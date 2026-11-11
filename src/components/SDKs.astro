@@ -4,7 +4,8 @@ import Icon from "./Icon.astro";
 import LangIcon from "./LangIcon.astro";
 
 const repo = "https://github.com/yannick2009/yily";
-const goDoc = "https://github.com/yannick2009/yily/blob/main/docs/sdk-proposals/go.md";
+const sdkRepo = (lang: string) =>
+  `https://github.com/yannick2009/yily-sdk-${lang}`;
 
 const goCode = `type AppConfig struct {
 	DBHost string \`yily:"DB_HOST"\`
@@ -28,78 +29,12 @@ func main() {
 	log.Printf("db: %s:%d", cfg.DBHost, cfg.DBPort)
 }`;
 
-const rustCode = `use yily::{Client, Config, Load};
-
-#[derive(Load)]
-struct AppConfig {
-    #[yily(name = "DB_HOST")]
-    db_host: String,
-    #[yily(name = "DB_PORT")]
-    db_port: u16,
-}
-
-#[tokio::main]
-async fn main() -> yily::Result<()> {
-    let client = Client::new(Config {
-        base_url: "https://yily.example.com".into(),
-        environment_id: "env_7f3a…".into(),
-        token: std::env::var("YILY_TOKEN")?,
-    });
-
-    let cfg: AppConfig = client.load().await?;
-    println!("db: {}:{}", cfg.db_host, cfg.db_port);
-    Ok(())
-}`;
-
-const javaCode = `public final class App {
-    public static void main(String[] args) {
-        var client = YilyClient.builder()
-            .baseUrl("https://yily.example.com")
-            .environmentId("env_7f3a…")
-            .token(System.getenv("YILY_TOKEN"))
-            .build();
-
-        var config = client.load(AppConfig.class);
-        System.out.printf("db: %s:%d%n",
-            config.dbHost(), config.dbPort());
-    }
-
-    record AppConfig(
-        @Yily("DB_HOST") String dbHost,
-        @Yily("DB_PORT") int dbPort
-    ) {}
-}`;
-
-const jsCode = `import { YilyClient } from "@yily/sdk";
-
-const client = new YilyClient({
-  baseUrl: "https://yily.example.com",
-  environmentId: "env_7f3a…",
-  token: process.env.YILY_TOKEN,
-});
-
-const config = await client.load({
-  DB_HOST: String,
-  DB_PORT: Number,
-});
-
-console.log(\`db: \${config.DB_HOST}:\${config.DB_PORT}\`);`;
-
-const pyCode = `import os
-from yily import Client
-
-client = Client(
-    base_url="https://yily.example.com",
-    environment_id="env_7f3a…",
-    token=os.environ["YILY_TOKEN"],
-)
-
-config = client.load({
-    "DB_HOST": str,
-    "DB_PORT": int,
-})
-
-print(f"db: {config.DB_HOST}:{config.DB_PORT}")`;
+const needContributor = (lang: string, prefix: string) =>
+  [
+    `${prefix} Coming soon. This SDK is not implemented yet.`,
+    `${prefix} We are looking for a contributor with ${lang} experience to build it.`,
+    `${prefix} See CONTRIBUTING.md to get started.`,
+  ].join("\n");
 
 const sdks = [
   {
@@ -109,10 +44,11 @@ const sdks = [
     shikiLang: "go",
     state: "API design preview",
     stateClass: "preview",
-    blurb: "First out of the gate. Struct tags map variable names, and one batched call fills the whole config.",
+    blurb:
+      "First out of the gate. Struct tags map variable names, and one batched call fills the whole config.",
     code: goCode,
-    link: goDoc,
-    linkLabel: "Read the Go design doc",
+    link: sdkRepo("go"),
+    linkLabel: "View the Go SDK",
   },
   {
     id: "rust",
@@ -121,9 +57,10 @@ const sdks = [
     shikiLang: "rust",
     state: "Coming soon",
     stateClass: "soon",
-    blurb: "A derive-first API with async loading and explicit errors. No hidden runtime.",
-    code: rustCode,
-    link: repo,
+    blurb:
+      "A derive-first API with async loading and explicit errors. No hidden runtime.",
+    code: needContributor("Rust", "//"),
+    link: sdkRepo("rust"),
     linkLabel: "Follow development",
   },
   {
@@ -133,9 +70,10 @@ const sdks = [
     shikiLang: "java",
     state: "Coming soon",
     stateClass: "soon",
-    blurb: "A small builder and annotated records. Works with the JVM you already run.",
-    code: javaCode,
-    link: repo,
+    blurb:
+      "A small builder and annotated records. Works with the JVM you already run.",
+    code: needContributor("Java", "//"),
+    link: sdkRepo("java"),
     linkLabel: "Follow development",
   },
   {
@@ -145,9 +83,10 @@ const sdks = [
     shikiLang: "typescript",
     state: "Coming soon",
     stateClass: "soon",
-    blurb: "A typed loader for Node.js and modern runtimes. No build step required.",
-    code: jsCode,
-    link: repo,
+    blurb:
+      "A typed loader for Node.js and modern runtimes. No build step required.",
+    code: needContributor("JavaScript", "//"),
+    link: sdkRepo("js"),
     linkLabel: "Follow development",
   },
   {
@@ -157,9 +96,10 @@ const sdks = [
     shikiLang: "python",
     state: "Coming soon",
     stateClass: "soon",
-    blurb: "Explicit type mapping and a deliberately small surface area. Pythonic by default.",
-    code: pyCode,
-    link: repo,
+    blurb:
+      "Explicit type mapping and a deliberately small surface area. Pythonic by default.",
+    code: needContributor("Python", "#"),
+    link: sdkRepo("py"),
     linkLabel: "Follow development",
   },
 ];
@@ -175,8 +115,8 @@ const sdks = [
       </h2>
       <p class="section-lede">
         The REST API is live today. Thin, read-only SDKs are next: Go first,
-        then Rust, Java, JavaScript and Python. Same single request, native types
-        everywhere.
+        then Rust, Java, JavaScript and Python. Same single request, native
+        types everywhere.
       </p>
     </div>
 
@@ -192,14 +132,18 @@ const sdks = [
               aria-selected={i === 0 ? "true" : "false"}
               tabindex={i === 0 ? 0 : -1}
               class:list={["sdk-tab", { "is-active": i === 0 }]}
-              data-sdk-tab={sdk.id}
-            >
-              <LangIcon lang={sdk.id as "go" | "rust" | "java" | "javascript" | "python"} size={16} />
+              data-sdk-tab={sdk.id}>
+              <LangIcon
+                lang={
+                  sdk.id as "go" | "rust" | "java" | "javascript" | "python"
+                }
+                size={16}
+              />
               <span>{sdk.name}</span>
               <span
                 class:list={["tab-dot", sdk.stateClass]}
                 aria-hidden="true"
-              ></span>
+              />
             </button>
           ))
         }
@@ -214,13 +158,13 @@ const sdks = [
               aria-labelledby={`tab-${sdk.id}`}
               class:list={["sdk-panel", { "is-active": i === 0 }]}
               data-sdk-panel={sdk.id}
-              hidden={i !== 0}
-            >
+              hidden={i !== 0}>
               <div class="sdk-meta">
-                <span
-                  class:list={["sdk-state", sdk.stateClass]}
-                >
-                  <Icon name={sdk.stateClass === "preview" ? "sparkle" : "clock"} size={12} />
+                <span class:list={["sdk-state", sdk.stateClass]}>
+                  <Icon
+                    name={sdk.stateClass === "preview" ? "code" : "clock"}
+                    size={12}
+                  />
                   {sdk.state}
                 </span>
                 <p>{sdk.blurb}</p>
@@ -229,23 +173,34 @@ const sdks = [
               <div class="code-window">
                 <div class="code-bar">
                   <span class="code-file">
-                    <LangIcon lang={sdk.id as "go" | "rust" | "java" | "javascript" | "python"} size={13} />
+                    <LangIcon
+                      lang={
+                        sdk.id as
+                          "go" | "rust" | "java" | "javascript" | "python"
+                      }
+                      size={13}
+                    />
                     {sdk.file}
                   </span>
                   <span class="code-lang">{sdk.name}</span>
-                  <button
-                    class="copy-btn"
-                    type="button"
-                    data-copy-target={`#code-${sdk.id}`}
-                    aria-label={`Copy the ${sdk.name} example`}
-                  >
-                    <Icon name="copy" size={12} class="icon-copy" />
-                    <Icon name="check" size={12} class="icon-check" />
-                    <span data-copy-label>Copy</span>
-                  </button>
+                  {sdk.stateClass === "preview" && (
+                    <button
+                      class="copy-btn"
+                      type="button"
+                      data-copy-target={`#code-${sdk.id}`}
+                      aria-label={`Copy the ${sdk.name} example`}>
+                      <Icon name="copy" size={12} class="icon-copy" />
+                      <Icon name="check" size={12} class="icon-check" />
+                      <span data-copy-label>Copy</span>
+                    </button>
+                  )}
                 </div>
                 <div class="code-body" id={`code-${sdk.id}`}>
-                  <Code code={sdk.code} lang={sdk.shikiLang as any} theme="github-dark-dimmed" />
+                  <Code
+                    code={sdk.code}
+                    lang={sdk.shikiLang as any}
+                    theme="github-dark-dimmed"
+                  />
                 </div>
               </div>
 
@@ -291,24 +246,32 @@ const sdks = [
     </div>
 
     <p class="sdk-today" data-reveal>
-      Need it before the SDKs land? The batched read endpoint is available now, so
-      you can <a href={repo} target="_blank" rel="noreferrer">use the REST API today <Icon name="arrow-up-right" size={12} /></a>.
+      Need it before the SDKs land? The batched read endpoint is available now,
+      so you can <a href={repo} target="_blank" rel="noreferrer"
+        >use the REST API today <Icon name="arrow-up-right" size={12} /></a
+      >.
     </p>
   </div>
 </section>
 
 <style>
   .sdks {
-    background:
-      radial-gradient(1000px 560px at 20% 20%, rgba(131, 56, 236, 0.055), transparent 70%);
+    background: radial-gradient(
+      1000px 560px at 20% 20%,
+      rgba(131, 56, 236, 0.055),
+      transparent 70%
+    );
   }
 
   .sdk-shell {
     overflow: hidden;
     border: 1px solid var(--border-strong);
     border-radius: 22px;
-    background:
-      linear-gradient(180deg, rgba(18, 15, 25, 0.85), rgba(8, 7, 12, 0.95));
+    background: linear-gradient(
+      180deg,
+      rgba(18, 15, 25, 0.85),
+      rgba(8, 7, 12, 0.95)
+    );
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.05) inset,
       0 40px 100px -40px rgba(0, 0, 0, 0.9);
@@ -391,8 +354,14 @@ const sdks = [
   }
 
   @keyframes panel-in {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .sdk-meta {
@@ -606,7 +575,9 @@ const sdks = [
     gap: 0.25rem;
     color: var(--text-soft);
     border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-    transition: color 0.2s ease, border-color 0.2s ease;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
   }
 
   .sdk-today a:hover {
