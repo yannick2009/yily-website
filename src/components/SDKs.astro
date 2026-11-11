@@ -14,8 +14,8 @@ const goCode = `type AppConfig struct {
 
 func main() {
 	client, err := yily.NewClient(yily.Config{
-		BaseURL:       "https://yily.example.com",
-		EnvironmentID: "env_7f3a…",
+		BaseURL:       "http://localhost:16529",
+		EnvironmentID: "your-environment-uuid",
 		Token:         os.Getenv("YILY_TOKEN"),
 	})
 	if err != nil {
