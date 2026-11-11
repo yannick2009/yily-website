@@ -2,9 +2,7 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 
-// https://astro.build/config
 export default defineConfig({
-  // Canonical production URL — powers canonical links, og:image and the sitemap.
   site: "https://yily.dev",
 
   integrations: [sitemap()],

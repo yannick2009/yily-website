@@ -134,9 +134,7 @@ const sdks = [
               class:list={["sdk-tab", { "is-active": i === 0 }]}
               data-sdk-tab={sdk.id}>
               <LangIcon
-                lang={
-                  sdk.id as "go" | "rust" | "java" | "javascript" | "python"
-                }
+                lang={sdk.id as "go" | "rust" | "java" | "javascript" | "python"}
                 size={16}
               />
               <span>{sdk.name}</span>
@@ -174,10 +172,7 @@ const sdks = [
                 <div class="code-bar">
                   <span class="code-file">
                     <LangIcon
-                      lang={
-                        sdk.id as
-                          "go" | "rust" | "java" | "javascript" | "python"
-                      }
+                      lang={sdk.id as "go" | "rust" | "java" | "javascript" | "python"}
                       size={13}
                     />
                     {sdk.file}

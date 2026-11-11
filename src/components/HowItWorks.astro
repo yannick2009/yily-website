@@ -1,4 +1,5 @@
 ---
+import { Code } from "astro:components";
 import Icon from "./Icon.astro";
 
 const steps = [
@@ -21,6 +22,9 @@ const steps = [
     code: "200 OK · values loaded",
   },
 ];
+
+const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
+  http://localhost:16529/environments/your-environment-id/variables/values`;
 ---
 
 <section class="section how" id="how-it-works">
@@ -192,6 +196,37 @@ const steps = [
           <span class="legend"><span class="legend-dot request"></span> request</span>
           <span class="legend"><span class="legend-dot response"></span> response</span>
           <span class="flow-foot-note">plaintext never touches disk</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container try-now">
+    <div class="try-card" data-reveal>
+      <div class="try-copy">
+        <span class="try-eyebrow"><span class="try-live-dot"></span> Live today</span>
+        <h3 class="try-title">No SDK yet? <span class="serif gradient-text">Just curl it.</span></h3>
+        <p class="try-desc">
+          The bulk values endpoint works right now. Point it at your own host
+          and read your variables with a Bearer token.
+        </p>
+      </div>
+      <div class="try-code">
+        <div class="try-code-bar">
+          <span class="try-code-file"><Icon name="terminal" size={13} /> cURL</span>
+          <span class="try-code-lang">bash</span>
+          <button
+            class="copy-btn"
+            type="button"
+            data-copy-target="#try-curl"
+            aria-label="Copy the cURL command">
+            <Icon name="copy" size={12} class="icon-copy" />
+            <Icon name="check" size={12} class="icon-check" />
+            <span data-copy-label>Copy</span>
+          </button>
+        </div>
+        <div class="try-code-body" id="try-curl">
+          <Code code={curlCommand} lang="bash" theme="github-dark-dimmed" />
         </div>
       </div>
     </div>
@@ -1176,6 +1211,134 @@ const steps = [
   .flow-foot-note {
     margin-left: auto;
     color: #5e5869;
+  }
+
+  /* ---------------- Try it now ---------------- */
+  .try-now {
+    margin-top: clamp(2.25rem, 4.5vw, 3.5rem);
+  }
+
+  .try-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(1.5rem, 3.5vw, 3rem);
+    padding: clamp(1.4rem, 3vw, 2.2rem);
+    border: 1px solid var(--border-strong);
+    border-radius: 18px;
+    background:
+      radial-gradient(600px 300px at 12% 0%, rgba(94, 234, 212, 0.05), transparent 70%),
+      linear-gradient(180deg, rgba(18, 15, 25, 0.9), rgba(8, 7, 12, 0.96));
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.05) inset,
+      0 30px 70px -30px rgba(0, 0, 0, 0.7);
+  }
+
+  .try-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--success);
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .try-live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 9px rgba(94, 234, 212, 0.7);
+    animation: flow-pulse 2.6s ease-in-out infinite;
+  }
+
+  .try-title {
+    margin-top: 0.75rem;
+    color: var(--text);
+    font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+
+  .try-desc {
+    max-width: 44ch;
+    margin-top: 0.7rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .try-code {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    background: #0a0810;
+  }
+
+  .try-code-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    height: 38px;
+    padding: 0 0.65rem 0 0.9rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.018);
+  }
+
+  .try-code-file {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+    color: var(--text-soft);
+    font-family: var(--font-code);
+    font-size: 0.61rem;
+  }
+
+  .try-code-file svg {
+    color: var(--faint);
+  }
+
+  .try-code-lang {
+    margin-left: auto;
+    color: #5d5769;
+    font-family: var(--font-body);
+    font-size: 0.57rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .try-code-body {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #2a2434 transparent;
+  }
+
+  .try-code-body :global(.astro-code) {
+    min-width: 100%;
+    margin: 0 !important;
+    padding: 1.05rem 1.2rem 1.15rem !important;
+    background: transparent !important;
+    font-family: var(--font-code) !important;
+    font-size: 0.75rem !important;
+    line-height: 1.8 !important;
+    tab-size: 2;
+  }
+
+  .try-code-body :global(.astro-code code) {
+    font-family: var(--font-code) !important;
+  }
+
+  @media (max-width: 900px) {
+    .try-card {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.4rem;
+    }
   }
 
   @media (max-width: 1024px) {
