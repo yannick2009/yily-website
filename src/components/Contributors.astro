@@ -1,0 +1,255 @@
+---
+import { Image } from "astro:assets";
+import Icon from "./Icon.astro";
+import GitHubIcon from "./GitHubIcon.astro";
+
+const repo = "https://github.com/yannick2009/yily";
+const contributing = `${repo}/blob/main/CONTRIBUTING.md`;
+const issues = `${repo}/issues`;
+
+interface Contributor {
+  login: string;
+  avatar: string;
+  url: string;
+}
+
+const contributors: Contributor[] = [
+  {
+    login: "yannick2009",
+    avatar: "https://avatars.githubusercontent.com/u/69443278?v=4",
+    url: "https://github.com/yannick2009",
+  },
+  {
+    login: "Angislad20",
+    avatar: "https://avatars.githubusercontent.com/u/116013303?v=4",
+    url: "https://github.com/Angislad20",
+  },
+  {
+    login: "yvnnix",
+    avatar: "https://avatars.githubusercontent.com/u/181828602?v=4",
+    url: "https://github.com/yvnnix",
+  },
+];
+---
+
+<section class="section contributors" id="contributors">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <span class="eyebrow">Contributors</span>
+      <h2 class="section-title">
+        We always need<br />
+        <span class="serif gradient-text">more contributors.</span>
+      </h2>
+      <p class="section-lede">
+        A small group of people keeps Yily moving, and there is always room for
+        one more. Fix a bug, polish a screen, or just tell us what feels broken.
+      </p>
+    </div>
+
+    <ul class="contributors-grid" data-reveal-group>
+      {
+        contributors.map((c) => (
+          <li data-reveal>
+            <a class="contributor" href={c.url} target="_blank" rel="noreferrer" title={c.login}>
+              <span class="contributor-avatar">
+                <Image
+                  src={c.avatar}
+                  alt={`${c.login} avatar`}
+                  width={88}
+                  height={88}
+                  format="webp"
+                  loading="lazy"
+                  decoding="async"
+                  referrerpolicy="no-referrer"
+                />
+              </span>
+              <span class="contributor-login">{c.login}</span>
+            </a>
+          </li>
+        ))
+      }
+
+      <li data-reveal>
+        <a class="contributor contributor-invite" href={contributing} target="_blank" rel="noreferrer" title="Become a contributor">
+          <span class="contributor-avatar">
+            <span class="invite-plus" aria-hidden="true"><Icon name="plus" size={16} /></span>
+          </span>
+          <span class="contributor-login">You?</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="contributors-cta" data-reveal>
+      <a class="btn btn-primary" href={contributing} target="_blank" rel="noreferrer">
+        <GitHubIcon size={18} />
+        Become a contributor
+      </a>
+      <a class="btn btn-ghost" href={issues} target="_blank" rel="noreferrer">
+        Browse open issues
+        <Icon name="arrow-up-right" size={15} class="icon-shift" />
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contributors {
+    background:
+      radial-gradient(1000px 620px at 50% 40%, rgba(131, 56, 236, 0.06), transparent 72%);
+  }
+
+  .contributors-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .contributors-grid li {
+    width: 88px;
+  }
+
+  .contributor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 0.4rem 0.62rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.006)),
+      var(--bg-raised);
+    transition:
+      border-color 0.25s ease,
+      background-color 0.25s ease,
+      transform 0.25s var(--ease-out);
+  }
+
+  .contributor:hover {
+    border-color: rgba(167, 139, 250, 0.3);
+    background-color: rgba(139, 92, 246, 0.06);
+    transform: translateY(-2px);
+  }
+
+  .contributor-avatar {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    padding: 2px;
+    background: linear-gradient(
+      140deg,
+      rgba(167, 139, 250, 0.85),
+      rgba(232, 121, 249, 0.4) 55%,
+      rgba(94, 234, 212, 0.3)
+    );
+    box-shadow: 0 8px 18px -8px rgba(124, 58, 237, 0.5);
+    transition:
+      transform 0.3s var(--ease-out),
+      box-shadow 0.3s ease;
+  }
+
+  .contributor:hover .contributor-avatar {
+    transform: scale(1.08);
+    box-shadow: 0 12px 24px -10px rgba(124, 58, 237, 0.7);
+  }
+
+  .contributor-avatar img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid #0d0b13;
+    object-fit: cover;
+    background: #16131d;
+  }
+
+  .contributor-login {
+    max-width: 100%;
+    overflow: hidden;
+    color: var(--muted);
+    font-family: var(--font-code);
+    font-size: 0.55rem;
+    letter-spacing: 0.005em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+
+  .contributor:hover .contributor-login {
+    color: var(--text-soft);
+  }
+
+  /* Invite tile */
+  .contributor-invite {
+    border-style: dashed;
+    border-color: rgba(167, 139, 250, 0.28);
+    background:
+      linear-gradient(180deg, rgba(139, 92, 246, 0.05), rgba(139, 92, 246, 0.012)),
+      var(--bg-raised);
+  }
+
+  .contributor-invite:hover {
+    border-color: rgba(167, 139, 250, 0.5);
+  }
+
+  .contributor-invite .contributor-avatar {
+    background: rgba(139, 92, 246, 0.08);
+    box-shadow: none;
+  }
+
+  .invite-plus {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px dashed rgba(167, 139, 250, 0.45);
+    color: var(--brand-bright);
+    transition:
+      border-color 0.3s ease,
+      transform 0.35s var(--ease-spring);
+  }
+
+  .contributor-invite:hover .invite-plus {
+    border-color: rgba(167, 139, 250, 0.8);
+    transform: rotate(90deg);
+  }
+
+  .contributors-cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.65rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 520px) {
+    .contributors-grid {
+      gap: 8px;
+    }
+
+    .contributors-grid li {
+      width: 80px;
+    }
+
+    .contributor-avatar {
+      width: 40px;
+      height: 40px;
+    }
+
+    .contributors-cta {
+      flex-direction: column;
+    }
+
+    .contributors-cta .btn {
+      width: 100%;
+    }
+  }
+</style>

@@ -103,7 +103,6 @@ const specs = [
       <div class="envelope-visual" aria-hidden="true">
         <div class="envelope-top">
           <span class="env-source">VariableVersion.Value</span>
-          <span class="env-authenticated"><Icon name="check" size={11} /> authenticated</span>
         </div>
 
         <div class="env-line">
@@ -312,24 +311,24 @@ const specs = [
     background: rgba(7, 5, 11, 0.62);
   }
 
-  .envelope-visual::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      100deg,
-      transparent 20%,
-      rgba(196, 181, 253, 0.055) 45%,
-      transparent 70%
-    );
-    transform: translateX(-100%);
-    animation: envelope-scan 6s ease-in-out infinite;
-    pointer-events: none;
+  @keyframes env-seg-focus {
+    0%, 13% {
+      box-shadow:
+        0 0 0 1px rgba(167, 139, 250, 0.3),
+        0 8px 22px -8px rgba(139, 92, 246, 0.55);
+      filter: brightness(1.3);
+      transform: translateY(-1px);
+    }
+    26%, 100% {
+      box-shadow: none;
+      filter: brightness(1);
+      transform: none;
+    }
   }
 
-  @keyframes envelope-scan {
-    0%, 60% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
+  @keyframes env-label-focus {
+    0%, 13% { color: #c9b8fb; }
+    26%, 100% { color: #5a5468; }
   }
 
   .envelope-top {
@@ -347,16 +346,6 @@ const specs = [
     letter-spacing: 0.02em;
   }
 
-  .env-authenticated {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    color: rgba(94, 234, 212, 0.65);
-    font-family: var(--font-body);
-    font-size: 0.56rem;
-    font-weight: 500;
-  }
-
   .env-line {
     display: flex;
     align-items: center;
@@ -372,22 +361,26 @@ const specs = [
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.025);
     letter-spacing: 0.03em;
+    animation: env-seg-focus 7.5s ease-in-out infinite;
   }
 
   .env-seg.schema {
     color: #b9a7f9;
     border-color: rgba(167, 139, 250, 0.2);
     background: rgba(139, 92, 246, 0.08);
+    animation-delay: 0s;
   }
 
   .env-seg.nonce {
     color: #e9d5ff;
     border-color: rgba(216, 180, 254, 0.15);
+    animation-delay: 2.5s;
   }
 
   .env-seg.cipher {
     color: #93a1b5;
     border-color: rgba(147, 161, 181, 0.12);
+    animation-delay: 5s;
   }
 
   .env-colon {
@@ -411,6 +404,14 @@ const specs = [
   .env-labels span:nth-child(3) {
     text-align: center;
   }
+
+  .env-labels span {
+    animation: env-label-focus 7.5s ease-in-out infinite;
+  }
+
+  .env-labels span:nth-child(1) { animation-delay: 0s; }
+  .env-labels span:nth-child(2) { animation-delay: 2.5s; }
+  .env-labels span:nth-child(3) { animation-delay: 5s; }
 
   .env-foot {
     display: flex;
