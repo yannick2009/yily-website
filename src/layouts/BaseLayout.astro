@@ -11,7 +11,9 @@ const {
   description = "Yily is a fast, self-hosted secret manager. One Go binary, one SQLite file, AES-256-GCM at rest. Store and retrieve your API keys, tokens and passwords without the ceremony.",
 } = Astro.props;
 
-const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
+const canonicalURL = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site)
+  : Astro.url;
 const ogImage = Astro.site ? new URL("/og.png", Astro.site).href : "/og.png";
 
 const jsonLd = {
@@ -61,7 +63,10 @@ const jsonLd = {
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Yily: Secrets management, without the weight." />
+    <meta
+      property="og:image:alt"
+      content="Yily: Secrets management, without the weight."
+    />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
@@ -86,7 +91,25 @@ const jsonLd = {
       document.documentElement.classList.add("js");
     </script>
 
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(jsonLd)}
+    />
+
+    <script
+      is:inline
+      defer
+      src="https://umami-production-3e01.up.railway.app/script.js"
+      data-website-id="ea9c2460-67ad-42ae-8709-44b0c6ac235e"></script>
+    <script
+      is:inline
+      defer
+      src="https://umami-production-3e01.up.railway.app/recorder.js"
+      data-website-id="ea9c2460-67ad-42ae-8709-44b0c6ac235e"
+      data-sample-rate="0.1"
+      data-mask-level="moderate"
+      data-max-duration="300000"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
