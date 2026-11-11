@@ -1,11 +1,13 @@
 // @ts-check
 import { defineConfig } from "astro/config";
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  // Set SITE_URL at build time (for example https://yily.example.com) so that
-  // canonical URLs and social images resolve to absolute addresses.
+  // Canonical production URL — powers canonical links, og:image and the sitemap.
   site: "https://yily.dev",
+
+  integrations: [sitemap()],
 
   // Allow Astro to fetch and optimize remote images (GitHub contributor avatars).
   image: {

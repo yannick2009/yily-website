@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://yily.dev/sitemap-index.xml
