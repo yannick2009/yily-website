@@ -336,6 +336,41 @@ import Footer from "../components/Footer.astro";
     });
 
     /* ---------------------------------------------------------------
+       Deploy method tabs (self-hosting)
+    --------------------------------------------------------------- */
+    const deployTabs = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-deploy-tab]"));
+    const deployPanels = Array.from(document.querySelectorAll<HTMLElement>("[data-deploy-panel]"));
+
+    const activateDeploy = (id: string | undefined) => {
+      for (const tab of deployTabs) {
+        const active = tab.dataset.deployTab === id;
+        tab.classList.toggle("is-active", active);
+        tab.setAttribute("aria-selected", String(active));
+        tab.tabIndex = active ? 0 : -1;
+      }
+      for (const panel of deployPanels) {
+        const active = panel.dataset.deployPanel === id;
+        panel.classList.toggle("is-active", active);
+        panel.hidden = !active;
+      }
+    };
+
+    deployTabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => activateDeploy(tab.dataset.deployTab));
+      tab.addEventListener("keydown", (event) => {
+        if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        let next = index;
+        if (event.key === "ArrowRight") next = (index + 1) % deployTabs.length;
+        if (event.key === "ArrowLeft") next = (index - 1 + deployTabs.length) % deployTabs.length;
+        if (event.key === "Home") next = 0;
+        if (event.key === "End") next = deployTabs.length - 1;
+        deployTabs[next].focus();
+        activateDeploy(deployTabs[next].dataset.deployTab);
+      });
+    });
+
+    /* ---------------------------------------------------------------
        Retrieval diagram stepper
     --------------------------------------------------------------- */
     const flow = document.querySelector<HTMLElement>("[data-flow]");

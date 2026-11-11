@@ -70,11 +70,10 @@ const paths = [
         <div class="terminal-bar">
           <span class="win-dots" aria-hidden="true"><span></span><span></span><span></span></span>
           <span class="terminal-title">bash · yily</span>
-          <span class="terminal-badge">:16529</span>
         </div>
 
         <div class="terminal-body">
-          <div class="term-block">
+          <div class="term-block key-block">
             <div class="term-block-head">
               <span class="term-step"><span>1</span> Generate your master key</span>
               <button
@@ -92,26 +91,148 @@ const paths = [
 <span class="t-cmd">chmod</span> <span class="t-num">600</span> yily.env</code></pre>
           </div>
 
-          <div class="term-block">
-            <div class="term-block-head">
-              <span class="term-step"><span>2</span> Start the container</span>
+          <div class="deploy" data-deploy>
+            <div class="deploy-tabs" role="tablist" aria-label="Choose an install method">
               <button
-                class="copy-btn"
                 type="button"
-                data-copy-block
-                aria-label="Copy the Docker command"
+                role="tab"
+                id="deploy-tab-docker"
+                aria-controls="deploy-panel-docker"
+                aria-selected="true"
+                tabindex="0"
+                class="deploy-tab is-active"
+                data-deploy-tab="docker"
               >
-                <Icon name="copy" size={12} class="icon-copy" />
-                <Icon name="check" size={12} class="icon-check" />
-                <span data-copy-label>Copy</span>
+                <span class="deploy-tab-num">1</span> Docker
+              </button>
+              <button
+                type="button"
+                role="tab"
+                id="deploy-tab-compose"
+                aria-controls="deploy-panel-compose"
+                aria-selected="false"
+                tabindex="-1"
+                class="deploy-tab"
+                data-deploy-tab="compose"
+              >
+                <span class="deploy-tab-num">2</span> Compose
+              </button>
+              <button
+                type="button"
+                role="tab"
+                id="deploy-tab-binary"
+                aria-controls="deploy-panel-binary"
+                aria-selected="false"
+                tabindex="-1"
+                class="deploy-tab"
+                data-deploy-tab="binary"
+              >
+                <span class="deploy-tab-num">3</span> Binary
               </button>
             </div>
-            <pre><code><span class="t-cmd">docker run</span> -d --name yily \
+
+            <div class="deploy-deck">
+              <div
+                class="deploy-panel is-active"
+                id="deploy-panel-docker"
+                role="tabpanel"
+                aria-labelledby="deploy-tab-docker"
+                data-deploy-panel="docker"
+              >
+                <div class="term-block">
+                  <div class="term-block-head">
+                    <span class="term-step"><span>1</span> Start the container</span>
+                    <button
+                      class="copy-btn"
+                      type="button"
+                      data-copy-block
+                      aria-label="Copy the Docker command"
+                    >
+                      <Icon name="copy" size={12} class="icon-copy" />
+                      <Icon name="check" size={12} class="icon-check" />
+                      <span data-copy-label>Copy</span>
+                    </button>
+                  </div>
+                  <pre><code><span class="t-cmd">docker run</span> -d --name yily \
   --restart unless-stopped \
   -p <span class="t-num">16529</span>:<span class="t-num">16529</span> \
   -v yily-data:/data \
   --env-file yily.env \
   <span class="t-img">ghcr.io/yannick2009/yily:1.0.0-beta.1</span></code></pre>
+                </div>
+              </div>
+
+              <div
+                class="deploy-panel"
+                id="deploy-panel-compose"
+                role="tabpanel"
+                aria-labelledby="deploy-tab-compose"
+                data-deploy-panel="compose"
+                hidden
+              >
+                <div class="term-block">
+                  <div class="term-block-head">
+                    <span class="term-step"><span>2</span> Docker Compose</span>
+                    <button
+                      class="copy-btn"
+                      type="button"
+                      data-copy-block
+                      aria-label="Copy the Docker Compose file"
+                    >
+                      <Icon name="copy" size={12} class="icon-copy" />
+                      <Icon name="check" size={12} class="icon-check" />
+                      <span data-copy-label>Copy</span>
+                    </button>
+                  </div>
+                  <pre><code><span class="t-cmd">services</span>:
+  <span class="t-cmd">yily</span>:
+    <span class="t-cmd">image</span>: <span class="t-img">ghcr.io/yannick2009/yily:1.0.0-beta.1</span>
+    <span class="t-cmd">restart</span>: <span class="t-str">unless-stopped</span>
+    <span class="t-cmd">ports</span>:
+      - <span class="t-num">"16529:16529"</span>
+    <span class="t-cmd">volumes</span>:
+      - <span class="t-str">yily-data:/data</span>
+    <span class="t-cmd">env_file</span>:
+      - <span class="t-str">yily.env</span>
+
+<span class="t-cmd">volumes</span>:
+  <span class="t-str">yily-data</span>:</code></pre>
+                  <div class="term-compose-run">
+                    <span class="term-compose-run-label">run</span>
+                    <code><span class="t-cmd">docker compose</span> up -d</code>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="deploy-panel"
+                id="deploy-panel-binary"
+                role="tabpanel"
+                aria-labelledby="deploy-tab-binary"
+                data-deploy-panel="binary"
+                hidden
+              >
+                <div class="term-block">
+                  <div class="term-block-head">
+                    <span class="term-step"><span>3</span> Download the server binary</span>
+                    <button
+                      class="copy-btn"
+                      type="button"
+                      data-copy-block
+                      aria-label="Copy the binary download commands"
+                    >
+                      <Icon name="copy" size={12} class="icon-copy" />
+                      <Icon name="check" size={12} class="icon-check" />
+                      <span data-copy-label>Copy</span>
+                    </button>
+                  </div>
+                  <pre><code><span class="t-cmd">curl</span> -LO <span class="t-str">https://github.com/yannick2009/yily/releases/download/v1.0.0-beta.1/yily_1.0.0-beta.1_linux_amd64.tar.gz</span>
+<span class="t-cmd">tar</span> -xzf <span class="t-str">yily_1.0.0-beta.1_linux_amd64.tar.gz</span>
+<span class="t-cmd">set -a</span>; <span class="t-cmd">source</span> <span class="t-str">./yily.env</span>; <span class="t-cmd">set +a</span>   <span class="t-cmt"># exports YILY_MASTER_KEY</span>
+<span class="t-cmd">./yily_1.0.0-beta.1_linux_amd64/yily</span></code></pre>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="term-open">
@@ -300,23 +421,102 @@ const paths = [
     font-size: 0.6rem;
   }
 
-  .terminal-badge {
-    margin-left: auto;
-    padding: 2px 7px;
-    border: 1px solid rgba(94, 234, 212, 0.13);
-    border-radius: 999px;
-    background: rgba(94, 234, 212, 0.04);
-    color: rgba(204, 251, 241, 0.55);
-    font-family: var(--font-code);
-    font-size: 0.5rem;
-  }
-
   .terminal-body {
     background:
       radial-gradient(400px 200px at 100% 0%, rgba(139, 92, 246, 0.055), transparent 75%);
   }
 
-  .term-block {
+  /* Deploy tabs + stacked panels */
+  .deploy-tabs {
+    display: flex;
+    align-items: flex-end;
+    overflow-x: auto;
+    padding: 0.55rem 0.55rem 0;
+    background: rgba(255, 255, 255, 0.014);
+    scrollbar-width: none;
+  }
+
+  .deploy-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .deploy-tab {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex: none;
+    height: 34px;
+    padding: 0 0.85rem;
+    margin-left: -6px;
+    margin-bottom: -1px;
+    border: 1px solid var(--border);
+    border-radius: 9px 9px 0 0;
+    background: #0c0a12;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 450;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .deploy-tab:first-child {
+    margin-left: 0;
+  }
+
+  .deploy-tab:hover {
+    color: var(--text);
+  }
+
+  .deploy-tab.is-active {
+    z-index: 3;
+    background: #09070d;
+    color: var(--text);
+    border-color: var(--border-strong);
+    border-bottom-color: transparent;
+  }
+
+  .deploy-tab-num {
+    display: grid;
+    place-items: center;
+    width: 15px;
+    height: 15px;
+    border: 1px solid rgba(167, 139, 250, 0.22);
+    border-radius: 50%;
+    color: var(--brand-bright);
+    font-family: var(--font-code);
+    font-size: 0.5rem;
+    transition: border-color 0.2s ease;
+  }
+
+  .deploy-tab.is-active .deploy-tab-num {
+    border-color: rgba(167, 139, 250, 0.45);
+  }
+
+  .deploy-deck {
+    position: relative;
+    border-top: 1px solid var(--border);
+  }
+
+  .deploy-panel.is-active {
+    animation: deploy-panel-in 0.45s var(--ease-out);
+  }
+
+  @keyframes deploy-panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .key-block {
     border-bottom: 1px solid var(--border);
   }
 
@@ -367,6 +567,22 @@ const paths = [
     white-space: pre;
   }
 
+  .term-compose-run {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 1rem 0.95rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.07);
+  }
+
+  .term-compose-run-label {
+    color: #57515f;
+    font-family: var(--font-code);
+    font-size: 0.52rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
   .t-cmd {
     color: #d8b4fe;
   }
@@ -387,11 +603,16 @@ const paths = [
     color: #a78bfa;
   }
 
+  .t-cmt {
+    color: #5d5769;
+  }
+
   .term-open {
     display: flex;
     align-items: center;
     gap: 0.45rem;
     padding: 0.8rem 1rem;
+    border-top: 1px solid var(--border);
     color: #625c70;
     font-family: var(--font-code);
     font-size: 0.57rem;
