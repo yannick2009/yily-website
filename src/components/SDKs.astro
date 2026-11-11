@@ -1,0 +1,673 @@
+---
+import { Code } from "astro:components";
+import Icon from "./Icon.astro";
+import LangIcon from "./LangIcon.astro";
+
+const repo = "https://github.com/yannick2009/yily";
+const goDoc = "https://github.com/yannick2009/yily/blob/main/docs/sdk-proposals/go.md";
+
+const goCode = `type AppConfig struct {
+	DBHost string \`yily:"DB_HOST"\`
+	DBPort int    \`yily:"DB_PORT"\`
+}
+
+func main() {
+	client, err := yily.NewClient(yily.Config{
+		BaseURL:       "https://yily.example.com",
+		EnvironmentID: "env_7f3a…",
+		Token:         os.Getenv("YILY_TOKEN"),
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var cfg AppConfig
+	if err := client.Load(context.Background(), &cfg); err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("db: %s:%d", cfg.DBHost, cfg.DBPort)
+}`;
+
+const rustCode = `use yily::{Client, Config, Load};
+
+#[derive(Load)]
+struct AppConfig {
+    #[yily(name = "DB_HOST")]
+    db_host: String,
+    #[yily(name = "DB_PORT")]
+    db_port: u16,
+}
+
+#[tokio::main]
+async fn main() -> yily::Result<()> {
+    let client = Client::new(Config {
+        base_url: "https://yily.example.com".into(),
+        environment_id: "env_7f3a…".into(),
+        token: std::env::var("YILY_TOKEN")?,
+    });
+
+    let cfg: AppConfig = client.load().await?;
+    println!("db: {}:{}", cfg.db_host, cfg.db_port);
+    Ok(())
+}`;
+
+const javaCode = `public final class App {
+    public static void main(String[] args) {
+        var client = YilyClient.builder()
+            .baseUrl("https://yily.example.com")
+            .environmentId("env_7f3a…")
+            .token(System.getenv("YILY_TOKEN"))
+            .build();
+
+        var config = client.load(AppConfig.class);
+        System.out.printf("db: %s:%d%n",
+            config.dbHost(), config.dbPort());
+    }
+
+    record AppConfig(
+        @Yily("DB_HOST") String dbHost,
+        @Yily("DB_PORT") int dbPort
+    ) {}
+}`;
+
+const jsCode = `import { YilyClient } from "@yily/sdk";
+
+const client = new YilyClient({
+  baseUrl: "https://yily.example.com",
+  environmentId: "env_7f3a…",
+  token: process.env.YILY_TOKEN,
+});
+
+const config = await client.load({
+  DB_HOST: String,
+  DB_PORT: Number,
+});
+
+console.log(\`db: \${config.DB_HOST}:\${config.DB_PORT}\`);`;
+
+const pyCode = `import os
+from yily import Client
+
+client = Client(
+    base_url="https://yily.example.com",
+    environment_id="env_7f3a…",
+    token=os.environ["YILY_TOKEN"],
+)
+
+config = client.load({
+    "DB_HOST": str,
+    "DB_PORT": int,
+})
+
+print(f"db: {config.DB_HOST}:{config.DB_PORT}")`;
+
+const sdks = [
+  {
+    id: "go",
+    name: "Go",
+    file: "main.go",
+    shikiLang: "go",
+    state: "API design preview",
+    stateClass: "preview",
+    blurb: "First out of the gate. Struct tags map variable names, and one batched call fills the whole config.",
+    code: goCode,
+    link: goDoc,
+    linkLabel: "Read the Go design doc",
+  },
+  {
+    id: "rust",
+    name: "Rust",
+    file: "main.rs",
+    shikiLang: "rust",
+    state: "Coming soon",
+    stateClass: "soon",
+    blurb: "A derive-first API with async loading and explicit errors. No hidden runtime.",
+    code: rustCode,
+    link: repo,
+    linkLabel: "Follow development",
+  },
+  {
+    id: "java",
+    name: "Java",
+    file: "Main.java",
+    shikiLang: "java",
+    state: "Coming soon",
+    stateClass: "soon",
+    blurb: "A small builder and annotated records. Works with the JVM you already run.",
+    code: javaCode,
+    link: repo,
+    linkLabel: "Follow development",
+  },
+  {
+    id: "javascript",
+    name: "JavaScript",
+    file: "main.ts",
+    shikiLang: "typescript",
+    state: "Coming soon",
+    stateClass: "soon",
+    blurb: "A typed loader for Node.js and modern runtimes. No build step required.",
+    code: jsCode,
+    link: repo,
+    linkLabel: "Follow development",
+  },
+  {
+    id: "python",
+    name: "Python",
+    file: "main.py",
+    shikiLang: "python",
+    state: "Coming soon",
+    stateClass: "soon",
+    blurb: "Explicit type mapping and a deliberately small surface area. Pythonic by default.",
+    code: pyCode,
+    link: repo,
+    linkLabel: "Follow development",
+  },
+];
+---
+
+<section class="section sdks" id="sdks">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <span class="eyebrow">SDKs</span>
+      <h2 class="section-title">
+        One API.<br />
+        <span class="serif gradient-text">Every stack.</span>
+      </h2>
+      <p class="section-lede">
+        The REST API is live today. Thin, read-only SDKs are next: Go first,
+        then Rust, Java, JavaScript and Python. Same single request, native types
+        everywhere.
+      </p>
+    </div>
+
+    <div class="sdk-shell" data-reveal>
+      <div class="sdk-tabs" role="tablist" aria-label="Choose an SDK language">
+        {
+          sdks.map((sdk, i) => (
+            <button
+              type="button"
+              role="tab"
+              id={`tab-${sdk.id}`}
+              aria-controls={`panel-${sdk.id}`}
+              aria-selected={i === 0 ? "true" : "false"}
+              tabindex={i === 0 ? 0 : -1}
+              class:list={["sdk-tab", { "is-active": i === 0 }]}
+              data-sdk-tab={sdk.id}
+            >
+              <LangIcon lang={sdk.id as "go" | "rust" | "java" | "javascript" | "python"} size={16} />
+              <span>{sdk.name}</span>
+              <span
+                class:list={["tab-dot", sdk.stateClass]}
+                aria-hidden="true"
+              ></span>
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="sdk-panels">
+        {
+          sdks.map((sdk, i) => (
+            <div
+              role="tabpanel"
+              id={`panel-${sdk.id}`}
+              aria-labelledby={`tab-${sdk.id}`}
+              class:list={["sdk-panel", { "is-active": i === 0 }]}
+              data-sdk-panel={sdk.id}
+              hidden={i !== 0}
+            >
+              <div class="sdk-meta">
+                <span
+                  class:list={["sdk-state", sdk.stateClass]}
+                >
+                  <Icon name={sdk.stateClass === "preview" ? "sparkle" : "clock"} size={12} />
+                  {sdk.state}
+                </span>
+                <p>{sdk.blurb}</p>
+              </div>
+
+              <div class="code-window">
+                <div class="code-bar">
+                  <span class="code-file">
+                    <LangIcon lang={sdk.id as "go" | "rust" | "java" | "javascript" | "python"} size={13} />
+                    {sdk.file}
+                  </span>
+                  <span class="code-lang">{sdk.name}</span>
+                  <button
+                    class="copy-btn"
+                    type="button"
+                    data-copy-target={`#code-${sdk.id}`}
+                    aria-label={`Copy the ${sdk.name} example`}
+                  >
+                    <Icon name="copy" size={12} class="icon-copy" />
+                    <Icon name="check" size={12} class="icon-check" />
+                    <span data-copy-label>Copy</span>
+                  </button>
+                </div>
+                <div class="code-body" id={`code-${sdk.id}`}>
+                  <Code code={sdk.code} lang={sdk.shikiLang as any} theme="github-dark-dimmed" />
+                </div>
+              </div>
+
+              <div class="sdk-foot">
+                <span class="sdk-foot-note">
+                  {sdk.stateClass === "preview"
+                    ? "The API is taking shape in the open. Details may change before release."
+                    : "Not released yet. Watch the repo to catch the first cut."}
+                </span>
+                <a href={sdk.link} target="_blank" rel="noreferrer">
+                  {sdk.linkLabel}
+                  <Icon name="arrow-up-right" size={13} />
+                </a>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="sdk-principles" data-reveal>
+      <span class="principle">
+        <span class="principle-icon"><Icon name="shield" size={15} /></span>
+        <span class="principle-copy">
+          <strong>Read-only by design</strong>
+          <em>SDKs retrieve. Nothing writes.</em>
+        </span>
+      </span>
+      <span class="principle">
+        <span class="principle-icon"><Icon name="layers" size={15} /></span>
+        <span class="principle-copy">
+          <strong>One batched request</strong>
+          <em>Every name, one round trip.</em>
+        </span>
+      </span>
+      <span class="principle">
+        <span class="principle-icon"><Icon name="branch" size={15} /></span>
+        <span class="principle-copy">
+          <strong>Version pinning</strong>
+          <em>Active by default. Pin when you need.</em>
+        </span>
+      </span>
+    </div>
+
+    <p class="sdk-today" data-reveal>
+      Need it before the SDKs land? The batched read endpoint is available now, so
+      you can <a href={repo} target="_blank" rel="noreferrer">use the REST API today <Icon name="arrow-up-right" size={12} /></a>.
+    </p>
+  </div>
+</section>
+
+<style>
+  .sdks {
+    background:
+      radial-gradient(1000px 560px at 20% 20%, rgba(131, 56, 236, 0.055), transparent 70%);
+  }
+
+  .sdk-shell {
+    overflow: hidden;
+    border: 1px solid var(--border-strong);
+    border-radius: 22px;
+    background:
+      linear-gradient(180deg, rgba(18, 15, 25, 0.85), rgba(8, 7, 12, 0.95));
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.05) inset,
+      0 40px 100px -40px rgba(0, 0, 0, 0.9);
+  }
+
+  .sdk-tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 0.55rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.014);
+    scrollbar-width: none;
+  }
+
+  .sdk-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sdk-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: none;
+    height: 38px;
+    padding: 0 0.85rem;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    color: var(--muted);
+    font-size: 0.79rem;
+    font-weight: 450;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .sdk-tab svg {
+    opacity: 0.62;
+    transition: opacity 0.2s ease;
+  }
+
+  .sdk-tab:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .sdk-tab.is-active {
+    border-color: var(--border-strong);
+    background: rgba(255, 255, 255, 0.055);
+    color: var(--text);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  }
+
+  .sdk-tab.is-active svg {
+    opacity: 0.95;
+    color: var(--brand-bright);
+  }
+
+  .tab-dot {
+    width: 4px;
+    height: 4px;
+    margin-left: 0.15rem;
+    border-radius: 50%;
+    background: #4f495c;
+  }
+
+  .tab-dot.preview {
+    background: var(--brand-bright);
+    box-shadow: 0 0 7px rgba(167, 139, 250, 0.7);
+  }
+
+  .sdk-panel {
+    padding: 1.35rem;
+  }
+
+  .sdk-panel.is-active {
+    animation: panel-in 0.4s var(--ease-out);
+  }
+
+  @keyframes panel-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .sdk-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .sdk-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex: none;
+    height: 25px;
+    padding: 0 0.6rem;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .sdk-state.preview {
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    background: rgba(139, 92, 246, 0.09);
+    color: #d8b4fe;
+  }
+
+  .sdk-state.soon {
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.025);
+    color: var(--muted);
+  }
+
+  .sdk-meta p {
+    color: var(--muted);
+    font-size: 0.84rem;
+    line-height: 1.6;
+  }
+
+  .code-window {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    background: #0a0810;
+  }
+
+  .code-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    height: 38px;
+    padding: 0 0.65rem 0 0.9rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.018);
+  }
+
+  .code-file {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+    color: var(--text-soft);
+    font-family: var(--font-code);
+    font-size: 0.61rem;
+  }
+
+  .code-file svg {
+    color: var(--faint);
+  }
+
+  .code-lang {
+    margin-left: auto;
+    color: #5d5769;
+    font-family: var(--font-body);
+    font-size: 0.57rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .code-body {
+    overflow-x: auto;
+    max-height: 500px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #2a2434 transparent;
+  }
+
+  .code-body :global(.astro-code) {
+    min-width: 100%;
+    margin: 0 !important;
+    padding: 1.05rem 1.2rem 1.15rem !important;
+    background: transparent !important;
+    font-family: var(--font-code) !important;
+    font-size: 0.75rem !important;
+    line-height: 1.8 !important;
+    tab-size: 2;
+    counter-reset: code-line;
+  }
+
+  .code-body :global(.astro-code code) {
+    font-family: var(--font-code) !important;
+  }
+
+  .code-body :global(.line) {
+    display: inline-block;
+    width: 100%;
+  }
+
+  .code-body :global(.line)::before {
+    counter-increment: code-line;
+    content: counter(code-line);
+    display: inline-block;
+    width: 2.1em;
+    margin-right: 1.1em;
+    color: #3c3648;
+    text-align: right;
+    user-select: none;
+  }
+
+  .sdk-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.85rem;
+  }
+
+  .sdk-foot-note {
+    color: #625c70;
+    font-size: 0.68rem;
+    line-height: 1.55;
+  }
+
+  .sdk-foot a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex: none;
+    color: var(--brand-bright);
+    font-size: 0.72rem;
+    transition: color 0.2s ease;
+  }
+
+  .sdk-foot a:hover {
+    color: #d8b4fe;
+  }
+
+  .sdk-principles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    margin-top: 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--border);
+  }
+
+  .principle {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1rem 1.15rem;
+    background: var(--bg-raised);
+  }
+
+  .principle-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(139, 92, 246, 0.16);
+    border-radius: 8px;
+    background: rgba(139, 92, 246, 0.07);
+    color: var(--brand-bright);
+  }
+
+  .principle-copy {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.4;
+  }
+
+  .principle-copy strong {
+    color: var(--text-soft);
+    font-size: 0.76rem;
+    font-weight: 520;
+    letter-spacing: -0.015em;
+  }
+
+  .principle-copy em {
+    color: var(--faint);
+    font-size: 0.64rem;
+    font-style: normal;
+  }
+
+  .sdk-today {
+    margin-top: 1.1rem;
+    color: var(--faint);
+    font-size: 0.72rem;
+    text-align: center;
+  }
+
+  .sdk-today a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--text-soft);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .sdk-today a:hover {
+    color: var(--brand-bright);
+    border-color: rgba(167, 139, 250, 0.5);
+  }
+
+  @media (max-width: 760px) {
+    .sdk-panel {
+      padding: 1rem;
+    }
+
+    .sdk-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.55rem;
+    }
+
+    .sdk-foot {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .code-body {
+      max-height: none;
+    }
+
+    .code-body :global(.astro-code) {
+      font-size: 0.67rem !important;
+      line-height: 1.78 !important;
+      padding: 0.9rem 0.9rem 1rem !important;
+    }
+
+    .code-body :global(.line)::before {
+      width: 1.6em;
+      margin-right: 0.7em;
+    }
+
+    .sdk-principles {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sdk-today {
+      text-align: left;
+    }
+
+    .sdk-tabs {
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .sdk-tab {
+      height: 35px;
+      padding: 0 0.65rem;
+      font-size: 0.72rem;
+    }
+
+    .code-lang {
+      display: none;
+    }
+  }
+</style>

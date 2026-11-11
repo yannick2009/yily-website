@@ -1,0 +1,418 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import Features from "../components/Features.astro";
+import HowItWorks from "../components/HowItWorks.astro";
+import SDKs from "../components/SDKs.astro";
+import Security from "../components/Security.astro";
+import SelfHost from "../components/SelfHost.astro";
+import OpenSource from "../components/OpenSource.astro";
+import Faq from "../components/Faq.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<BaseLayout>
+  <Nav />
+
+  <main id="main">
+    <Hero />
+    <Features />
+    <HowItWorks />
+    <SDKs />
+    <Security />
+    <SelfHost />
+    <OpenSource />
+    <Faq />
+  </main>
+
+  <Footer />
+
+  <script>
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* ---------------------------------------------------------------
+       Navigation: scrolled state, progress bar, active section
+    --------------------------------------------------------------- */
+    const nav = document.querySelector<HTMLElement>("[data-nav]");
+    const progress = document.querySelector<HTMLElement>("[data-progress]");
+    const navSections = Array.from(document.querySelectorAll<HTMLElement>("main section[id]"));
+    const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]"));
+
+    const updateActiveNav = () => {
+      const line = window.innerHeight * 0.38;
+      let activeId = "";
+      for (const section of navSections) {
+        if (section.getBoundingClientRect().top <= line) {
+          activeId = section.id;
+        }
+      }
+      for (const link of navLinks) {
+        link.classList.toggle("is-active", link.getAttribute("href") === `#${activeId}`);
+      }
+    };
+
+    const onScroll = () => {
+      nav?.classList.toggle("is-scrolled", window.scrollY > 10);
+      if (progress) {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const ratio = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+        progress.style.transform = `scaleX(${ratio})`;
+      }
+      updateActiveNav();
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", updateActiveNav);
+
+    /* ---------------------------------------------------------------
+       Mobile menu
+    --------------------------------------------------------------- */
+    const menuBtn = document.querySelector<HTMLButtonElement>("[data-menu-btn]");
+    const mobileMenu = document.querySelector<HTMLElement>("[data-mobile-menu]");
+
+    const setMenu = (open: boolean) => {
+      if (!menuBtn || !mobileMenu) return;
+      menuBtn.setAttribute("aria-expanded", String(open));
+      menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      mobileMenu.dataset.open = String(open);
+      mobileMenu.setAttribute("aria-hidden", String(!open));
+      document.body.classList.toggle("menu-open", open);
+      document.body.style.overflow = open ? "hidden" : "";
+    };
+
+    menuBtn?.addEventListener("click", () => {
+      setMenu(menuBtn.getAttribute("aria-expanded") !== "true");
+    });
+
+    mobileMenu?.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => setMenu(false));
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setMenu(false);
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 1024) setMenu(false);
+    });
+
+    /* ---------------------------------------------------------------
+       Scroll reveals
+    --------------------------------------------------------------- */
+    document.querySelectorAll<HTMLElement>("[data-reveal-group]").forEach((group) => {
+      group.querySelectorAll<HTMLElement>(":scope > [data-reveal]").forEach((el, index) => {
+        el.style.setProperty("--reveal-delay", `${index * 65}ms`);
+      });
+    });
+
+    const revealElements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      revealElements.forEach((el) => el.classList.add("is-in"));
+    } else {
+      const revealObserver = new IntersectionObserver(
+        (entries, observer) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-in");
+              observer.unobserve(entry.target);
+            }
+          }
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -7% 0px" }
+      );
+      revealElements.forEach((el) => revealObserver.observe(el));
+    }
+
+    /* ---------------------------------------------------------------
+       Copy to clipboard
+    --------------------------------------------------------------- */
+    const writeClipboard = async (text: string) => {
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return;
+        } catch {
+          // Fall through to the legacy path when permission is denied.
+        }
+      }
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.top = "0";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      const copied = document.execCommand("copy");
+      area.remove();
+      if (!copied) throw new Error("copy failed");
+    };
+
+    document.querySelectorAll<HTMLButtonElement>("[data-copy-target], [data-copy-block]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        let text = "";
+
+        if (button.hasAttribute("data-copy-block")) {
+          const pre = button.closest(".term-block")?.querySelector("pre");
+          text = pre?.textContent?.trim() ?? "";
+        } else {
+          const target = document.querySelector<HTMLElement>(button.getAttribute("data-copy-target") || "");
+          text = target?.querySelector("pre")?.textContent ?? target?.textContent ?? "";
+          text = text.trim();
+        }
+
+        if (!text) return;
+
+        try {
+          await writeClipboard(text);
+          button.classList.add("is-copied");
+          const label = button.querySelector<HTMLElement>("[data-copy-label]");
+          if (label) {
+            if (!label.dataset.original) label.dataset.original = label.textContent ?? "";
+            label.textContent = "Copied";
+            window.setTimeout(() => {
+              button.classList.remove("is-copied");
+              label.textContent = label.dataset.original ?? "Copy";
+            }, 1700);
+          } else {
+            window.setTimeout(() => button.classList.remove("is-copied"), 1700);
+          }
+        } catch {
+          button.classList.remove("is-copied");
+        }
+      });
+    });
+
+    /* ---------------------------------------------------------------
+       Cursor spotlight on cards
+    --------------------------------------------------------------- */
+    document.querySelectorAll<HTMLElement>("[data-spotlight]").forEach((card) => {
+      card.addEventListener("pointermove", (event) => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty("--mx", `${event.clientX - rect.left}px`);
+        card.style.setProperty("--my", `${event.clientY - rect.top}px`);
+      });
+    });
+
+    /* ---------------------------------------------------------------
+       Hero: live variables reveal demo
+    --------------------------------------------------------------- */
+    const truncateMiddle = (value: string, max = 32) => {
+      if (value.length <= max) return value;
+      const half = Math.floor((max - 1) / 2);
+      return `${value.slice(0, half)}…${value.slice(-half)}`;
+    };
+
+    const secretRows = Array.from(document.querySelectorAll<HTMLElement>("[data-secret-row]"));
+    const autoRow = document.querySelector<HTMLElement>("[data-auto-reveal]");
+    const controllers = new Map<
+      HTMLElement,
+      { reveal: () => void; hide: () => void }
+    >();
+    let heroInteracted = false;
+
+    secretRows.forEach((row) => {
+      const valueEl = row.querySelector<HTMLElement>("[data-value]");
+      const toggle = row.querySelector<HTMLButtonElement>("[data-reveal-toggle]");
+      const nameEl = row.querySelector<HTMLElement>("[data-var-name]");
+      const countdownEl = row.querySelector<HTMLElement>("[data-countdown]");
+      const countdownSeconds = row.querySelector<HTMLElement>("[data-countdown-seconds]");
+      const name = nameEl?.textContent?.trim() || "value";
+      const plain = row.dataset.plain || "";
+      const mask = "••••••••••";
+      const isAuto = row === autoRow;
+      let revealed = false;
+      let countdownTimer = 0;
+      let autoTimer = 0;
+
+      const clearTimers = () => {
+        window.clearInterval(countdownTimer);
+        window.clearTimeout(autoTimer);
+      };
+
+      const scheduleAuto = () => {
+        if (!isAuto || heroInteracted || reduceMotion) return;
+        autoTimer = window.setTimeout(() => {
+          if (!heroInteracted) reveal();
+        }, 5000);
+      };
+
+      const hide = () => {
+        clearTimers();
+        if (!revealed) return;
+        revealed = false;
+        row.classList.remove("is-plain");
+        if (valueEl) valueEl.textContent = mask;
+        if (countdownEl) countdownEl.hidden = true;
+        toggle?.setAttribute("aria-pressed", "false");
+        toggle?.setAttribute("aria-label", `Reveal ${name}`);
+      };
+
+      const reveal = () => {
+        if (revealed || !valueEl) return;
+        clearTimers();
+        revealed = true;
+        valueEl.textContent = truncateMiddle(plain);
+        row.classList.add("is-plain");
+        toggle?.setAttribute("aria-pressed", "true");
+        toggle?.setAttribute("aria-label", `Hide ${name}`);
+
+        if (countdownEl && countdownSeconds) {
+          let remaining = 20;
+          countdownEl.hidden = false;
+          countdownSeconds.textContent = String(remaining);
+          if (!reduceMotion) {
+            countdownTimer = window.setInterval(() => {
+              remaining -= 1;
+              if (remaining <= 0) {
+                hide();
+                scheduleAuto();
+                return;
+              }
+              countdownSeconds.textContent = String(remaining);
+            }, 1000);
+          }
+        }
+      };
+
+      toggle?.addEventListener("click", () => {
+        if (isAuto) heroInteracted = true;
+        if (revealed) hide();
+        else reveal();
+      });
+
+      controllers.set(row, { reveal, hide });
+    });
+
+    const autoController = autoRow ? controllers.get(autoRow) : undefined;
+    if (autoController) {
+      if (reduceMotion) {
+        autoController.reveal();
+      } else {
+        window.setTimeout(() => {
+          if (!heroInteracted) autoController.reveal();
+        }, 1900);
+      }
+    }
+
+    /* ---------------------------------------------------------------
+       SDK language tabs
+    --------------------------------------------------------------- */
+    const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-sdk-tab]"));
+    const panels = Array.from(document.querySelectorAll<HTMLElement>("[data-sdk-panel]"));
+
+    const activateTab = (id: string | undefined) => {
+      for (const tab of tabs) {
+        const active = tab.dataset.sdkTab === id;
+        tab.classList.toggle("is-active", active);
+        tab.setAttribute("aria-selected", String(active));
+        tab.tabIndex = active ? 0 : -1;
+      }
+      for (const panel of panels) {
+        const active = panel.dataset.sdkPanel === id;
+        panel.hidden = !active;
+        panel.classList.toggle("is-active", active);
+      }
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => activateTab(tab.dataset.sdkTab));
+      tab.addEventListener("keydown", (event) => {
+        if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        let next = index;
+        if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+        if (event.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === "Home") next = 0;
+        if (event.key === "End") next = tabs.length - 1;
+        tabs[next].focus();
+        activateTab(tabs[next].dataset.sdkTab);
+      });
+    });
+
+    /* ---------------------------------------------------------------
+       Retrieval diagram stepper
+    --------------------------------------------------------------- */
+    const flow = document.querySelector<HTMLElement>("[data-flow]");
+    const flowSection = flow?.closest<HTMLElement>(".how") ?? flow;
+    const flowSteps = Array.from(document.querySelectorAll<HTMLElement>("[data-flow-step]"));
+    const flowCounter = document.querySelector<HTMLElement>("[data-flow-counter]");
+    const flowHint = document.querySelector<HTMLElement>("[data-flow-hint]");
+    const flowHintWrap = flowHint?.closest<HTMLElement>(".hint");
+
+    if (flow && flowSteps.length) {
+      let currentStep = 1;
+      let autoTimer = 0;
+      let userPaused = false;
+      let flowVisible = false;
+
+      if (reduceMotion && flowHint) {
+        flowHint.textContent = "Click a step to explore";
+      }
+
+      const setStep = (value: number) => {
+        currentStep = ((value - 1 + flowSteps.length) % flowSteps.length) + 1;
+        flow.dataset.step = String(currentStep);
+        if (flowCounter) {
+          flowCounter.textContent = `${String(currentStep).padStart(2, "0")} / ${String(flowSteps.length).padStart(2, "0")}`;
+        }
+        for (const step of flowSteps) {
+          const active = Number(step.dataset.flowStep) === currentStep;
+          step.classList.toggle("is-active", active);
+          step.querySelector<HTMLButtonElement>("button")?.setAttribute("aria-current", active ? "step" : "false");
+        }
+      };
+
+      const scheduleStep = () => {
+        window.clearTimeout(autoTimer);
+        if (reduceMotion || userPaused || !flowVisible) return;
+        autoTimer = window.setTimeout(() => {
+          setStep(currentStep + 1);
+          scheduleStep();
+        }, 4200);
+      };
+
+      for (const step of flowSteps) {
+        step.querySelector<HTMLButtonElement>("button")?.addEventListener("click", () => {
+          userPaused = true;
+          window.clearTimeout(autoTimer);
+          setStep(Number(step.dataset.flowStep));
+          flowSection?.classList.remove("is-running");
+          flowSection?.classList.add("is-paused");
+          flowHintWrap?.classList.add("is-paused");
+          if (flowHint) {
+            flowHint.textContent = "Paused · click a step to explore";
+          }
+        });
+      }
+
+      if ("IntersectionObserver" in window) {
+        const flowObserver = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              flowVisible = entry.isIntersecting;
+              if (flowVisible) {
+                if (!userPaused) flowSection?.classList.add("is-running");
+                scheduleStep();
+              } else {
+                flowSection?.classList.remove("is-running");
+                window.clearTimeout(autoTimer);
+              }
+            }
+          },
+          { threshold: 0.28 }
+        );
+        flowObserver.observe(flow);
+      } else {
+        flowVisible = true;
+        flowSection?.classList.add("is-running");
+        scheduleStep();
+      }
+
+      setStep(1);
+    }
+  </script>
+</BaseLayout>

@@ -1,0 +1,267 @@
+---
+import Icon from "./Icon.astro";
+import GitHubIcon from "./GitHubIcon.astro";
+
+const repo = "https://github.com/yannick2009/yily";
+const issues = `${repo}/issues`;
+const contributing = `${repo}/blob/main/CONTRIBUTING.md`;
+
+const faqs = [
+  {
+    q: "Is Yily production-ready?",
+    a: "It is in public beta (v1.0.0-beta.1). The core works and is self-hostable today, but pin a release, back up the data volume and master key, and expect APIs to evolve. Read the release notes before upgrading.",
+  },
+  {
+    q: "How is Yily different from Vault or Infisical?",
+    a: "Yily is deliberately small: one Go binary, SQLite, one admin and no external dependencies. If you need distributed clusters, dynamic secrets or multi-tenant RBAC, those tools are a better fit. If you want a vault you can understand in an afternoon, Yily is for you.",
+  },
+  {
+    q: "What happens if I lose the master key?",
+    a: "The encrypted values become unrecoverable. There is no recovery path, by design. Generate the key once, store it outside the database and back it up somewhere safe.",
+  },
+  {
+    q: "Which SDKs can I use today?",
+    a: "The REST API and CLI are available now. Go, Rust, Java, JavaScript and Python SDKs are on the roadmap, with Go first. The snippets on this page are design previews and may change before release.",
+  },
+  {
+    q: "Does it run on ARM?",
+    a: "The current image is linux/amd64 only. On ARM hosts, Docker can emulate it by adding --platform linux/amd64. A native ARM build is not available yet.",
+  },
+  {
+    q: "How can I contribute?",
+    a: "Open an issue, send a pull request or improve the docs. The contributing guide covers the workflow. Bug reports and documentation fixes count just as much as code.",
+  },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a,
+    },
+  })),
+};
+---
+
+<section class="section faq" id="faq">
+  <div class="container faq-grid">
+    <div class="faq-copy" data-reveal>
+      <span class="eyebrow">FAQ</span>
+      <h2 class="section-title">Fair questions.</h2>
+      <p class="section-lede">
+        Still curious? The source is public, the specs are in the repo, and the
+        issue tracker is open.
+      </p>
+      <div class="faq-actions">
+        <a class="btn btn-ghost btn-sm" href={issues} target="_blank" rel="noreferrer">
+          <GitHubIcon size={15} />
+          Open an issue
+        </a>
+        <a class="faq-link" href={contributing} target="_blank" rel="noreferrer">
+          Contributing guide
+          <Icon name="arrow-up-right" size={13} />
+        </a>
+      </div>
+    </div>
+
+    <div class="faq-list" data-reveal style="--reveal-delay: 80ms">
+      {
+        faqs.map((faq, i) => (
+          <details name="faq" open={i === 0}>
+            <summary>
+              <span class="faq-index">{String(i + 1).padStart(2, "0")}</span>
+              <span class="faq-question">{faq.q}</span>
+              <span class="faq-plus"><Icon name="plus" size={14} /></span>
+            </summary>
+            <div class="faq-answer">
+              <p>{faq.a}</p>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+<style>
+  .faq {
+    border-top: 1px solid var(--border);
+    background:
+      radial-gradient(700px 400px at 10% 20%, rgba(131, 56, 236, 0.045), transparent 70%);
+  }
+
+  .faq-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+    gap: clamp(2.5rem, 6vw, 5.5rem);
+    align-items: start;
+  }
+
+  .faq-copy {
+    position: sticky;
+    top: 120px;
+  }
+
+  .faq-copy .section-title {
+    margin-top: 0.95rem;
+  }
+
+  .faq-copy .section-lede {
+    max-width: 360px;
+  }
+
+  .faq-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .faq-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--faint);
+    font-size: 0.72rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .faq-link:hover {
+    color: var(--brand-bright);
+    border-color: rgba(167, 139, 250, 0.4);
+  }
+
+  .faq-list {
+    border-top: 1px solid var(--border);
+  }
+
+  .faq-list details {
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.3s ease;
+  }
+
+  .faq-list details[open] {
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.025), transparent 70%);
+  }
+
+  .faq-list summary {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) 28px;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.15rem 0.5rem;
+    cursor: pointer;
+    list-style: none;
+    transition: color 0.2s ease;
+  }
+
+  .faq-list summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-list summary:hover .faq-question {
+    color: var(--text);
+  }
+
+  .faq-index {
+    color: #5a5468;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .faq-question {
+    color: var(--text-soft);
+    font-size: 0.94rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    transition: color 0.2s ease;
+  }
+
+  .faq-list details[open] .faq-question {
+    color: var(--text);
+  }
+
+  .faq-plus {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--faint);
+    transition:
+      transform 0.3s var(--ease-out),
+      color 0.3s ease,
+      border-color 0.3s ease,
+      background-color 0.3s ease;
+  }
+
+  .faq-list details[open] .faq-plus {
+    transform: rotate(45deg);
+    border-color: rgba(167, 139, 250, 0.28);
+    background: rgba(139, 92, 246, 0.08);
+    color: var(--brand-bright);
+  }
+
+  .faq-answer {
+    padding: 0 3rem 1.35rem 2.85rem;
+    animation: faq-in 0.35s var(--ease-out);
+  }
+
+  .faq-answer p {
+    max-width: 61ch;
+    color: var(--muted);
+    font-size: 0.84rem;
+    line-height: 1.72;
+    text-wrap: pretty;
+  }
+
+  @keyframes faq-in {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 960px) {
+    .faq-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2.5rem;
+    }
+
+    .faq-copy {
+      position: static;
+    }
+
+    .faq-copy .section-lede {
+      max-width: 500px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .faq-list summary {
+      grid-template-columns: 26px minmax(0, 1fr) 26px;
+      gap: 0.5rem;
+      padding: 1rem 0.2rem;
+    }
+
+    .faq-question {
+      font-size: 0.87rem;
+    }
+
+    .faq-answer {
+      padding: 0 2rem 1.2rem 2rem;
+    }
+  }
+</style>

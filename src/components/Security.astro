@@ -1,0 +1,484 @@
+---
+import Icon from "./Icon.astro";
+
+const encryptionDoc = "https://github.com/yannick2009/yily/blob/main/docs/encryption.md";
+const authDoc = "https://github.com/yannick2009/yily/blob/main/docs/authentication.md";
+
+const specs = [
+  {
+    icon: "lock" as const,
+    label: "Encryption at rest",
+    value: "AES-256-GCM",
+    desc: "Authenticated encryption with a fresh 96-bit nonce for every write and a 128-bit tag.",
+    code: "AEAD · hardware accelerated",
+  },
+  {
+    icon: "fingerprint" as const,
+    label: "Context binding",
+    value: "AAD verified",
+    desc: "Ciphertext is bound to its variable ID and version. Swap it in SQLite and decryption fails closed.",
+    code: "yily:<variable>:<version>",
+  },
+  {
+    icon: "key" as const,
+    label: "Password hashing",
+    value: "Argon2id",
+    desc: "Memory-hard hashing at the OWASP baseline, with a unique salt for every credential.",
+    code: "t=3 · m=64 MB · p=4",
+  },
+  {
+    icon: "shield" as const,
+    label: "Tokens at rest",
+    value: "SHA-256",
+    desc: "Sessions and personal access tokens are stored only as digests. Raw tokens are shown once.",
+    code: "hex(sha256(token))",
+  },
+  {
+    icon: "clock" as const,
+    label: "Sessions",
+    value: "24h / 2h",
+    desc: "Absolute and idle expiry. HttpOnly cookies, SameSite=Lax, and Secure whenever HTTPS is detected.",
+    code: "HttpOnly · Lax · Secure",
+  },
+  {
+    icon: "server" as const,
+    label: "Tenancy",
+    value: "Single admin",
+    desc: "Self-contained authentication. No OAuth provider, no SMTP server, no third party in the loop.",
+    code: "single-tenant by design",
+  },
+];
+---
+
+<section class="section security" id="security">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <span class="eyebrow">Security model</span>
+      <h2 class="section-title">
+        Boring crypto.<br />
+        <span class="serif gradient-text">Applied carefully.</span>
+      </h2>
+      <p class="section-lede">
+        Standard primitives, explicit context, zero cleverness. Secrets are
+        encrypted before they touch SQLite; tokens are hashed before they are
+        stored.
+      </p>
+    </div>
+
+    <div class="specs" data-reveal-group>
+      {
+        specs.map((spec) => (
+          <article class="spec" data-reveal data-spotlight>
+            <div class="spec-top">
+              <span class="spec-icon"><Icon name={spec.icon} size={15} /></span>
+              <span class="spec-label">{spec.label}</span>
+            </div>
+            <h3>{spec.value}</h3>
+            <p>{spec.desc}</p>
+            <code class="spec-code">{spec.code}</code>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="envelope" data-reveal data-spotlight>
+      <div class="envelope-copy">
+        <span class="eyebrow">Envelope anatomy</span>
+        <h3>Every value carries its own proof.</h3>
+        <p>
+          The stored format is versioned, self-describing and context-bound. It is
+          impossible to move a ciphertext to another variable or version without
+          authentication failing.
+        </p>
+        <div class="envelope-links">
+          <a href={encryptionDoc} target="_blank" rel="noreferrer">
+            <Icon name="book" size={13} /> Encryption spec
+          </a>
+          <a href={authDoc} target="_blank" rel="noreferrer">
+            <Icon name="shield" size={13} /> Auth spec
+          </a>
+        </div>
+      </div>
+
+      <div class="envelope-visual" aria-hidden="true">
+        <div class="envelope-top">
+          <span class="env-source">VariableVersion.Value</span>
+          <span class="env-authenticated"><Icon name="check" size={11} /> authenticated</span>
+        </div>
+
+        <div class="env-line">
+          <span class="env-seg schema">v1</span>
+          <span class="env-colon">:</span>
+          <span class="env-seg nonce">9f2b…c1</span>
+          <span class="env-colon">:</span>
+          <span class="env-seg cipher">4c0a…e1</span>
+        </div>
+
+        <div class="env-labels">
+          <span>schema</span>
+          <span>nonce · 96-bit</span>
+          <span>ciphertext + tag</span>
+        </div>
+
+        <div class="env-foot">
+          <span><Icon name="rotate" size={11} /> versioned</span>
+          <span><Icon name="sparkle" size={11} /> random per write</span>
+          <span><Icon name="fingerprint" size={11} /> ID + version bound</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="security-note" data-reveal>
+      Zero plaintext at rest. If the master key is lost, the ciphertext stays
+      closed. <a href={encryptionDoc} target="_blank" rel="noreferrer">Read the spec <Icon name="arrow-up-right" size={11} /></a>.
+    </p>
+  </div>
+</section>
+
+<style>
+  .security {
+    background:
+      radial-gradient(1000px 600px at 50% 30%, rgba(131, 56, 236, 0.05), transparent 72%);
+  }
+
+  .specs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .spec {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 1.35rem;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.024), rgba(255, 255, 255, 0.007)),
+      var(--bg-raised);
+    transition:
+      border-color 0.3s ease,
+      transform 0.3s var(--ease-out);
+  }
+
+  .spec::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      340px circle at var(--mx, 50%) var(--my, 0%),
+      rgba(139, 92, 246, 0.11),
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  .spec:hover {
+    border-color: rgba(167, 139, 250, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .spec:hover::before {
+    opacity: 1;
+  }
+
+  .spec > * {
+    position: relative;
+  }
+
+  .spec-top {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .spec-icon {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(139, 92, 246, 0.16);
+    border-radius: 8px;
+    background: rgba(139, 92, 246, 0.07);
+    color: var(--brand-bright);
+  }
+
+  .spec-label {
+    color: #6f697e;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .spec h3 {
+    margin-top: 1.1rem;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .spec p {
+    margin-top: 0.45rem;
+    color: var(--muted);
+    font-size: 0.79rem;
+    line-height: 1.62;
+    text-wrap: pretty;
+  }
+
+  .spec-code {
+    width: fit-content;
+    max-width: 100%;
+    overflow: hidden;
+    margin-top: auto;
+    padding-top: 1rem;
+    color: #635c72;
+    font-family: var(--font-code);
+    font-size: 0.55rem;
+    letter-spacing: 0.02em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Envelope */
+  .envelope {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    margin-top: 1rem;
+    padding: clamp(1.6rem, 3vw, 2.4rem);
+    border: 1px solid rgba(167, 139, 250, 0.15);
+    border-radius: 20px;
+    background:
+      radial-gradient(600px 300px at 80% 20%, rgba(139, 92, 246, 0.09), transparent 70%),
+      linear-gradient(180deg, rgba(20, 16, 28, 0.9), rgba(10, 8, 15, 0.94));
+  }
+
+  .envelope-copy h3 {
+    margin-top: 0.9rem;
+    font-size: clamp(1.25rem, 2.1vw, 1.7rem);
+    font-weight: 560;
+    line-height: 1.18;
+    letter-spacing: -0.04em;
+  }
+
+  .envelope-copy p {
+    max-width: 46ch;
+    margin-top: 0.65rem;
+    color: var(--muted);
+    font-size: 0.82rem;
+    line-height: 1.68;
+    text-wrap: pretty;
+  }
+
+  .envelope-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.15rem;
+    margin-top: 1.1rem;
+  }
+
+  .envelope-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38rem;
+    color: var(--text-soft);
+    font-size: 0.72rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .envelope-links a:hover {
+    color: var(--brand-bright);
+    border-color: rgba(167, 139, 250, 0.4);
+  }
+
+  .envelope-visual {
+    position: relative;
+    overflow: hidden;
+    padding: 1.05rem 1.15rem;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    background: rgba(7, 5, 11, 0.62);
+  }
+
+  .envelope-visual::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      transparent 20%,
+      rgba(196, 181, 253, 0.055) 45%,
+      transparent 70%
+    );
+    transform: translateX(-100%);
+    animation: envelope-scan 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes envelope-scan {
+    0%, 60% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .envelope-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .env-source {
+    color: #5a5468;
+    font-family: var(--font-code);
+    font-size: 0.54rem;
+    letter-spacing: 0.02em;
+  }
+
+  .env-authenticated {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: rgba(94, 234, 212, 0.65);
+    font-family: var(--font-body);
+    font-size: 0.56rem;
+    font-weight: 500;
+  }
+
+  .env-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    font-family: var(--font-code);
+    font-size: clamp(0.66rem, 1.1vw, 0.82rem);
+  }
+
+  .env-seg {
+    padding: 0.35rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.025);
+    letter-spacing: 0.03em;
+  }
+
+  .env-seg.schema {
+    color: #b9a7f9;
+    border-color: rgba(167, 139, 250, 0.2);
+    background: rgba(139, 92, 246, 0.08);
+  }
+
+  .env-seg.nonce {
+    color: #e9d5ff;
+    border-color: rgba(216, 180, 254, 0.15);
+  }
+
+  .env-seg.cipher {
+    color: #93a1b5;
+    border-color: rgba(147, 161, 181, 0.12);
+  }
+
+  .env-colon {
+    color: #4f495c;
+  }
+
+  .env-labels {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr 1.6fr;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    color: #5a5468;
+    font-family: var(--font-body);
+    font-size: 0.52rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .env-labels span:nth-child(2),
+  .env-labels span:nth-child(3) {
+    text-align: center;
+  }
+
+  .env-foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem 1rem;
+    margin-top: 1.15rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--border);
+    color: #625c70;
+    font-family: var(--font-body);
+    font-size: 0.53rem;
+  }
+
+  .env-foot span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.32rem;
+  }
+
+  .security-note {
+    margin-top: 1rem;
+    color: var(--faint);
+    font-size: 0.72rem;
+    text-align: center;
+  }
+
+  .security-note a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    color: var(--text-soft);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .security-note a:hover {
+    color: var(--brand-bright);
+    border-color: rgba(167, 139, 250, 0.4);
+  }
+
+  @media (max-width: 960px) {
+    .specs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .envelope {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.8rem;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .specs {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .envelope {
+      padding: 1.25rem;
+    }
+
+    .env-foot {
+      gap: 0.5rem 0.8rem;
+    }
+
+    .security-note {
+      text-align: left;
+    }
+  }
+</style>

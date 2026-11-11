@@ -1,0 +1,318 @@
+---
+import Icon from "./Icon.astro";
+import GitHubIcon from "./GitHubIcon.astro";
+
+const repo = "https://github.com/yannick2009/yily";
+const version = "v1.0.0-beta.1";
+const year = new Date().getFullYear();
+
+interface FooterLink {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
+const columns: { title: string; links: FooterLink[] }[] = [
+  {
+    title: "Product",
+    links: [
+      { label: "Why Yily", href: "#why" },
+      { label: "How it works", href: "#how-it-works" },
+      { label: "SDKs", href: "#sdks" },
+      { label: "Security", href: "#security" },
+      { label: "Self-hosting", href: "#self-host" },
+      { label: "FAQ", href: "#faq" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "GitHub", href: repo, external: true },
+      { label: "Releases", href: `${repo}/releases`, external: true },
+      { label: "Documentation", href: `${repo}#readme`, external: true },
+    ],
+  },
+  {
+    title: "Community",
+    links: [
+      { label: "Issues", href: `${repo}/issues`, external: true },
+      { label: "Contributing", href: `${repo}/blob/main/CONTRIBUTING.md`, external: true },
+      { label: "License", href: `${repo}/blob/main/LICENSE`, external: true },
+      { label: "MIT", href: "https://opensource.org/licenses/MIT", external: true },
+    ],
+  },
+];
+---
+
+<footer class="footer">
+  <img class="footer-watermark" src="/logo.svg" alt="" width="180" height="169" aria-hidden="true" loading="lazy" decoding="async" fetchpriority="low" />
+
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#top" class="footer-logo" aria-label="Yily, back to top">
+          <img src="/logo.svg" alt="Yily" width="180" height="169" loading="lazy" decoding="async" />
+        </a>
+        <p>
+          A lightweight, self-hosted secret manager for people who would rather
+          ship than operate a vault cluster.
+        </p>
+        <div class="footer-badges">
+          <a
+            class="pill footer-version"
+            href={`${repo}/releases`}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`Yily ${version}, view releases`}
+          >
+            {version}
+          </a>
+          <a class="footer-github" href={repo} target="_blank" rel="noreferrer" aria-label="Yily on GitHub">
+            <GitHubIcon size={15} />
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-cols">
+        {
+          columns.map((column) => (
+            <nav class="footer-col" aria-label={column.title}>
+              <h3>{column.title}</h3>
+              <ul>
+                {column.links.map((link) => (
+                  <li>
+                    <a
+                      href={link.href}
+                      target={link.external ? "_blank" : undefined}
+                      rel={link.external ? "noreferrer" : undefined}
+                    >
+                      {link.label}
+                      {link.external && <Icon name="arrow-up-right" size={10} />}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {year} Yily. Released under the MIT License.</p>
+      <p class="footer-credit">
+        Built with Go, Astro &amp; a healthy distrust of plaintext.
+      </p>
+      <a class="back-to-top" href="#top">
+        Back to top
+        <span class="back-to-top-icon"><Icon name="arrow-up-right" size={12} /></span>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    background:
+      radial-gradient(900px 400px at 50% 120%, rgba(131, 56, 236, 0.1), transparent 70%),
+      #08070c;
+  }
+
+  .footer-watermark {
+    position: absolute;
+    bottom: -180px;
+    left: 50%;
+    width: min(70vw, 680px);
+    height: auto;
+    transform: translateX(-50%) rotate(-4deg);
+    opacity: 0.022;
+    pointer-events: none;
+  }
+
+  .footer .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.6fr);
+    gap: clamp(2.5rem, 7vw, 6rem);
+    padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .footer-brand {
+    max-width: 340px;
+  }
+
+  .footer-logo {
+    display: inline-block;
+  }
+
+  .footer-logo img {
+    width: auto;
+    height: 43px;
+    filter: drop-shadow(0 0 20px rgba(131, 56, 236, 0.22));
+    transition: filter 0.3s ease;
+  }
+
+  .footer-logo:hover img {
+    filter: drop-shadow(0 0 26px rgba(167, 139, 250, 0.45));
+  }
+
+  .footer-brand p {
+    margin-top: 1rem;
+    color: var(--faint);
+    font-size: 0.79rem;
+    line-height: 1.7;
+    text-wrap: pretty;
+  }
+
+  .footer-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 1.2rem;
+  }
+
+  .footer-version {
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .footer-version:hover {
+    border-color: var(--border-strong);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text);
+  }
+
+  .footer-github {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    color: var(--muted);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .footer-github:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .footer-cols {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  .footer-col h3 {
+    color: var(--text-soft);
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .footer-col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin-top: 1rem;
+  }
+
+  .footer-col a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.22rem;
+    color: var(--faint);
+    font-size: 0.76rem;
+    transition: color 0.2s ease;
+  }
+
+  .footer-col a:hover {
+    color: var(--text);
+  }
+
+  .footer-col a svg {
+    opacity: 0.55;
+  }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.4rem;
+    padding: 1.15rem 0 1.4rem;
+    border-top: 1px solid var(--border);
+    color: #5e5869;
+    font-size: 0.67rem;
+  }
+
+  .footer-credit {
+    margin-left: auto;
+    color: #514b5c;
+  }
+
+  .back-to-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--faint);
+    transition: color 0.2s ease;
+  }
+
+  .back-to-top-icon {
+    display: grid;
+    place-items: center;
+    transform: rotate(-45deg);
+    transition: transform 0.25s var(--ease-out);
+  }
+
+  .back-to-top:hover {
+    color: var(--text-soft);
+  }
+
+  .back-to-top:hover .back-to-top-icon {
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+
+  @media (max-width: 860px) {
+    .footer-top {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2.5rem;
+    }
+
+    .footer-brand {
+      max-width: 420px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .footer-cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.8rem;
+    }
+
+    .footer-credit {
+      width: 100%;
+      margin-left: 0;
+    }
+
+    .back-to-top {
+      margin-left: auto;
+    }
+  }
+</style>

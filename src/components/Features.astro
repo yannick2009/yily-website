@@ -1,0 +1,941 @@
+---
+import Icon from "./Icon.astro";
+---
+
+<section class="section features" id="why">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <span class="eyebrow">Why Yily</span>
+      <h2 class="section-title">
+        Small by design.<br />
+        <span class="serif gradient-text">Serious where it matters.</span>
+      </h2>
+      <p class="section-lede">
+        Yily started with a question: why does secret management need so much
+        machinery?
+      </p>
+    </div>
+
+    <div class="origin" data-reveal>
+      <div class="origin-label"><span class="origin-dot"></span>The origin</div>
+      <div class="origin-copy">
+        <p>
+          The secret managers I tried were built for large teams. They came
+          with clusters, agents, external databases, and a bill that grows with
+          every environment. I wanted the opposite: one secure place for my keys,
+          a deploy that takes a minute, and a footprint that costs little to run.
+        </p>
+        <p>
+          That constraint shaped the architecture: <strong>one Go binary, one SQLite file, one master key.</strong> Everything else had to earn its place.
+        </p>
+      </div>
+    </div>
+
+    <div class="bento" data-reveal-group>
+      <article class="bento-card span-4" data-reveal data-spotlight>
+        <div class="card-top">
+          <span class="card-icon"><Icon name="box" size={16} /></span>
+          <span class="card-kicker">Deployment</span>
+        </div>
+        <h3>One binary. Zero orchestra.</h3>
+        <p>
+          The API, web interface and CLI ship together, with state in a single
+          SQLite database. Deploy it next to your app. No external storage to
+          run.
+        </p>
+
+        <div class="visual dash-visual" aria-hidden="true">
+          <div class="mini-page-head">
+            <div>
+              <span class="mini-page-title">Dashboard</span>
+              <span class="mini-page-sub">A quick overview of your secrets.</span>
+            </div>
+          </div>
+          <div class="dash-stats">
+            <div class="dash-stat">
+              <span class="dash-stat-icon"><Icon name="folder" size={12} /></span>
+              <span class="dash-stat-value">3</span>
+              <span class="dash-stat-label">Projects</span>
+            </div>
+            <div class="dash-stat">
+              <span class="dash-stat-icon"><Icon name="globe" size={12} /></span>
+              <span class="dash-stat-value">6</span>
+              <span class="dash-stat-label">Environments</span>
+            </div>
+            <div class="dash-stat">
+              <span class="dash-stat-icon"><Icon name="lock" size={12} /></span>
+              <span class="dash-stat-value">24</span>
+              <span class="dash-stat-label">Secrets</span>
+            </div>
+            <div class="dash-stat">
+              <span class="dash-stat-icon"><Icon name="key" size={12} /></span>
+              <span class="dash-stat-value">2</span>
+              <span class="dash-stat-label">Tokens</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bento-card span-2" data-reveal data-spotlight>
+        <div class="card-top">
+          <span class="card-icon"><Icon name="lock" size={16} /></span>
+          <span class="card-kicker">At rest</span>
+        </div>
+        <h3>Encrypted, then stored.</h3>
+        <p>
+          Every value is sealed with AES-256-GCM and a fresh nonce. The master key
+          never enters the database.
+        </p>
+
+        <div class="visual secret-visual" aria-hidden="true">
+          <div class="secret-variable">
+            <span class="secret-name">JWT_SECRET</span>
+            <span class="mini-tag">prod</span>
+            <span class="mini-tag">api</span>
+          </div>
+          <div class="secret-meta">
+            <span>Created Nov 9, 2026</span>
+            <span class="mini-primary"><Icon name="plus" size={9} /> New version</span>
+          </div>
+          <div class="mini-card secret-current">
+            <div class="secret-current-head">
+              <span class="secret-current-label">Current value</span>
+              <span class="mini-version-badge">Version 4</span>
+            </div>
+            <div class="secret-current-row">
+              <code>••••••••••</code>
+              <span class="secret-actions"><Icon name="eye" size={11} /><Icon name="copy" size={11} /></span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bento-card span-2" data-reveal data-spotlight>
+        <div class="card-top">
+          <span class="card-icon"><Icon name="layers" size={16} /></span>
+          <span class="card-kicker">Versioning</span>
+        </div>
+        <h3>History with an undo.</h3>
+        <p>
+          Every value change becomes a version. Reactivate an older one the
+          moment a deploy goes sideways.
+        </p>
+
+        <div class="visual versions-visual" aria-hidden="true">
+          <div class="ver-row">
+            <div class="ver-main">
+              <div class="ver-top">
+                <span class="ver-num">Version 4</span>
+                <span class="ver-badge is-active">Active</span>
+              </div>
+              <span class="ver-date">Created Nov 9, 2026</span>
+            </div>
+            <span class="ver-action secondary">Deactivate</span>
+          </div>
+          <div class="ver-row">
+            <div class="ver-main">
+              <div class="ver-top">
+                <span class="ver-num">Version 3</span>
+                <span class="ver-badge">Inactive</span>
+              </div>
+              <span class="ver-date">Created Nov 2, 2026</span>
+            </div>
+            <span class="ver-action primary">Activate</span>
+          </div>
+          <div class="ver-row">
+            <div class="ver-main">
+              <div class="ver-top">
+                <span class="ver-num">Version 2</span>
+                <span class="ver-badge">Inactive</span>
+              </div>
+              <span class="ver-date">Created Oct 27, 2026</span>
+            </div>
+            <span class="ver-action primary">Activate</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="bento-card span-2" data-reveal data-spotlight>
+        <div class="card-top">
+          <span class="card-icon"><Icon name="key" size={16} /></span>
+          <span class="card-kicker">Access</span>
+        </div>
+        <h3>Tokens that know their place.</h3>
+        <p>
+          Read- or write-scoped tokens, SHA-256 hashed before storage, revocable in
+          one click. The raw token is shown exactly once.
+        </p>
+
+        <div class="visual tokens-visual" aria-hidden="true">
+          <div class="mini-page-head">
+            <span class="mini-page-title">Tokens</span>
+            <span class="mini-primary"><Icon name="plus" size={9} /> Create token</span>
+          </div>
+          <div class="mini-card token-card">
+            <div class="token-row">
+              <span class="token-icon"><Icon name="key" size={11} /></span>
+              <div class="token-main">
+                <div class="token-line">
+                  <span class="token-name">deploy-bot</span>
+                  <span class="token-scope">Read</span>
+                </div>
+                <span class="token-meta">Never expires</span>
+                <span class="token-meta is-faint">Last used Nov 9, 2026</span>
+              </div>
+              <span class="token-actions"><Icon name="rotate" size={11} /><Icon name="x-circle" size={11} /></span>
+            </div>
+            <div class="token-row">
+              <span class="token-icon"><Icon name="key" size={11} /></span>
+              <div class="token-main">
+                <div class="token-line">
+                  <span class="token-name">ci-runner</span>
+                  <span class="token-scope is-write">Write</span>
+                </div>
+                <span class="token-meta">Expires Dec 31, 2026</span>
+                <span class="token-meta is-faint">Last used Nov 10, 2026</span>
+              </div>
+              <span class="token-actions"><Icon name="rotate" size={11} /><Icon name="x-circle" size={11} /></span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bento-card span-2" data-reveal data-spotlight>
+        <div class="card-top">
+          <span class="card-icon"><Icon name="clock" size={16} /></span>
+          <span class="card-kicker">Audit</span>
+        </div>
+        <h3>Receipts, automatically.</h3>
+        <p>
+          Sign-ins, rotations and revocations are recorded with the actor, target
+          and time. Export the trail when you need proof.
+        </p>
+
+        <div class="visual audit-visual" aria-hidden="true">
+          <div class="mini-page-head">
+            <span class="mini-page-title">Audit log</span>
+            <span class="mini-secondary"><Icon name="download" size={9} /> Export <span class="mini-csv">CSV</span></span>
+          </div>
+          <div class="mini-card audit-card">
+            <div class="audit-table-head"><span>Actor</span><span>Action</span><span>Resource</span><span>Time</span></div>
+            <div class="audit-row">
+              <span class="audit-actor">Yannick</span>
+              <span class="audit-action is-brand">Revealed</span>
+              <span class="audit-resource"><strong>JWT_SECRET</strong><em>Variable</em></span>
+              <span class="audit-time">2m</span>
+            </div>
+            <div class="audit-row">
+              <span class="audit-actor">Yannick</span>
+              <span class="audit-action">Rotated</span>
+              <span class="audit-resource"><strong>deploy-bot</strong><em>Token</em></span>
+              <span class="audit-time">1h</span>
+            </div>
+            <div class="audit-row">
+              <span class="audit-actor">Yannick</span>
+              <span class="audit-action">Revoked</span>
+              <span class="audit-resource"><strong>legacy-token</strong><em>Token</em></span>
+              <span class="audit-time">4h</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .features {
+    background:
+      radial-gradient(900px 500px at 50% 0%, rgba(139, 92, 246, 0.055), transparent 70%);
+  }
+
+  .features .section-header {
+    margin-bottom: 2.25rem;
+  }
+
+  .origin {
+    display: grid;
+    grid-template-columns: 130px minmax(0, 1fr);
+    gap: 2rem;
+    max-width: 880px;
+    margin: 0 auto 2.9rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .origin-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 0.15rem;
+    color: var(--brand-bright);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .origin-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 10px rgba(167, 139, 250, 0.75);
+  }
+
+  .origin-copy {
+    max-width: 690px;
+  }
+
+  .origin-copy p {
+    color: var(--muted);
+    font-size: 0.94rem;
+    line-height: 1.75;
+    text-wrap: pretty;
+  }
+
+  .origin-copy p + p {
+    margin-top: 0.9rem;
+  }
+
+  .origin-copy strong {
+    color: var(--text-soft);
+    font-weight: 500;
+  }
+
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .span-4 {
+    grid-column: span 4;
+  }
+
+  .span-2 {
+    grid-column: span 2;
+  }
+
+  .bento-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: clamp(1.35rem, 2.2vw, 1.8rem);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0.008)),
+      var(--bg-raised);
+    transition:
+      border-color 0.35s var(--ease-out),
+      transform 0.35s var(--ease-out);
+  }
+
+  .bento-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(
+      440px circle at var(--mx, 50%) var(--my, 0%),
+      rgba(139, 92, 246, 0.12),
+      transparent 58%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .bento-card::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(196, 181, 253, 0.22), transparent);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .bento-card:hover {
+    border-color: rgba(167, 139, 250, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .bento-card:hover::before,
+  .bento-card:hover::after {
+    opacity: 1;
+  }
+
+  .bento-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .card-icon {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(139, 92, 246, 0.18);
+    border-radius: 9px;
+    background: linear-gradient(180deg, rgba(139, 92, 246, 0.13), rgba(139, 92, 246, 0.05));
+    color: var(--brand-bright);
+  }
+
+  .card-kicker {
+    color: #5e5869;
+    font-family: var(--font-body);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  .bento-card h3 {
+    margin-top: 1.3rem;
+    font-size: clamp(1.12rem, 1.55vw, 1.32rem);
+    font-weight: 560;
+    line-height: 1.22;
+    letter-spacing: -0.035em;
+  }
+
+  .bento-card p {
+    max-width: 52ch;
+    margin-top: 0.6rem;
+    color: var(--muted);
+    font-size: 0.855rem;
+    line-height: 1.68;
+    text-wrap: pretty;
+  }
+
+  .visual {
+    margin-top: auto;
+    padding-top: 1.65rem;
+  }
+
+  /* Mini UI shared */
+  .mini-page-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+  }
+
+  .mini-page-title {
+    color: var(--text-soft);
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .mini-page-sub {
+    display: block;
+    margin-top: 1px;
+    color: var(--faint);
+    font-size: 0.53rem;
+  }
+
+  .mini-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #b15cff, #9333ea);
+    color: #fff;
+    font-size: 0.48rem;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(168, 85, 247, 0.16);
+  }
+
+  .mini-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--faint);
+    font-size: 0.5rem;
+    white-space: nowrap;
+  }
+
+  .mini-csv {
+    padding: 0 3px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-family: var(--font-code);
+    font-size: 0.4rem;
+    line-height: 1.5;
+  }
+
+  .mini-card {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.014);
+  }
+
+  .mini-tag {
+    flex: none;
+    padding: 1px 4px;
+    border-radius: 3px;
+    background: rgba(139, 92, 246, 0.14);
+    color: var(--brand-bright);
+    font-size: 0.46rem;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .mini-version-badge {
+    flex: none;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: rgba(139, 92, 246, 0.14);
+    color: var(--brand-bright);
+    font-size: 0.47rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Dashboard visual */
+  .dash-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .dash-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .dash-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+    padding: 8px 9px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.014);
+  }
+
+  .dash-stat-icon {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: rgba(139, 92, 246, 0.13);
+    color: var(--brand-bright);
+  }
+
+  .dash-stat-value {
+    color: var(--text);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .dash-stat-label {
+    overflow: hidden;
+    color: var(--faint);
+    font-size: 0.53rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Current value visual */
+  .secret-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .secret-variable {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .secret-name {
+    overflow: hidden;
+    color: var(--text-soft);
+    font-family: var(--font-code);
+    font-size: 0.66rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .secret-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    color: var(--faint);
+    font-size: 0.48rem;
+  }
+
+  .secret-current {
+    padding: 0.55rem 0.65rem;
+  }
+
+  .secret-current-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .secret-current-label {
+    color: var(--text-soft);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .secret-current-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .secret-current-row code {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--faint);
+    font-family: var(--font-code);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .secret-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: none;
+    color: var(--faint);
+  }
+
+  /* Versions */
+  .versions-visual {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.013);
+  }
+
+  .ver-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.48rem 0.6rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .ver-row:first-child {
+    border-top: 0;
+  }
+
+  .ver-main {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .ver-top {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .ver-num {
+    color: var(--text-soft);
+    font-family: var(--font-body);
+    font-size: 0.61rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .ver-badge {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--faint);
+    font-size: 0.48rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .ver-badge.is-active {
+    background: rgba(139, 92, 246, 0.16);
+    color: var(--brand-bright);
+  }
+
+  .ver-date {
+    color: var(--faint);
+    font-size: 0.5rem;
+    white-space: nowrap;
+  }
+
+  .ver-action {
+    flex: none;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.5rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .ver-action.secondary {
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--muted);
+  }
+
+  .ver-action.primary {
+    border: 1px solid rgba(139, 92, 246, 0.34);
+    background: rgba(139, 92, 246, 0.14);
+    color: var(--brand-bright);
+  }
+
+  /* Tokens visual */
+  .tokens-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .token-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.55rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .token-row:last-child {
+    border-bottom: 0;
+  }
+
+  .token-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--muted);
+  }
+
+  .token-main {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .token-line {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .token-name {
+    overflow: hidden;
+    color: var(--text-soft);
+    font-size: 0.61rem;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .token-scope {
+    flex: none;
+    padding: 1px 4px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--faint);
+    font-size: 0.43rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .token-scope.is-write {
+    background: rgba(139, 92, 246, 0.14);
+    color: var(--brand-bright);
+  }
+
+  .token-meta {
+    overflow: hidden;
+    color: var(--faint);
+    font-size: 0.48rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .token-meta.is-faint {
+    color: #57515f;
+  }
+
+  .token-actions {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex: none;
+    color: var(--faint);
+  }
+
+  /* Audit visual */
+  .audit-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .audit-table-head,
+  .audit-row {
+    display: grid;
+    grid-template-columns: 54px 62px minmax(0, 1fr) 22px;
+    align-items: center;
+    gap: 4px;
+    padding: 0 0.55rem;
+  }
+
+  .audit-table-head {
+    height: 20px;
+    border-bottom: 1px solid var(--border);
+    color: var(--faint);
+    font-size: 0.43rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .audit-row {
+    min-height: 35px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .audit-row:last-child {
+    border-bottom: 0;
+  }
+
+  .audit-actor {
+    overflow: hidden;
+    color: var(--text-soft);
+    font-size: 0.46rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .audit-action {
+    justify-self: start;
+    padding: 1px 4px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--muted);
+    font-size: 0.4rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .audit-action.is-brand {
+    background: rgba(139, 92, 246, 0.14);
+    color: var(--brand-bright);
+  }
+
+  .audit-resource {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+  }
+
+  .audit-resource strong {
+    overflow: hidden;
+    color: var(--text-soft);
+    font-size: 0.52rem;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .audit-resource em {
+    color: var(--faint);
+    font-size: 0.43rem;
+    font-style: normal;
+  }
+
+  .audit-time {
+    color: var(--faint);
+    font-size: 0.46rem;
+    text-align: right;
+  }
+
+  @media (max-width: 1024px) {
+    .bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .span-4,
+    .span-2 {
+      grid-column: span 1;
+    }
+
+    .span-4 {
+      grid-column: span 2;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .dash-stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 680px) {
+    .bento {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .origin {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.7rem;
+      margin-bottom: 2.25rem;
+      padding-top: 1.25rem;
+    }
+
+    .origin-copy p {
+      font-size: 0.9rem;
+    }
+
+    .span-4,
+    .span-2 {
+      grid-column: span 1;
+    }
+
+  }
+</style>

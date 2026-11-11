@@ -1,0 +1,1288 @@
+---
+import Icon from "./Icon.astro";
+
+const steps = [
+  {
+    n: "01",
+    title: "Ask once",
+    desc: "Your app asks for every variable it needs in one batched request. The personal access token travels in the Authorization header, over HTTPS. Yily SHA-256 hashes it, verifies its read scope and expiry, then hands the request to the variable store.",
+    code: "GET /environments/{id}/variables/values",
+  },
+  {
+    n: "02",
+    title: "Open in memory",
+    desc: "The active version comes back from SQLite as ciphertext. AES-256-GCM opens it with the master key, while the AAD binds it to its variable and version.",
+    code: "AES-256-GCM · nonce + AAD",
+  },
+  {
+    n: "03",
+    title: "Return, typed",
+    desc: "Values travel back as JSON and land in your struct. Plaintext exists only in memory. It is never written to disk or printed in a log.",
+    code: "200 OK · values loaded",
+  },
+];
+---
+
+<section class="section how" id="how-it-works">
+  <div class="container how-grid">
+    <div class="how-copy">
+      <div class="section-header left">
+        <span class="eyebrow">The retrieval path</span>
+        <h2 class="section-title">
+          A secret's journey,<br />
+          <span class="serif gradient-text">end to end.</span>
+        </h2>
+        <p class="section-lede">
+          Yily was built around one job: getting a value from encrypted storage
+          into your process without leaking it on the way. Here is every hop.
+        </p>
+      </div>
+
+      <ol class="steps" aria-label="Secret retrieval steps">
+        {
+          steps.map((step, i) => (
+            <li class:list={["step", { "is-active": i === 0 }]} data-flow-step={i + 1}>
+              <button
+                type="button"
+                aria-controls="flow-diagram"
+                aria-current={i === 0 ? "step" : "false"}
+              >
+                <span class="step-num">{step.n}</span>
+                <span class="step-body">
+                  <span class="step-title">{step.title}</span>
+                  <span class="step-desc">{step.desc}</span>
+                  <code class="step-code">{step.code}</code>
+                  <span class="step-progress" aria-hidden="true"><i></i></span>
+                </span>
+              </button>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="how-notes">
+        <span class="hint"><span class="hint-dot"></span><span data-flow-hint>Auto-advancing · click a step to pause</span></span>
+        <span class="rest-note">
+          The bulk values endpoint is live today. SDK snippets on this page are
+          design previews.
+        </span>
+      </div>
+    </div>
+
+    <div class="how-visual" data-reveal>
+      <div class="flow-card" id="flow-diagram" data-flow data-step="1">
+        <div class="flow-head">
+          <span class="flow-head-title">
+            <span class="flow-live-dot"></span>
+            A secret's journey
+          </span>
+          <span class="flow-counter" data-flow-counter>01 / 03</span>
+        </div>
+
+        <div class="flow-canvas">
+          <div class="flow-app" aria-hidden="true">
+            <div class="flow-node flow-client">
+              <div class="flow-node-head">
+                <span class="flow-icon"><Icon name="terminal" size={13} /></span>
+                <span class="flow-node-title">Your app</span>
+                <span class="flow-node-tag">Go SDK</span>
+              </div>
+              <div class="flow-code">
+                <span class="flow-code-line">
+                  <span class="flow-code-dim">client</span><span class="flow-code-punct">.</span><span class="flow-code-fn">Load</span><span class="flow-code-punct">(</span><span class="flow-code-dim">&amp;cfg</span><span class="flow-code-punct">)</span>
+                </span>
+                <span class="flow-code-sub">One batched request at boot</span>
+              </div>
+            </div>
+
+            <div class="flow-rail flow-rail-request">
+              <span class="flow-rail-line"></span>
+              <span class="flow-rail-packet"></span>
+              <span class="flow-rail-label">GET · Bearer PAT</span>
+            </div>
+
+            <div class="flow-node flow-server">
+              <div class="flow-node-head flow-server-head">
+                <span class="flow-icon"><Icon name="server" size={13} /></span>
+                <span class="flow-node-title">Yily server</span>
+                <span class="flow-status"><span class="flow-status-dot"></span>online</span>
+              </div>
+              <div class="flow-server-rows">
+                <div class="flow-row flow-auth">
+                  <span class="flow-row-icon"><Icon name="shield" size={13} /></span>
+                  <span class="flow-row-copy">
+                    <span class="flow-row-title">Authenticate</span>
+                    <span class="flow-row-detail">SHA-256(PAT) · scope · expiry</span>
+                  </span>
+                  <span class="flow-badge">read</span>
+                </div>
+                <div class="flow-row flow-resolve">
+                  <span class="flow-row-icon"><Icon name="database" size={13} /></span>
+                  <span class="flow-row-copy">
+                    <span class="flow-row-title">Resolve active version</span>
+                    <span class="flow-row-detail">SQLite · ciphertext only</span>
+                  </span>
+                  <span class="flow-badge flow-badge-brand">Version 4</span>
+                </div>
+                <div class="flow-row flow-decrypt">
+                  <span class="flow-row-icon flow-lock">
+                    <span class="flow-lock-closed"><Icon name="lock" size={13} /></span>
+                    <span class="flow-lock-open"><Icon name="lock-open" size={13} /></span>
+                  </span>
+                  <span class="flow-row-copy">
+                    <span class="flow-row-title">Decrypt in memory</span>
+                    <span class="flow-row-detail">AES-256-GCM · master key · AAD</span>
+                  </span>
+                  <span class="flow-badge flow-badge-mono">AES-256-GCM</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flow-rail flow-rail-response">
+              <span class="flow-rail-line"></span>
+              <span class="flow-rail-packet"></span>
+              <span class="flow-rail-label">values · HTTPS</span>
+            </div>
+
+            <div class="flow-node flow-result">
+              <div class="flow-node-head flow-result-head">
+                <span class="flow-icon flow-icon-key"><Icon name="key" size={13} /></span>
+                <span class="flow-result-name">JWT_SECRET</span>
+                <span class="flow-node-tag">prod</span>
+                <span class="flow-node-tag">api</span>
+                <span class="flow-returned"><Icon name="check" size={9} /> returned</span>
+              </div>
+
+              <div class="flow-current">
+                <div class="flow-current-head">
+                  <span class="flow-current-label">Current value</span>
+                  <span class="flow-version">Version 4</span>
+                </div>
+                <div class="flow-current-row">
+                  <span class="flow-value">
+                    <code class="flow-mask">••••••••••••</code>
+                    <code class="flow-revealed">9f2b7c4e…a8d1</code>
+                  </span>
+                  <span class="flow-countdown"><Icon name="clock" size={9} /> 20s</span>
+                  <span class="flow-actions">
+                    <span class="flow-eye">
+                      <span class="flow-eye-on"><Icon name="eye" size={12} /></span>
+                      <span class="flow-eye-off"><Icon name="eye-off" size={12} /></span>
+                    </span>
+                    <Icon name="copy" size={12} />
+                  </span>
+                </div>
+              </div>
+
+              <div class="flow-result-foot">
+                <span class="flow-result-icon">
+                  <span class="flow-result-icon-idle"><Icon name="arrow-down" size={9} /></span>
+                  <span class="flow-result-icon-done"><Icon name="check" size={9} /></span>
+                </span>
+                <span class="flow-result-copy">
+                  <span class="flow-result-idle">Values return as typed config</span>
+                  <span class="flow-result-done">Typed values loaded into your config</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-foot">
+          <span class="legend"><span class="legend-dot request"></span> request</span>
+          <span class="legend"><span class="legend-dot response"></span> response</span>
+          <span class="flow-foot-note">plaintext never touches disk</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .how {
+    background:
+      radial-gradient(1000px 600px at 85% 40%, rgba(131, 56, 236, 0.06), transparent 70%);
+  }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 548px);
+    align-items: start;
+    gap: clamp(2.5rem, 5.5vw, 5rem);
+  }
+
+  .how-copy {
+    position: sticky;
+    top: 108px;
+  }
+
+  .how-copy .section-header {
+    margin-bottom: 2rem;
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 780px;
+  }
+
+  .step {
+    position: relative;
+    border: 1px solid transparent;
+    border-radius: 15px;
+    transition:
+      background-color 0.35s var(--ease-out),
+      border-color 0.35s var(--ease-out);
+  }
+
+  .step:hover {
+    background: rgba(255, 255, 255, 0.018);
+  }
+
+  .step.is-active {
+    border-color: rgba(167, 139, 250, 0.18);
+    background: linear-gradient(180deg, rgba(139, 92, 246, 0.085), rgba(139, 92, 246, 0.025));
+  }
+
+  .step button {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 0.9rem;
+    width: 100%;
+    padding: 0.95rem 1rem;
+    text-align: left;
+  }
+
+  .step-num {
+    display: grid;
+    place-items: center;
+    width: 29px;
+    height: 29px;
+    margin-top: 1px;
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+    color: var(--faint);
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    transition:
+      color 0.3s ease,
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .step.is-active .step-num {
+    border-color: var(--brand-bright);
+    background: var(--brand-bright);
+    color: #0b0910;
+    box-shadow: 0 0 22px rgba(167, 139, 250, 0.42);
+  }
+
+  .step-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .step-title {
+    color: var(--text-soft);
+    font-size: 0.95rem;
+    font-weight: 540;
+    letter-spacing: -0.025em;
+    transition: color 0.3s ease;
+  }
+
+  .step.is-active .step-title {
+    color: var(--text);
+  }
+
+  .step-desc {
+    max-width: 66ch;
+    margin-top: 0.28rem;
+    color: var(--muted);
+    font-size: 0.815rem;
+    line-height: 1.62;
+    text-wrap: pretty;
+  }
+
+  .step-code {
+    width: fit-content;
+    max-width: 100%;
+    overflow: hidden;
+    margin-top: 0.55rem;
+    padding: 3px 7px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.16);
+    color: #6d6779;
+    font-family: var(--font-code);
+    font-size: 0.55rem;
+    letter-spacing: 0.015em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .step.is-active .step-code {
+    border-color: rgba(167, 139, 250, 0.14);
+    color: #a99fc4;
+  }
+
+  .step-progress {
+    display: block;
+    height: 2px;
+    margin-top: 0.7rem;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.045);
+    opacity: 0;
+    overflow: hidden;
+  }
+
+  .step.is-active .step-progress {
+    opacity: 1;
+  }
+
+  .step-progress i {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--brand-deep), var(--brand-bright));
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .how.is-running .step.is-active .step-progress i {
+    animation: step-progress 4.2s linear forwards;
+  }
+
+  .how.is-paused .step.is-active .step-progress i {
+    animation: none;
+    transform: scaleX(1);
+  }
+
+  @keyframes step-progress {
+    to { transform: scaleX(1); }
+  }
+
+  .how-notes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    padding-left: 0.25rem;
+  }
+
+  .hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--faint);
+    font-family: var(--font-body);
+    font-size: 0.63rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  .hint-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--brand-bright);
+    box-shadow: 0 0 8px rgba(167, 139, 250, 0.7);
+  }
+
+  .hint.is-paused .hint-dot {
+    background: var(--faint);
+    box-shadow: none;
+  }
+
+  .rest-note {
+    max-width: 46ch;
+    color: #625c70;
+    font-size: 0.7rem;
+    line-height: 1.6;
+  }
+
+  /* ---------------- Flow card ---------------- */
+  .how-visual {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .flow-card {
+    position: relative;
+    width: 100%;
+    max-width: 580px;
+    overflow: hidden;
+    border: 1px solid var(--border-strong);
+    border-radius: 22px;
+    background:
+      linear-gradient(180deg, rgba(18, 15, 25, 0.92), rgba(8, 7, 12, 0.97));
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.06) inset,
+      0 40px 100px -30px rgba(0, 0, 0, 0.8),
+      0 0 60px rgba(124, 58, 237, 0.08);
+  }
+
+  .flow-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    z-index: 2;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(196, 181, 253, 0.34), transparent);
+  }
+
+  .flow-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.012);
+  }
+
+  .flow-head-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-soft);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .flow-live-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 9px rgba(94, 234, 212, 0.7);
+    animation: flow-pulse 2.6s ease-in-out infinite;
+  }
+
+  @keyframes flow-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+  }
+
+  .flow-counter {
+    color: var(--faint);
+    font-family: var(--font-body);
+    font-size: 0.64rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .flow-canvas {
+    padding: 1.15rem 1.1rem 1.25rem;
+    background:
+      radial-gradient(500px 380px at 50% 46%, rgba(139, 92, 246, 0.065), transparent 75%);
+  }
+
+  .flow-app {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flow-node {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.018);
+    transition:
+      background 0.35s ease,
+      border-color 0.35s ease,
+      box-shadow 0.35s ease;
+  }
+
+  .flow-client {
+    padding: 0.8rem 0.9rem 0.9rem;
+  }
+
+  .flow-node-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .flow-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 25px;
+    height: 25px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.025);
+    color: var(--faint);
+    transition:
+      color 0.35s ease,
+      background-color 0.35s ease,
+      border-color 0.35s ease;
+  }
+
+  .flow-node-title {
+    color: var(--text-soft);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .flow-node-tag {
+    flex: none;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: rgba(139, 92, 246, 0.13);
+    color: var(--brand-bright);
+    font-size: 0.48rem;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .flow-code {
+    display: flex;
+    flex-direction: column;
+    gap: 0.28rem;
+    margin-top: 0.7rem;
+    padding: 0.65rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.18);
+  }
+
+  .flow-code-line {
+    overflow: hidden;
+    color: var(--text-soft);
+    font-family: var(--font-code);
+    font-size: 0.65rem;
+    letter-spacing: 0.005em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .flow-code-dim {
+    color: #a99fc4;
+  }
+
+  .flow-code-fn {
+    color: var(--brand-bright);
+  }
+
+  .flow-code-punct {
+    color: #6f697e;
+  }
+
+  .flow-code-sub {
+    color: var(--faint);
+    font-family: var(--font-body);
+    font-size: 0.54rem;
+  }
+
+  .flow-rail {
+    position: relative;
+    height: 38px;
+    margin-left: 1rem;
+  }
+
+  .flow-rail-line {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 0;
+    border-left: 1px dashed rgba(255, 255, 255, 0.14);
+    transition: border-color 0.35s ease;
+  }
+
+  .flow-rail-packet {
+    position: absolute;
+    top: 3px;
+    left: -2.5px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--brand-bright);
+    box-shadow: 0 0 8px rgba(167, 139, 250, 0.9);
+    opacity: 0;
+  }
+
+  .flow-rail-label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: var(--faint);
+    font-family: var(--font-code);
+    font-size: 0.53rem;
+    letter-spacing: 0.01em;
+    transition: color 0.35s ease;
+  }
+
+  .flow-rail-request .flow-rail-packet {
+    animation-delay: 0s;
+  }
+
+  .flow-rail-response .flow-rail-packet {
+    background: var(--success);
+    box-shadow: 0 0 8px rgba(94, 234, 212, 0.9);
+  }
+
+  .flow-server {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .flow-server::after {
+    content: "";
+    position: absolute;
+    right: -30%;
+    bottom: -55%;
+    left: -30%;
+    height: 105%;
+    background: radial-gradient(closest-side, rgba(139, 92, 246, 0.18), transparent 72%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.55s ease;
+  }
+
+  .flow-server-head {
+    position: relative;
+    z-index: 1;
+    padding: 0.7rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .flow-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    color: var(--faint);
+    font-size: 0.51rem;
+  }
+
+  .flow-status-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 6px rgba(94, 234, 212, 0.65);
+  }
+
+  .flow-server-rows {
+    position: relative;
+    z-index: 1;
+  }
+
+  .flow-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.68rem 0.85rem;
+    transition: background 0.35s ease;
+  }
+
+  .flow-row + .flow-row {
+    border-top: 1px solid var(--border);
+  }
+
+  .flow-row-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--faint);
+    transition:
+      color 0.35s ease,
+      background-color 0.35s ease,
+      border-color 0.35s ease;
+  }
+
+  .flow-row-copy {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .flow-row-title {
+    color: var(--text-soft);
+    font-size: 0.71rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    transition: color 0.35s ease;
+  }
+
+  .flow-row-detail {
+    overflow: hidden;
+    color: var(--faint);
+    font-family: var(--font-code);
+    font-size: 0.52rem;
+    letter-spacing: 0.005em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .flow-badge {
+    flex: none;
+    padding: 2px 5px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--faint);
+    font-size: 0.49rem;
+    line-height: 1.4;
+    opacity: 0.72;
+    white-space: nowrap;
+    transition:
+      opacity 0.35s ease,
+      color 0.35s ease,
+      border-color 0.35s ease,
+      background-color 0.35s ease;
+  }
+
+  .flow-badge-brand {
+    border-color: transparent;
+    background: rgba(139, 92, 246, 0.13);
+    color: var(--brand-bright);
+  }
+
+  .flow-badge-mono {
+    font-family: var(--font-code);
+    font-size: 0.46rem;
+    letter-spacing: 0.01em;
+  }
+
+  .flow-lock {
+    position: relative;
+  }
+
+  .flow-lock-closed,
+  .flow-lock-open {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transition:
+      opacity 0.35s ease,
+      transform 0.4s var(--ease-spring);
+  }
+
+  .flow-lock-open {
+    opacity: 0;
+    transform: scale(0.72) rotate(-12deg);
+  }
+
+  .flow-result {
+    padding: 0.8rem 0.85rem 0.7rem;
+  }
+
+  .flow-result-head {
+    min-width: 0;
+  }
+
+  .flow-result-name {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--text);
+    font-family: var(--font-code);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .flow-returned {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    flex: none;
+    margin-left: auto;
+    color: var(--faint);
+    font-size: 0.5rem;
+    opacity: 0;
+    transition:
+      color 0.35s ease,
+      opacity 0.35s ease;
+  }
+
+  .flow-icon-key {
+    color: var(--brand-bright);
+    background: rgba(139, 92, 246, 0.12);
+    border-color: rgba(139, 92, 246, 0.2);
+  }
+
+  .flow-current {
+    margin-top: 0.65rem;
+    padding: 0.55rem 0.65rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.14);
+    transition:
+      background-color 0.35s ease,
+      border-color 0.35s ease;
+  }
+
+  .flow-current-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .flow-current-label {
+    color: var(--text-soft);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .flow-version {
+    flex: none;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: rgba(139, 92, 246, 0.14);
+    color: var(--brand-bright);
+    font-size: 0.47rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .flow-current-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .flow-value {
+    display: grid;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .flow-value code {
+    grid-area: 1 / 1;
+    overflow: hidden;
+    font-family: var(--font-code);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .flow-mask {
+    color: var(--faint);
+  }
+
+  .flow-revealed {
+    color: rgba(204, 251, 241, 0.86);
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: translateY(3px);
+  }
+
+  .flow-countdown {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    flex: none;
+    color: var(--faint);
+    font-size: 0.47rem;
+    font-variant-numeric: tabular-nums;
+    opacity: 0;
+    transition:
+      color 0.35s ease,
+      opacity 0.35s ease;
+  }
+
+  .flow-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex: none;
+    color: var(--faint);
+  }
+
+  .flow-eye {
+    position: relative;
+    width: 12px;
+    height: 12px;
+  }
+
+  .flow-eye > span {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transition: opacity 0.25s ease;
+  }
+
+  .flow-eye-off {
+    opacity: 0;
+  }
+
+  .flow-result-foot {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.6rem;
+    color: var(--faint);
+    font-size: 0.52rem;
+    transition: color 0.35s ease;
+  }
+
+  .flow-result-icon {
+    position: relative;
+    flex: none;
+    width: 9px;
+    height: 9px;
+  }
+
+  .flow-result-icon > span {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transition: opacity 0.3s ease;
+  }
+
+  .flow-result-icon-done {
+    opacity: 0;
+  }
+
+  .flow-result-copy {
+    display: grid;
+  }
+
+  .flow-result-copy > span {
+    grid-area: 1 / 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .flow-result-done {
+    opacity: 0;
+  }
+
+  /* Active states */
+  .flow-card[data-step="1"] .flow-client {
+    border-color: rgba(167, 139, 250, 0.5);
+    background: linear-gradient(180deg, rgba(139, 92, 246, 0.12), rgba(139, 92, 246, 0.035));
+    box-shadow:
+      0 0 0 1px rgba(167, 139, 250, 0.08),
+      0 12px 32px rgba(124, 58, 237, 0.12);
+  }
+
+  .flow-card[data-step="1"] .flow-client .flow-icon {
+    border-color: rgba(167, 139, 250, 0.3);
+    background: rgba(139, 92, 246, 0.16);
+    color: var(--brand-bright);
+  }
+
+  .flow-card[data-step="1"] .flow-rail-request .flow-rail-line {
+    border-color: rgba(167, 139, 250, 0.45);
+  }
+
+  .flow-card[data-step="1"] .flow-rail-request .flow-rail-packet {
+    animation: flow-packet 1.4s var(--ease-out) infinite;
+  }
+
+  .flow-card[data-step="1"] .flow-rail-request .flow-rail-label {
+    color: #a99fc4;
+  }
+
+  .flow-card[data-step="1"] .flow-server,
+  .flow-card[data-step="2"] .flow-server {
+    border-color: rgba(167, 139, 250, 0.22);
+  }
+
+  .flow-card[data-step="1"] .flow-auth,
+  .flow-card[data-step="2"] .flow-resolve,
+  .flow-card[data-step="2"] .flow-decrypt {
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.11), rgba(139, 92, 246, 0.018));
+  }
+
+  .flow-card[data-step="1"] .flow-auth .flow-row-icon,
+  .flow-card[data-step="2"] .flow-resolve .flow-row-icon,
+  .flow-card[data-step="2"] .flow-decrypt .flow-row-icon {
+    border-color: rgba(167, 139, 250, 0.3);
+    background: rgba(139, 92, 246, 0.16);
+    color: var(--brand-bright);
+  }
+
+  .flow-card[data-step="1"] .flow-auth .flow-row-title,
+  .flow-card[data-step="2"] .flow-resolve .flow-row-title,
+  .flow-card[data-step="2"] .flow-decrypt .flow-row-title {
+    color: var(--text);
+  }
+
+  .flow-card[data-step="1"] .flow-auth .flow-badge,
+  .flow-card[data-step="2"] .flow-resolve .flow-badge,
+  .flow-card[data-step="2"] .flow-decrypt .flow-badge {
+    opacity: 1;
+    border-color: rgba(167, 139, 250, 0.22);
+    color: #d8b4fe;
+  }
+
+  .flow-card[data-step="2"] .flow-server::after {
+    opacity: 1;
+  }
+
+  .flow-card[data-step="2"] .flow-lock-closed {
+    opacity: 0;
+    transform: scale(0.72) rotate(12deg);
+  }
+
+  .flow-card[data-step="2"] .flow-lock-open {
+    opacity: 1;
+    transform: none;
+  }
+
+  .flow-card[data-step="3"] .flow-result {
+    border-color: rgba(94, 234, 212, 0.35);
+    background: linear-gradient(180deg, rgba(94, 234, 212, 0.055), rgba(94, 234, 212, 0.014));
+    box-shadow:
+      0 0 0 1px rgba(94, 234, 212, 0.06),
+      0 12px 32px rgba(94, 234, 212, 0.05);
+  }
+
+  .flow-card[data-step="3"] .flow-icon-key {
+    border-color: rgba(94, 234, 212, 0.24);
+    background: rgba(94, 234, 212, 0.08);
+    color: var(--success);
+  }
+
+  .flow-card[data-step="3"] .flow-current {
+    border-color: rgba(94, 234, 212, 0.2);
+    background: rgba(94, 234, 212, 0.035);
+  }
+
+  .flow-card[data-step="3"] .flow-mask {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+
+  .flow-card[data-step="3"] .flow-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  .flow-card[data-step="3"] .flow-countdown {
+    color: rgba(204, 251, 241, 0.58);
+    opacity: 1;
+  }
+
+  .flow-card[data-step="3"] .flow-eye-on {
+    opacity: 0;
+  }
+
+  .flow-card[data-step="3"] .flow-eye-off {
+    opacity: 1;
+  }
+
+  .flow-card[data-step="3"] .flow-returned,
+  .flow-card[data-step="3"] .flow-result-foot {
+    color: rgba(204, 251, 241, 0.66);
+    opacity: 1;
+  }
+
+  .flow-card[data-step="3"] .flow-result-icon-idle,
+  .flow-card[data-step="3"] .flow-result-idle {
+    opacity: 0;
+  }
+
+  .flow-card[data-step="3"] .flow-result-icon-done,
+  .flow-card[data-step="3"] .flow-result-done {
+    opacity: 1;
+  }
+
+  .flow-card[data-step="3"] .flow-result-icon-done {
+    color: var(--success);
+  }
+
+  .flow-card[data-step="3"] .flow-rail-response .flow-rail-line {
+    border-color: rgba(94, 234, 212, 0.38);
+  }
+
+  .flow-card[data-step="3"] .flow-rail-response .flow-rail-packet {
+    animation: flow-packet 1.4s var(--ease-out) infinite;
+  }
+
+  .flow-card[data-step="3"] .flow-rail-response .flow-rail-label {
+    color: rgba(204, 251, 241, 0.55);
+  }
+
+  @keyframes flow-packet {
+    0% {
+      top: 3px;
+      opacity: 0;
+    }
+    18% {
+      opacity: 1;
+    }
+    82% {
+      opacity: 1;
+    }
+    100% {
+      top: calc(100% - 8px);
+      opacity: 0;
+    }
+  }
+
+  .flow-foot {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.7rem 1.1rem;
+    border-top: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.012);
+    color: var(--faint);
+    font-family: var(--font-body);
+    font-size: 0.54rem;
+  }
+
+  .legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .legend-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--brand-bright);
+    box-shadow: 0 0 6px rgba(167, 139, 250, 0.5);
+  }
+
+  .legend-dot.response {
+    background: var(--success);
+    box-shadow: 0 0 6px rgba(94, 234, 212, 0.4);
+  }
+
+  .flow-foot-note {
+    margin-left: auto;
+    color: #5e5869;
+  }
+
+  @media (max-width: 1024px) {
+    .how-copy {
+      position: static;
+    }
+
+    .how-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 3rem;
+    }
+
+    .how-visual {
+      justify-content: center;
+    }
+
+    .flow-card {
+      max-width: 580px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .step button {
+      grid-template-columns: 31px minmax(0, 1fr);
+      gap: 0.7rem;
+      padding: 0.85rem 0.7rem;
+    }
+
+    .step-num {
+      width: 25px;
+      height: 25px;
+      font-size: 0.5rem;
+    }
+
+    .step-desc {
+      font-size: 0.775rem;
+    }
+
+    .flow-canvas {
+      padding: 0.9rem 0.7rem 1rem;
+    }
+
+    .flow-head,
+    .flow-foot {
+      padding-inline: 0.8rem;
+    }
+
+    .flow-foot-note {
+      display: none;
+    }
+
+    .flow-client {
+      padding: 0.7rem 0.7rem 0.75rem;
+    }
+
+    .flow-row {
+      gap: 0.5rem;
+      padding: 0.62rem 0.65rem;
+    }
+
+    .flow-row-title {
+      font-size: 0.72rem;
+    }
+
+    .flow-row-detail {
+      font-size: 0.56rem;
+    }
+
+    .flow-badge {
+      padding: 1px 4px;
+      font-size: 0.5rem;
+    }
+
+    .flow-badge-mono {
+      display: none;
+    }
+
+    .flow-result {
+      padding: 0.7rem 0.7rem 0.65rem;
+    }
+
+    .flow-result-name {
+      font-size: 0.68rem;
+    }
+
+    .flow-returned {
+      display: none;
+    }
+
+    .flow-current-label {
+      font-size: 0.62rem;
+    }
+
+    .flow-value code {
+      font-size: 0.68rem;
+    }
+
+    .flow-rail {
+      height: 34px;
+    }
+
+    .flow-rail-label {
+      font-size: 0.53rem;
+    }
+
+    .flow-result-foot {
+      font-size: 0.52rem;
+    }
+  }
+</style>

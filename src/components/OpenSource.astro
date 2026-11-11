@@ -1,0 +1,356 @@
+---
+import Icon from "./Icon.astro";
+import GitHubIcon from "./GitHubIcon.astro";
+
+const repo = "https://github.com/yannick2009/yily";
+const releases = `${repo}/releases`;
+const issues = `${repo}/issues`;
+const contributing = `${repo}/blob/main/CONTRIBUTING.md`;
+const license = `${repo}/blob/main/LICENSE`;
+---
+
+<section class="section open-source" id="open-source">
+  <div class="container">
+    <div class="os-card" data-reveal data-spotlight>
+      <div class="os-aura" aria-hidden="true"></div>
+      <img class="os-watermark" src="/logo.svg" alt="" width="180" height="169" aria-hidden="true" loading="lazy" decoding="async" fetchpriority="low" />
+
+      <div class="os-copy">
+        <span class="eyebrow">Open source · MIT</span>
+        <h2>
+          Built in the open.<br />
+          <span class="serif gradient-text">Yours to keep.</span>
+        </h2>
+        <p>
+          Audit every line, fork it if you disagree, and run it for as long as you
+          like. No seats, no license ceiling, and no vendor holding the keys.
+        </p>
+        <div class="os-actions">
+          <a class="btn btn-primary" href={repo} target="_blank" rel="noreferrer">
+            <GitHubIcon size={18} />
+            Star on GitHub
+          </a>
+          <a class="btn btn-ghost" href={contributing} target="_blank" rel="noreferrer">
+            Contributing guide
+            <Icon name="arrow-up-right" size={15} class="icon-shift" />
+          </a>
+        </div>
+        <div class="os-meta">
+          <span class="pill"><span class="dot"></span>v1.0.0-beta.1</span>
+          <span class="os-meta-item"><Icon name="shield" size={12} /> MIT licensed</span>
+          <span class="os-meta-item"><Icon name="branch" size={12} /> Built in public</span>
+        </div>
+      </div>
+
+      <div class="os-side">
+        <div class="clone-card">
+          <div class="clone-label">
+            <Icon name="terminal" size={13} />
+            <span>Clone the source</span>
+          </div>
+          <div class="clone-code" id="clone-code">
+            <code>git clone git@github.com:yannick2009/yily.git</code>
+            <button
+              class="copy-btn clone-copy"
+              type="button"
+              data-copy-target="#clone-code"
+              aria-label="Copy the clone command"
+            >
+              <Icon name="copy" size={12} class="icon-copy" />
+              <Icon name="check" size={12} class="icon-check" />
+            </button>
+          </div>
+          <div class="repo-tree" aria-hidden="true">
+            <div class="tree-row">
+              <span class="tree-prefix">├─</span>
+              <span class="tree-name">server/</span>
+              <span class="tree-desc">Go · API · CLI</span>
+            </div>
+            <div class="tree-row">
+              <span class="tree-prefix">├─</span>
+              <span class="tree-name">client/</span>
+              <span class="tree-desc">SolidJS · web UI</span>
+            </div>
+            <div class="tree-row">
+              <span class="tree-prefix">└─</span>
+              <span class="tree-name">docs/</span>
+              <span class="tree-desc">specs · proposals</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="repo-links">
+          <a href={releases} target="_blank" rel="noreferrer">Releases <Icon name="arrow-up-right" size={12} /></a>
+          <a href={issues} target="_blank" rel="noreferrer">Issues <Icon name="arrow-up-right" size={12} /></a>
+          <a href={license} target="_blank" rel="noreferrer">License <Icon name="arrow-up-right" size={12} /></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .open-source {
+    padding-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .os-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    overflow: hidden;
+    padding: clamp(2rem, 4.5vw, 3.8rem);
+    border: 1px solid rgba(167, 139, 250, 0.18);
+    border-radius: 26px;
+    background:
+      linear-gradient(120deg, rgba(32, 22, 48, 0.72), rgba(10, 8, 16, 0.86) 55%),
+      var(--bg-raised);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.07) inset,
+      0 40px 120px -40px rgba(0, 0, 0, 0.9),
+      0 0 90px rgba(124, 58, 237, 0.08);
+  }
+
+  .os-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(216, 180, 254, 0.4), transparent);
+  }
+
+  .os-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      600px circle at var(--mx, 30%) var(--my, 40%),
+      rgba(139, 92, 246, 0.1),
+      transparent 55%
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+
+  .os-card:hover::after {
+    opacity: 1;
+  }
+
+  .os-aura {
+    position: absolute;
+    top: -220px;
+    left: -120px;
+    width: 560px;
+    height: 460px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(131, 56, 236, 0.22), transparent 72%);
+    filter: blur(60px);
+    pointer-events: none;
+  }
+
+  .os-watermark {
+    position: absolute;
+    right: 3%;
+    bottom: -35%;
+    width: min(40vw, 440px);
+    height: auto;
+    opacity: 0.035;
+    transform: rotate(-8deg);
+    filter: blur(0.3px);
+    pointer-events: none;
+  }
+
+  .os-copy,
+  .os-side {
+    position: relative;
+    z-index: 2;
+  }
+
+  .os-copy h2 {
+    margin-top: 1rem;
+    font-size: clamp(2rem, 4.2vw, 3.3rem);
+    font-weight: 580;
+    line-height: 1.02;
+    letter-spacing: -0.05em;
+    text-wrap: balance;
+  }
+
+  .os-copy p {
+    max-width: 50ch;
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.72;
+    text-wrap: pretty;
+  }
+
+  .os-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.7rem;
+  }
+
+  .os-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.55rem 1.1rem;
+    margin-top: 1.6rem;
+  }
+
+  .os-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--faint);
+    font-size: 0.68rem;
+  }
+
+  .os-side {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .clone-card {
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    background: rgba(7, 5, 11, 0.62);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+  }
+
+  .clone-label {
+    display: flex;
+    align-items: center;
+    gap: 0.42rem;
+    padding: 0.75rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--faint);
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .clone-code {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .clone-code code {
+    overflow: hidden;
+    flex: 1;
+    color: #cfc8dd;
+    font-family: var(--font-code);
+    font-size: 0.62rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .clone-copy {
+    flex: none;
+    width: 28px;
+    padding: 0;
+    justify-content: center;
+    height: 27px;
+  }
+
+  .clone-copy [data-copy-label] {
+    display: none;
+  }
+
+  .repo-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.75rem 0.9rem 0.85rem;
+    font-family: var(--font-code);
+    font-size: 0.56rem;
+  }
+
+  .tree-row {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #5c5668;
+  }
+
+  .tree-prefix {
+    color: #3f394a;
+  }
+
+  .tree-name {
+    color: #b9a7f9;
+  }
+
+  .tree-desc {
+    margin-left: auto;
+    color: #5c5668;
+  }
+
+  .repo-links {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    padding-left: 0.2rem;
+  }
+
+  .repo-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--faint);
+    font-size: 0.68rem;
+    transition: color 0.2s ease;
+  }
+
+  .repo-links a:hover {
+    color: var(--brand-bright);
+  }
+
+  @media (max-width: 900px) {
+    .os-card {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
+    }
+
+    .os-side {
+      max-width: 520px;
+    }
+
+    .os-watermark {
+      width: 320px;
+      right: -60px;
+      bottom: -20%;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .os-card {
+      padding: 1.5rem;
+    }
+
+    .os-actions {
+      flex-direction: column;
+    }
+
+    .os-actions .btn {
+      width: 100%;
+    }
+
+    .clone-code code {
+      font-size: 0.56rem;
+    }
+  }
+</style>
