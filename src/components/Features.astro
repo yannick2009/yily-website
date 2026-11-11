@@ -1,5 +1,18 @@
 ---
 import Icon from "./Icon.astro";
+
+const languages = [
+  "English",
+  "Français",
+  "Español",
+  "Deutsch",
+  "Italiano",
+  "Português",
+  "Русский",
+  "中文",
+  "日本語",
+  "한국어",
+];
 ---
 
 <section class="section features" id="why">
@@ -239,6 +252,18 @@ import Icon from "./Icon.astro";
           </div>
         </div>
       </article>
+    </div>
+
+    <div class="langs" data-reveal>
+      <div class="langs-head">
+        <span class="langs-icon"><Icon name="globe" size={15} /></span>
+        <span>Localized in <strong>10 languages</strong></span>
+      </div>
+      <ul class="langs-list">
+        {languages.map((lang) => (
+          <li>{lang}</li>
+        ))}
+      </ul>
     </div>
   </div>
 </section>
@@ -893,6 +918,66 @@ import Icon from "./Icon.astro";
     color: var(--faint);
     font-size: 0.46rem;
     text-align: right;
+  }
+
+  .langs {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    width: fit-content;
+    max-width: 100%;
+    margin: 1.3rem auto 0;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.016);
+  }
+
+  .langs-head {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex: none;
+    color: var(--text-soft);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .langs-head strong {
+    color: var(--brand-bright);
+    font-weight: 600;
+  }
+
+  .langs-icon {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(139, 92, 246, 0.18);
+    border-radius: 8px;
+    background: rgba(139, 92, 246, 0.09);
+    color: var(--brand-bright);
+  }
+
+  .langs-list {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .langs-list li {
+    padding: 0.28rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.66rem;
+    white-space: nowrap;
   }
 
   @media (max-width: 1024px) {
