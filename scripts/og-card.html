@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 100 900;
+    src: url("/fonts/inter-var-latin.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Instrument Serif";
+    font-style: italic;
+    font-weight: 400;
+    src: url("/fonts/instrument-serif-italic-latin.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "IBM Plex Mono";
+    font-style: normal;
+    font-weight: 400 500;
+    src: url("/fonts/ibm-plex-mono-400-latin.woff2") format("woff2");
+  }
+
+  :root {
+    --bg: #07060a;
+    --text: #f4f1fb;
+    --muted: #9d97ac;
+    --brand: #8b5cf6;
+    --brand-bright: #a78bfa;
+    --accent: #e879f9;
+    --success: #5eead4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+  }
+
+  body {
+    position: relative;
+    background: var(--bg);
+    font-family: "Inter", system-ui, sans-serif;
+    color: var(--text);
+  }
+
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+  }
+  .glow-a { top: -220px; left: -120px; width: 720px; height: 560px;
+    background: radial-gradient(closest-side, rgba(131,56,236,0.55), transparent 70%); }
+  .glow-b { bottom: -260px; right: -140px; width: 640px; height: 560px;
+    background: radial-gradient(closest-side, rgba(232,121,249,0.22), transparent 70%); }
+  .glow-c { top: 60px; right: 120px; width: 480px; height: 420px;
+    background: radial-gradient(closest-side, rgba(124,58,237,0.28), transparent 70%); }
+
+  .constellation { position: absolute; inset: 0; pointer-events: none; }
+  .constellation svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .constellation line { stroke: rgba(167,139,250,0.14); stroke-width: 1; }
+  .constellation .node { fill: rgba(244,239,255,0.4); }
+  .constellation .node-key { fill: #d8b4fe; }
+
+  .layout {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    height: 100%;
+    padding: 64px 72px 60px;
+  }
+
+  .copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 1 auto;
+    max-width: 660px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    margin-bottom: 34px;
+  }
+  .brand img {
+    height: 60px;
+    width: auto;
+    display: block;
+  }
+
+  h1 {
+    font-size: 58px;
+    font-weight: 620;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+  h1 .serif {
+    display: inline-block;
+    font-family: "Instrument Serif", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.18em;
+    line-height: 1.12;
+    padding-bottom: 0.14em;
+    margin-bottom: -0.12em;
+    background: linear-gradient(96deg, #c4b5fd 0%, #a78bfa 40%, #e879f9 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .sub {
+    margin-top: 26px;
+    max-width: 520px;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--muted);
+    letter-spacing: -0.005em;
+  }
+
+  .meta {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+  }
+  .meta span {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: #b8b1c9;
+    padding: 7px 12px;
+    border: 1px solid rgba(167,139,250,0.22);
+    border-radius: 8px;
+    background: rgba(139,92,246,0.08);
+  }
+
+  .url {
+    margin-top: 34px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    color: #6f697e;
+  }
+
+  /* --- 3D vault block --- */
+  .stage {
+    position: relative;
+    flex: 0 0 460px;
+    display: grid;
+    place-items: center;
+    perspective: 1100px;
+  }
+
+  .halo {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(139,92,246,0.35), transparent 70%);
+    filter: blur(30px);
+  }
+
+  .shadow {
+    position: absolute;
+    bottom: 34px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 44px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(0,0,0,0.75), transparent 72%);
+    filter: blur(10px);
+  }
+
+  .cube {
+    position: relative;
+    width: 236px;
+    height: 236px;
+    transform-style: preserve-3d;
+    transform: rotateX(-22deg) rotateY(34deg);
+  }
+
+  .face {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+  }
+
+  .face.front  { transform: translateZ(118px);
+    background: linear-gradient(155deg, #2b2145 0%, #181129 100%); }
+  .face.back   { transform: rotateY(180deg) translateZ(118px);
+    background: #120e1e; }
+  .face.right  { transform: rotateY(90deg) translateZ(118px);
+    background: linear-gradient(180deg, #150f24 0%, #0c0914 100%); }
+  .face.left   { transform: rotateY(-90deg) translateZ(118px);
+    background: #120e1e; }
+  .face.top    { transform: rotateX(90deg) translateZ(118px);
+    background: linear-gradient(200deg, #4a3783 0%, #2c204f 100%); }
+  .face.bottom { transform: rotateX(-90deg) translateZ(118px);
+    background: #0b0814; }
+
+  .front .lock {
+    width: 108px;
+    height: 108px;
+    filter: drop-shadow(0 0 26px rgba(167,139,250,0.55));
+  }
+  .front .lock-glow {
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(139,92,246,0.5), transparent 70%);
+    filter: blur(6px);
+  }
+
+  .face.top::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 26px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.12), transparent 60%);
+  }
+
+  .spark {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #d8b4fe;
+    box-shadow: 0 0 16px 4px rgba(216,180,254,0.55);
+  }
+  .spark.s1 { top: 74px; right: 96px; }
+  .spark.s2 { top: 116px; right: 44px; width: 6px; height: 6px; opacity: 0.8; }
+  .spark.s3 { bottom: 96px; right: 118px; width: 7px; height: 7px; background: #5eead4; box-shadow: 0 0 14px 3px rgba(94,234,212,0.5); }
+</style>
+</head>
+<body>
+  <div class="glow glow-a"></div>
+  <div class="glow glow-b"></div>
+  <div class="glow glow-c"></div>
+
+  <div class="constellation">
+    <svg viewBox="0 0 1200 630" preserveAspectRatio="xMidYMid slice">
+      <g stroke-linecap="round">
+        <line x1="640" y1="120" x2="760" y2="220"/>
+        <line x1="760" y1="220" x2="900" y2="180"/>
+        <line x1="900" y1="180" x2="1030" y2="300"/>
+        <line x1="1030" y1="300" x2="980" y2="470"/>
+        <line x1="900" y1="180" x2="840" y2="80"/>
+        <line x1="980" y1="470" x2="820" y2="520"/>
+        <line x1="760" y1="220" x2="640" y2="360"/>
+      </g>
+      <g>
+        <circle class="node" cx="640" cy="120" r="3"/>
+        <circle class="node" cx="760" cy="220" r="3.5"/>
+        <circle class="node" cx="900" cy="180" r="3"/>
+        <circle class="node" cx="1030" cy="300" r="4"/>
+        <circle class="node" cx="980" cy="470" r="3"/>
+        <circle class="node" cx="840" cy="80" r="2.5"/>
+        <circle class="node" cx="820" cy="520" r="2.5"/>
+        <circle class="node" cx="640" cy="360" r="3"/>
+        <circle class="node-key" cx="1030" cy="300" r="5"/>
+        <circle class="node-key" cx="900" cy="180" r="4"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="layout">
+    <div class="copy">
+      <div class="brand">
+        <img src="/logo.svg" alt="" width="180" height="169" />
+      </div>
+
+      <h1>
+        Secrets management,<br />
+        <span class="serif">without the weight.</span>
+      </h1>
+
+      <p class="sub">
+        A fast, self-hosted home for your API keys, tokens and passwords.
+      </p>
+
+      <div class="meta">
+        <span>Open source · MIT</span>
+        <span>One SQLite file</span>
+        <span>AES-256-GCM</span>
+      </div>
+
+      <div class="url">github.com/yannick2009/yily</div>
+    </div>
+
+    <div class="stage">
+      <div class="halo"></div>
+      <div class="shadow"></div>
+      <div class="cube">
+        <div class="face top"></div>
+        <div class="face bottom"></div>
+        <div class="face front">
+          <div class="lock-glow"></div>
+          <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="url(#lockgrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <defs>
+              <linearGradient id="lockgrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#e9d5ff"/>
+                <stop offset="0.5" stop-color="#c084fc"/>
+                <stop offset="1" stop-color="#e879f9"/>
+              </linearGradient>
+            </defs>
+            <path d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/>
+          </svg>
+        </div>
+        <div class="face back"></div>
+        <div class="face right"></div>
+        <div class="face left"></div>
+      </div>
+      <span class="spark s1"></span>
+      <span class="spark s2"></span>
+      <span class="spark s3"></span>
+    </div>
+  </div>
+</body>
+</html>
