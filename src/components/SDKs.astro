@@ -29,6 +29,24 @@ func main() {
 	log.Printf("db: %s:%d", cfg.DBHost, cfg.DBPort)
 }`;
 
+const jsCode = `import { Client } from "yily-sdk-js";
+
+const client = new Client({
+  baseURL: "http://localhost:16529",
+  environmentID: "ENVxxxxxxxxxxxx",
+  token: process.env.YILY_TOKEN,
+});
+
+const cfg = await client.load({
+  dbHost: { name: "DB_HOST" },
+  dbPort: { name: "DB_PORT", type: "int" },
+  debug: { name: "DEBUG", type: "bool" },
+  timeout: { name: "TIMEOUT", type: "duration" },
+});
+
+const apiKey = await client.get("API_KEY");
+console.log("db:", cfg.dbHost, cfg.dbPort);`;
+
 const needContributor = (lang: string, prefix: string) =>
   [
     `${prefix} Coming soon. This SDK is not implemented yet.`,
@@ -37,6 +55,19 @@ const needContributor = (lang: string, prefix: string) =>
   ].join("\n");
 
 const sdks = [
+  {
+    id: "javascript",
+    name: "JavaScript",
+    file: "main.js",
+    shikiLang: "javascript",
+    state: "API design preview",
+    stateClass: "preview",
+    blurb:
+      "A typed loader for Node.js and modern runtimes. No build step required.",
+    code: jsCode,
+    link: sdkRepo("js"),
+    linkLabel: "View the JavaScript SDK",
+  },
   {
     id: "go",
     name: "Go",
@@ -77,19 +108,6 @@ const sdks = [
     linkLabel: "Follow development",
   },
   {
-    id: "javascript",
-    name: "JavaScript",
-    file: "main.ts",
-    shikiLang: "typescript",
-    state: "Coming soon",
-    stateClass: "soon",
-    blurb:
-      "A typed loader for Node.js and modern runtimes. No build step required.",
-    code: needContributor("JavaScript", "//"),
-    link: sdkRepo("js"),
-    linkLabel: "Follow development",
-  },
-  {
     id: "python",
     name: "Python",
     file: "main.py",
@@ -114,8 +132,8 @@ const sdks = [
         <span class="serif gradient-text">Every stack.</span>
       </h2>
       <p class="section-lede">
-        The REST API is live today. Thin, read-only SDKs are next: Go first,
-        then Rust, Java, JavaScript and Python. Same single request, native
+        The REST API is live today. Thin, read-only SDKs are next: JavaScript
+        first, then Go, Rust, Java and Python. Same single request, native
         types everywhere.
       </p>
     </div>
