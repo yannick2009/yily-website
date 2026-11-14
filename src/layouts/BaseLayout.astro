@@ -7,8 +7,8 @@ interface Props {
 }
 
 const {
-  title = "Yily: Secrets management, without the weight.",
-  description = "Yily is a fast, self-hosted secret manager. One Go binary, one SQLite file, AES-256-GCM at rest. Store and retrieve your API keys, tokens and passwords without the ceremony.",
+  title = "Yily: One home for your secrets, none scattered around.",
+  description = "Stop scattering API keys and tokens across .env files, repos and chat. Yily is a lightweight, self-hosted secret manager: one Go binary, one SQLite file, AES-256-GCM at rest.",
 } = Astro.props;
 
 const canonicalURL = Astro.site
@@ -65,7 +65,7 @@ const jsonLd = {
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="Yily: Secrets management, without the weight."
+      content="Yily: One home for your secrets, none scattered around."
     />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />

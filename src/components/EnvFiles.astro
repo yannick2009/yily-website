@@ -1,0 +1,177 @@
+---
+import Icon from "./Icon.astro";
+---
+
+<section class="section env" id="env-files">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <span class="eyebrow">The .env problem</span>
+      <h2 class="section-title">
+        Your keys are everywhere.<br />
+        <span class="serif gradient-text">Put them back in one place.</span>
+      </h2>
+      <p class="section-lede">
+        Most leaks are not hacks. They are a key pasted into the wrong channel,
+        or a .env that got committed by accident. Yily gives every secret one
+        home, so there is nothing left to scatter.
+      </p>
+    </div>
+
+    <div class="split" data-reveal-group>
+      <article class="split-card before" data-reveal>
+        <div class="split-head">
+          <span class="split-icon is-before"><Icon name="x" size={15} /></span>
+          <span class="split-label">Without Yily</span>
+        </div>
+        <ul class="split-list">
+          <li><span class="li-ico is-before"><Icon name="x" size={10} /></span>A .env on every machine</li>
+          <li><span class="li-ico is-before"><Icon name="x" size={10} /></span>Keys pasted into Slack, tickets and CI logs</li>
+          <li><span class="li-ico is-before"><Icon name="x" size={10} /></span>One careless git push, and it is public forever</li>
+        </ul>
+      </article>
+
+      <article class="split-card after" data-reveal>
+        <div class="split-head">
+          <span class="split-icon is-after"><Icon name="check" size={15} /></span>
+          <span class="split-label">With Yily</span>
+        </div>
+        <ul class="split-list">
+          <li><span class="li-ico is-after"><Icon name="check" size={10} /></span>One self-hosted home for every key</li>
+          <li><span class="li-ico is-after"><Icon name="check" size={10} /></span>Values pulled at boot, never copied around</li>
+          <li><span class="li-ico is-after"><Icon name="check" size={10} /></span>Plaintext lives in memory only, never on disk</li>
+        </ul>
+      </article>
+    </div>
+
+    <p class="env-closer" data-reveal>
+      A leaked key is gone forever. A revocable token is not. Yily makes sure
+      the only thing you ever share is a token.
+    </p>
+  </div>
+</section>
+
+<style>
+  .env {
+    background:
+      radial-gradient(900px 500px at 50% 0%, rgba(131, 56, 236, 0.055), transparent 70%);
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .split-card {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(1.35rem, 2.5vw, 1.8rem);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.006)),
+      var(--bg-raised);
+  }
+
+  .split-card.after {
+    border-color: rgba(94, 234, 212, 0.16);
+    background:
+      radial-gradient(500px 240px at 50% 0%, rgba(94, 234, 212, 0.06), transparent 70%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.006)),
+      var(--bg-raised);
+  }
+
+  .split-head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .split-icon {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+  }
+
+  .split-icon.is-before {
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    background: rgba(251, 191, 36, 0.08);
+    color: rgba(251, 191, 36, 0.85);
+  }
+
+  .split-icon.is-after {
+    border: 1px solid rgba(94, 234, 212, 0.22);
+    background: rgba(94, 234, 212, 0.09);
+    color: var(--success);
+  }
+
+  .split-label {
+    color: var(--text-soft);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .split-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1.2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .split-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .li-ico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 17px;
+    height: 17px;
+    margin-top: 2px;
+    border-radius: 50%;
+  }
+
+  .li-ico.is-before {
+    background: rgba(251, 191, 36, 0.1);
+    color: rgba(251, 191, 36, 0.75);
+  }
+
+  .li-ico.is-after {
+    background: rgba(94, 234, 212, 0.12);
+    color: var(--success);
+  }
+
+  .env-closer {
+    max-width: 640px;
+    margin: 1.4rem auto 0;
+    color: var(--faint);
+    font-size: 0.8rem;
+    line-height: 1.7;
+    text-align: center;
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 680px) {
+    .split {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .env-closer {
+      text-align: left;
+    }
+  }
+</style>

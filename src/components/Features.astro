@@ -33,10 +33,17 @@ const languages = [
       <div class="origin-label"><span class="origin-dot"></span>The origin</div>
       <div class="origin-copy">
         <p>
-          The secret managers I tried were built for large teams. They came
-          with clusters, agents, external databases, and a bill that grows with
-          every environment. I wanted the opposite: one secure place for my keys,
-          a deploy that takes a minute, and a footprint that costs little to run.
+          Every project starts the same way. A key lands in a .env, gets pasted
+          into Slack, copied to a second machine, and eventually committed where
+          it should never be. Once a secret is out, it is out for good. You
+          cannot un-leak a key.
+        </p>
+        <p>
+          The big secret managers made this worse, not better. They were built
+          for large teams and came with clusters, agents, external databases,
+          and a bill that grows with every environment. I wanted the opposite:
+          one secure place for every key, a deploy that takes a minute, and
+          nothing left lying around.
         </p>
         <p>
           That constraint shaped the architecture: <strong>one Go binary, one SQLite file, one master key.</strong> Everything else had to earn its place.

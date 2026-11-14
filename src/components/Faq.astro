@@ -13,7 +13,11 @@ const faqs = [
   },
   {
     q: "How is Yily different from Vault or Infisical?",
-    a: "Yily is deliberately small: one Go binary, SQLite, one admin and no external dependencies. If you need distributed clusters, dynamic secrets or multi-tenant RBAC, those tools are a better fit. If you want a vault you can understand in an afternoon, Yily is for you.",
+    a: "Those tools are built for large teams, and they need the machinery to match: clusters, agents, external databases, and a bill that grows with every environment. Yily is the opposite. One Go binary, one SQLite file, one admin, and no external dependencies. If you need distributed clusters or multi-tenant RBAC, they are a better fit. If you want a vault you can understand in an afternoon, Yily is for you.",
+  },
+  {
+    q: "Can I replace my .env files with Yily?",
+    a: "Yes, that is the point. Instead of copying keys across machines and channels, store each one in Yily and let your app pull values at boot with a read-only token. Nothing gets pasted, committed or shared, so there is nothing to leak.",
   },
   {
     q: "What happens if I lose the master key?",
