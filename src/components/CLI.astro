@@ -1,0 +1,209 @@
+---
+import Icon from "./Icon.astro";
+
+const site = Astro.site ?? new URL("https://yily.dev");
+const installUrl = new URL("/install.sh", site).href;
+const installCommand = `curl -fsSL ${installUrl} | bash -s -- --pre-release`;
+---
+
+<section class="section cli" id="cli">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <span class="eyebrow">CLI</span>
+      <h2 class="section-title">
+        Install the CLI.<br />
+        <span class="serif gradient-text">Drive it from the shell.</span>
+      </h2>
+      <p class="section-lede">
+        Install <code class="inline-code">yily-cli</code> and manage environments
+        and variables from your terminal. One command, and it is in your
+        <code class="inline-code">~/.local/bin</code>.
+      </p>
+    </div>
+
+    <div class="cli-card" data-reveal data-spotlight>
+      <div class="cli-label">
+        <span class="cli-label-icon"><Icon name="terminal" size={14} /></span>
+        <span>Install the CLI</span>
+        <span class="cli-flag">pre-release</span>
+      </div>
+
+      <div class="cli-code">
+        <code id="cli-install">{installCommand}</code>
+        <button
+          class="copy-btn cli-copy"
+          type="button"
+          data-copy-target="#cli-install"
+          aria-label="Copy the install command"
+        >
+          <Icon name="copy" size={12} class="icon-copy" />
+          <Icon name="check" size={12} class="icon-check" />
+          <span data-copy-label>Copy</span>
+        </button>
+      </div>
+
+      <div class="cli-meta">
+        <span><Icon name="check" size={12} /> Linux &amp; macOS</span>
+        <span><Icon name="check" size={12} /> Checksum verified</span>
+        <span><Icon name="check" size={12} /> No sudo required</span>
+      </div>
+
+      <p class="cli-foot">
+        The <code class="inline-code">--pre-release</code> flag pulls the current
+        beta. Drop it once a stable release ships.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cli {
+    background:
+      radial-gradient(900px 520px at 50% 18%, rgba(131, 56, 236, 0.06), transparent 72%);
+  }
+
+  .cli-card {
+    position: relative;
+    overflow: hidden;
+    max-width: 760px;
+    margin: 0 auto;
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    background:
+      linear-gradient(180deg, rgba(18, 15, 25, 0.9), rgba(8, 7, 12, 0.96));
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.05) inset,
+      0 30px 70px -30px rgba(0, 0, 0, 0.7);
+  }
+
+  .cli-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(216, 180, 254, 0.32), transparent);
+  }
+
+  .cli-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      520px circle at var(--mx, 50%) var(--my, 30%),
+      rgba(94, 234, 212, 0.07),
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+
+  .cli-card:hover::after {
+    opacity: 1;
+  }
+
+  .cli-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-soft);
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .cli-label-icon {
+    display: grid;
+    place-items: center;
+    color: var(--brand-bright);
+  }
+
+  .cli-flag {
+    margin-left: auto;
+    padding: 1px 6px;
+    border: 1px solid rgba(94, 234, 212, 0.28);
+    border-radius: 5px;
+    background: rgba(94, 234, 212, 0.08);
+    color: var(--success);
+    font-family: var(--font-code);
+    font-size: 0.56rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .cli-code {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.22);
+  }
+
+  .cli-code code {
+    overflow-x: auto;
+    flex: 1;
+    color: #cfc8dd;
+    font-size: 0.78rem;
+    white-space: nowrap;
+    scrollbar-width: thin;
+    scrollbar-color: #2a2434 transparent;
+  }
+
+  .cli-copy {
+    flex: none;
+  }
+
+  .cli-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.4rem;
+    padding: 0.7rem 1rem 0;
+  }
+
+  .cli-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--faint);
+    font-size: 0.7rem;
+  }
+
+  .cli-meta svg {
+    color: var(--success);
+  }
+
+  .cli-foot {
+    padding: 0.55rem 1rem 0.85rem;
+    color: #5e5869;
+    font-size: 0.66rem;
+    line-height: 1.55;
+  }
+
+  .inline-code {
+    padding: 0.1rem 0.35rem;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #cfc8dd;
+    font-size: 0.82em;
+  }
+
+  @media (max-width: 520px) {
+    .cli-code {
+      gap: 0.5rem;
+      padding: 0.85rem;
+    }
+
+    .cli-code code {
+      font-size: 0.66rem;
+    }
+
+    .cli-meta {
+      gap: 0.5rem 1rem;
+    }
+  }
+</style>
