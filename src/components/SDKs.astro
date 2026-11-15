@@ -14,7 +14,7 @@ const goCode = `type AppConfig struct {
 
 func main() {
 	client, err := yily.NewClient(yily.Config{
-		BaseURL:       "http://localhost:16529",
+		BaseURL:       "http://localhost:52015",
 		EnvironmentID: "your-environment-uuid",
 		Token:         os.Getenv("YILY_TOKEN"),
 	})
@@ -32,7 +32,7 @@ func main() {
 const jsCode = `import { Client } from "yily-sdk-js";
 
 const client = new Client({
-  baseURL: "http://localhost:16529",
+  baseURL: "http://localhost:52015",
   environmentID: "ENVxxxxxxxxxxxx",
   token: process.env.YILY_TOKEN,
 });
@@ -50,7 +50,7 @@ console.log("db:", cfg.dbHost, cfg.dbPort);`;
 const tsCode = `import { Client } from "yily-sdk-js";
 
 const client = new Client({
-  baseURL: "http://localhost:16529",
+  baseURL: "http://localhost:52015",
   environmentID: "ENVxxxxxxxxxxxx",
   token: process.env.YILY_TOKEN!,
 });
