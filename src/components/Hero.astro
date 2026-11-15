@@ -2,6 +2,7 @@
 import Icon from "./Icon.astro";
 import GitHubIcon from "./GitHubIcon.astro";
 import YilyAppMockup from "./YilyAppMockup.astro";
+import { VERSION_TAG } from "../config";
 
 const repo = "https://github.com/yannick2009/yily";
 const releases = "https://github.com/yannick2009/yily/releases";
@@ -65,7 +66,7 @@ const releases = "https://github.com/yannick2009/yily/releases";
     <a class="hero-badge" href={releases} target="_blank" rel="noreferrer">
       <span class="badge-live"><span class="badge-dot"></span>Now in public beta</span>
       <span class="badge-div"></span>
-      <span class="badge-version">v1.0.0-beta.1</span>
+      <span class="badge-version">{VERSION_TAG}</span>
       <span class="badge-arrow"><Icon name="arrow-up-right" size={12} /></span>
     </a>
 

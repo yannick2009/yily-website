@@ -1,5 +1,6 @@
 ---
 import Icon from "./Icon.astro";
+import { VERSION, VERSION_TAG } from "../config";
 
 const readme = "https://github.com/yannick2009/yily/blob/main/README.md";
 
@@ -161,7 +162,7 @@ const paths = [
   -p <span class="t-num">52015</span>:<span class="t-num">52015</span> \
   -v yily-data:/data \
   --env-file yily.env \
-  <span class="t-img">ghcr.io/yannick2009/yily:1.0.0-beta.1</span></code></pre>
+  <span class="t-img">ghcr.io/yannick2009/yily:{VERSION}</span></code></pre>
                 </div>
               </div>
 
@@ -189,7 +190,7 @@ const paths = [
                   </div>
                   <pre><code><span class="t-cmd">services</span>:
   <span class="t-cmd">yily</span>:
-    <span class="t-cmd">image</span>: <span class="t-img">ghcr.io/yannick2009/yily:1.0.0-beta.1</span>
+    <span class="t-cmd">image</span>: <span class="t-img">ghcr.io/yannick2009/yily:{VERSION}</span>
     <span class="t-cmd">restart</span>: <span class="t-str">unless-stopped</span>
     <span class="t-cmd">ports</span>:
       - <span class="t-num">"52015:52015"</span>
@@ -229,10 +230,10 @@ const paths = [
                       <span data-copy-label>Copy</span>
                     </button>
                   </div>
-                  <pre><code><span class="t-cmd">curl</span> -LO <span class="t-str">https://github.com/yannick2009/yily/releases/download/v1.0.0-beta.1/yily_1.0.0-beta.1_linux_amd64.tar.gz</span>
-<span class="t-cmd">tar</span> -xzf <span class="t-str">yily_1.0.0-beta.1_linux_amd64.tar.gz</span>
+                  <pre><code><span class="t-cmd">curl</span> -LO <span class="t-str">https://github.com/yannick2009/yily/releases/download/{VERSION_TAG}/yily_{VERSION}_linux_amd64.tar.gz</span>
+<span class="t-cmd">tar</span> -xzf <span class="t-str">yily_{VERSION}_linux_amd64.tar.gz</span>
 <span class="t-cmd">set -a</span>; <span class="t-cmd">source</span> <span class="t-str">./yily.env</span>; <span class="t-cmd">set +a</span>   <span class="t-cmt"># exports YILY_MASTER_KEY and YILY_SETUP_TOKEN</span>
-<span class="t-cmd">./yily_1.0.0-beta.1_linux_amd64/yily</span></code></pre>
+<span class="t-cmd">./yily_{VERSION}_linux_amd64/yily</span></code></pre>
                 </div>
               </div>
             </div>

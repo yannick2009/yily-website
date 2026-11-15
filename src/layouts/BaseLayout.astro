@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { VERSION } from "../config";
 
 interface Props {
   title?: string;
@@ -30,7 +31,7 @@ const jsonLd = {
     price: "0",
     priceCurrency: "USD",
   },
-  softwareVersion: "1.0.0-beta.1",
+  softwareVersion: VERSION,
   sameAs: ["https://github.com/yannick2009/yily"],
 };
 ---

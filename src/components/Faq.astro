@@ -1,6 +1,7 @@
 ---
 import Icon from "./Icon.astro";
 import GitHubIcon from "./GitHubIcon.astro";
+import { VERSION_TAG } from "../config";
 
 const repo = "https://github.com/yannick2009/yily";
 const issues = `${repo}/issues`;
@@ -9,7 +10,7 @@ const contributing = `${repo}/blob/main/CONTRIBUTING.md`;
 const faqs = [
   {
     q: "Is Yily production-ready?",
-    a: "It is in public beta (v1.0.0-beta.1). The core works and is self-hostable today, but pin a release, back up the data volume and master key, and expect APIs to evolve. Read the release notes before upgrading.",
+    a: `It is in public beta (${VERSION_TAG}). The core works and is self-hostable today, but pin a release, back up the data volume and master key, and expect APIs to evolve. Read the release notes before upgrading.`,
   },
   {
     q: "How is Yily different from Vault or Infisical?",

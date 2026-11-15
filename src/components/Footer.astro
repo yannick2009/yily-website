@@ -1,9 +1,10 @@
 ---
 import Icon from "./Icon.astro";
 import GitHubIcon from "./GitHubIcon.astro";
+import { VERSION_TAG } from "../config";
 
 const repo = "https://github.com/yannick2009/yily";
-const version = "v1.0.0-beta.1";
+const version = VERSION_TAG;
 const year = new Date().getFullYear();
 
 interface FooterLink {

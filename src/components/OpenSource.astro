@@ -1,6 +1,7 @@
 ---
 import Icon from "./Icon.astro";
 import GitHubIcon from "./GitHubIcon.astro";
+import { VERSION_TAG } from "../config";
 
 const repo = "https://github.com/yannick2009/yily";
 const releases = `${repo}/releases`;
@@ -36,7 +37,7 @@ const license = `${repo}/blob/main/LICENSE`;
           </a>
         </div>
         <div class="os-meta">
-          <span class="pill"><span class="dot"></span>v1.0.0-beta.1</span>
+          <span class="pill"><span class="dot"></span>{VERSION_TAG}</span>
           <span class="os-meta-item"><Icon name="shield" size={12} /> MIT licensed</span>
           <span class="os-meta-item"><Icon name="branch" size={12} /> Built in public</span>
         </div>
