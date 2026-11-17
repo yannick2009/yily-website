@@ -152,6 +152,19 @@ const sdks = [
     link: sdkRepo("py"),
     linkLabel: "Follow development",
   },
+  {
+    id: "csharp",
+    name: "C#",
+    file: "Program.cs",
+    shikiLang: "csharp",
+    state: "Coming soon",
+    stateClass: "soon",
+    blurb:
+      "A typed client for .NET with async loading and minimal ceremony. No hidden runtime.",
+    code: needContributor("C#", "//"),
+    link: sdkRepo("csharp"),
+    linkLabel: "Follow development",
+  },
 ];
 ---
 
@@ -184,7 +197,7 @@ const sdks = [
               class:list={["sdk-tab", { "is-active": i === 0 }]}
               data-sdk-tab={sdk.id}>
               <LangIcon
-                lang={sdk.id as "go" | "rust" | "java" | "javascript" | "typescript" | "python"}
+                lang={sdk.id as "go" | "rust" | "java" | "javascript" | "typescript" | "python" | "csharp"}
                 size={16}
               />
               <span>{sdk.name}</span>
@@ -222,7 +235,7 @@ const sdks = [
                 <div class="code-bar">
                   <span class="code-file">
                     <LangIcon
-                      lang={sdk.id as "go" | "rust" | "java" | "javascript" | "typescript" | "python"}
+                      lang={sdk.id as "go" | "rust" | "java" | "javascript" | "typescript" | "python" | "csharp"}
                       size={13}
                     />
                     {sdk.file}
