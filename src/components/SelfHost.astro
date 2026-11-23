@@ -32,7 +32,8 @@ const paths = [
       <div class="section-header left">
         <span class="eyebrow">Self-hosting</span>
         <h2 class="section-title">
-          Up in a minute.<br />
+          Up in a minute.
+          <br />
           <span class="serif gradient-text">Yours for good.</span>
         </h2>
         <p class="section-lede">
@@ -42,26 +43,30 @@ const paths = [
       </div>
 
       <div class="paths">
-        {
-          paths.map((path) => (
-            <a class="path" href={path.href} target="_blank" rel="noreferrer">
-              <span class="path-icon"><Icon name={path.icon} size={15} /></span>
-              <span class="path-copy">
-                <strong>{path.title}</strong>
-                <em>{path.desc}</em>
-              </span>
-              <span class="path-arrow"><Icon name="arrow-up-right" size={14} /></span>
-            </a>
-          ))
-        }
+        {paths.map((path) => (
+          <a class="path" href={path.href} target="_blank" rel="noreferrer">
+            <span class="path-icon">
+              <Icon name={path.icon} size={15} />
+            </span>
+            <span class="path-copy">
+              <strong>{path.title}</strong>
+              <em>{path.desc}</em>
+            </span>
+            <span class="path-arrow">
+              <Icon name="arrow-up-right" size={14} />
+            </span>
+          </a>
+        ))}
       </div>
 
       <div class="key-warning">
-        <span class="warning-icon"><Icon name="warning" size={15} /></span>
+        <span class="warning-icon">
+          <Icon name="warning" size={15} />
+        </span>
         <p>
-          <strong>Guard the master key.</strong> If it is lost, the encrypted values
-          are unrecoverable. That is by design. Store it outside the database and
-          back it up.
+          <strong>Guard the master key.</strong> If it is lost, the encrypted
+          values are unrecoverable. That is by design. Store it outside the
+          database.
         </p>
       </div>
     </div>
@@ -69,20 +74,25 @@ const paths = [
     <div class="self-visual" data-reveal style="--reveal-delay: 100ms">
       <div class="terminal">
         <div class="terminal-bar">
-          <span class="win-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="win-dots" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
           <span class="terminal-title">bash · yily</span>
         </div>
 
         <div class="terminal-body">
           <div class="term-block key-block">
             <div class="term-block-head">
-              <span class="term-step"><span>1</span> Generate your keys</span>
+              <span class="term-step">
+                <span>1</span> Generate your keys
+              </span>
               <button
                 class="copy-btn"
                 type="button"
                 data-copy-block
-                aria-label="Copy the key command"
-              >
+                aria-label="Copy the key command">
                 <Icon name="copy" size={12} class="icon-copy" />
                 <Icon name="check" size={12} class="icon-check" />
                 <span data-copy-label>Copy</span>
@@ -96,7 +106,10 @@ const paths = [
           </div>
 
           <div class="deploy" data-deploy>
-            <div class="deploy-tabs" role="tablist" aria-label="Choose an install method">
+            <div
+              class="deploy-tabs"
+              role="tablist"
+              aria-label="Choose an install method">
               <button
                 type="button"
                 role="tab"
@@ -105,8 +118,7 @@ const paths = [
                 aria-selected="true"
                 tabindex="0"
                 class="deploy-tab is-active"
-                data-deploy-tab="docker"
-              >
+                data-deploy-tab="docker">
                 <span class="deploy-tab-num">1</span> Docker
               </button>
               <button
@@ -117,8 +129,7 @@ const paths = [
                 aria-selected="false"
                 tabindex="-1"
                 class="deploy-tab"
-                data-deploy-tab="compose"
-              >
+                data-deploy-tab="compose">
                 <span class="deploy-tab-num">2</span> Compose
               </button>
               <button
@@ -129,8 +140,7 @@ const paths = [
                 aria-selected="false"
                 tabindex="-1"
                 class="deploy-tab"
-                data-deploy-tab="binary"
-              >
+                data-deploy-tab="binary">
                 <span class="deploy-tab-num">3</span> Binary
               </button>
             </div>
@@ -141,17 +151,17 @@ const paths = [
                 id="deploy-panel-docker"
                 role="tabpanel"
                 aria-labelledby="deploy-tab-docker"
-                data-deploy-panel="docker"
-              >
+                data-deploy-panel="docker">
                 <div class="term-block">
                   <div class="term-block-head">
-                    <span class="term-step"><span>1</span> Start the container</span>
+                    <span class="term-step">
+                      <span>1</span> Start the container
+                    </span>
                     <button
                       class="copy-btn"
                       type="button"
                       data-copy-block
-                      aria-label="Copy the Docker command"
-                    >
+                      aria-label="Copy the Docker command">
                       <Icon name="copy" size={12} class="icon-copy" />
                       <Icon name="check" size={12} class="icon-check" />
                       <span data-copy-label>Copy</span>
@@ -172,17 +182,17 @@ const paths = [
                 role="tabpanel"
                 aria-labelledby="deploy-tab-compose"
                 data-deploy-panel="compose"
-                hidden
-              >
+                hidden>
                 <div class="term-block">
                   <div class="term-block-head">
-                    <span class="term-step"><span>2</span> Docker Compose</span>
+                    <span class="term-step">
+                      <span>2</span> Docker Compose
+                    </span>
                     <button
                       class="copy-btn"
                       type="button"
                       data-copy-block
-                      aria-label="Copy the Docker Compose file"
-                    >
+                      aria-label="Copy the Docker Compose file">
                       <Icon name="copy" size={12} class="icon-copy" />
                       <Icon name="check" size={12} class="icon-check" />
                       <span data-copy-label>Copy</span>
@@ -203,7 +213,9 @@ const paths = [
   <span class="t-str">yily-data</span>:</code></pre>
                   <div class="term-compose-run">
                     <span class="term-compose-run-label">run</span>
-                    <code><span class="t-cmd">docker compose</span> up -d</code>
+                    <code>
+                      <span class="t-cmd">docker compose</span> up -d
+                    </code>
                   </div>
                 </div>
               </div>
@@ -214,17 +226,17 @@ const paths = [
                 role="tabpanel"
                 aria-labelledby="deploy-tab-binary"
                 data-deploy-panel="binary"
-                hidden
-              >
+                hidden>
                 <div class="term-block">
                   <div class="term-block-head">
-                    <span class="term-step"><span>3</span> Download the server binary</span>
+                    <span class="term-step">
+                      <span>3</span> Download the server binary
+                    </span>
                     <button
                       class="copy-btn"
                       type="button"
                       data-copy-block
-                      aria-label="Copy the binary download commands"
-                    >
+                      aria-label="Copy the binary download commands">
                       <Icon name="copy" size={12} class="icon-copy" />
                       <Icon name="check" size={12} class="icon-check" />
                       <span data-copy-label>Copy</span>
@@ -240,10 +252,23 @@ const paths = [
           </div>
 
           <div class="term-open">
-            <span class="term-ready"><span class="live-dot"></span> running</span>
+            <span class="term-ready">
+              <span class="live-dot"></span> running
+            </span>
             <span class="term-open-sep">/</span>
-            <span>open <a href="http://localhost:52015" target="_blank" rel="noreferrer" aria-label="Open the Yily dashboard at localhost:52015">localhost:52015</a></span>
-            <span class="term-open-arrow"><Icon name="arrow-up-right" size={11} /></span>
+            <span>
+              open{" "}
+              <a
+                href="http://localhost:52015"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open the Yily dashboard at localhost:52015">
+                localhost:52015
+              </a>
+            </span>
+            <span class="term-open-arrow">
+              <Icon name="arrow-up-right" size={11} />
+            </span>
           </div>
         </div>
       </div>
@@ -261,8 +286,11 @@ const paths = [
 
 <style>
   .self-host {
-    background:
-      radial-gradient(900px 520px at 85% 30%, rgba(139, 92, 246, 0.06), transparent 70%);
+    background: radial-gradient(
+      900px 520px at 85% 30%,
+      rgba(139, 92, 246, 0.06),
+      transparent 70%
+    );
   }
 
   .self-grid {
@@ -426,8 +454,11 @@ const paths = [
   }
 
   .terminal-body {
-    background:
-      radial-gradient(400px 200px at 100% 0%, rgba(139, 92, 246, 0.055), transparent 75%);
+    background: radial-gradient(
+      400px 200px at 100% 0%,
+      rgba(139, 92, 246, 0.055),
+      transparent 75%
+    );
   }
 
   /* Deploy tabs + stacked panels */
