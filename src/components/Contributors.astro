@@ -1,35 +1,15 @@
 ---
-import { Image } from "astro:assets";
 import Icon from "./Icon.astro";
 import GitHubIcon from "./GitHubIcon.astro";
+import { fetchContributors, FALLBACK_CONTRIBUTORS } from "../lib/github";
 
 const repo = "https://github.com/yannick2009/yily";
 const contributing = `${repo}/blob/main/CONTRIBUTING.md`;
 const issues = `${repo}/issues`;
 
-interface Contributor {
-  login: string;
-  avatar: string;
-  url: string;
-}
-
-const contributors: Contributor[] = [
-  {
-    login: "yannick2009",
-    avatar: "https://avatars.githubusercontent.com/u/69443278?v=4",
-    url: "https://github.com/yannick2009",
-  },
-  {
-    login: "Angislad20",
-    avatar: "https://avatars.githubusercontent.com/u/116013303?v=4",
-    url: "https://github.com/Angislad20",
-  },
-  {
-    login: "yvnnix",
-    avatar: "https://avatars.githubusercontent.com/u/181828602?v=4",
-    url: "https://github.com/yvnnix",
-  },
-];
+// Fetched from GitHub at build time; kept fresh in the browser by the script below.
+const fetched = await fetchContributors(AbortSignal.timeout(5000));
+const contributors = fetched.length > 0 ? fetched : FALLBACK_CONTRIBUTORS;
 ---
 
 <section class="section contributors" id="contributors">
@@ -47,17 +27,16 @@ const contributors: Contributor[] = [
       </p>
     </div>
 
-    <ul class="contributors-grid" data-reveal-group>
+    <ul class="contributors-grid" data-reveal-group data-contributors-grid>
       {contributors.map((c) => (
-        <li data-reveal>
+        <li data-reveal data-contributor-login={c.login}>
           <a class="contributor" href={c.url} target="_blank" rel="noreferrer" title={c.login}>
             <span class="contributor-avatar">
-              <Image
+              <img
                 src={c.avatar}
                 alt={`${c.login} avatar`}
-                width={88}
-                height={88}
-                format="webp"
+                width="88"
+                height="88"
                 loading="lazy"
                 decoding="async"
                 referrerpolicy="no-referrer"
@@ -68,7 +47,7 @@ const contributors: Contributor[] = [
         </li>
       ))}
 
-      <li data-reveal>
+      <li data-reveal data-contributor-invite>
         <a
           class="contributor contributor-invite"
           href={contributing}
@@ -100,6 +79,138 @@ const contributors: Contributor[] = [
     </div>
   </div>
 </section>
+
+<script>
+  import { fetchContributors, type Contributor } from "../lib/github";
+
+  const grid = document.querySelector<HTMLElement>("[data-contributors-grid]");
+
+  if (grid) {
+    const CACHE_KEY = "yily:github-contributors";
+    const invite = grid.querySelector<HTMLElement>("[data-contributor-invite]");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const canObserve = !reduceMotion && "IntersectionObserver" in window;
+    const revealObserver = canObserve
+      ? new IntersectionObserver(
+          (entries, observer) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add("is-in");
+              observer.unobserve(entry.target);
+            }
+          },
+          { threshold: 0.1, rootMargin: "0px 0px -7% 0px" },
+        )
+      : null;
+
+    const isContributor = (entry: unknown): entry is Contributor => {
+      if (typeof entry !== "object" || entry === null) return false;
+      const candidate = entry as Record<string, unknown>;
+      return (
+        typeof candidate.login === "string" &&
+        typeof candidate.avatar === "string" &&
+        typeof candidate.url === "string"
+      );
+    };
+
+    const readCache = (): Contributor[] | null => {
+      try {
+        const raw = window.localStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        const parsed: unknown = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return null;
+        const valid = parsed.filter(isContributor);
+        return valid.length > 0 ? valid : null;
+      } catch {
+        return null;
+      }
+    };
+
+    const writeCache = (list: Contributor[]) => {
+      try {
+        window.localStorage.setItem(CACHE_KEY, JSON.stringify(list));
+      } catch {
+        /* Storage unavailable: the list still renders for this visit. */
+      }
+    };
+
+    const currentLogins = () =>
+      [...grid.querySelectorAll<HTMLElement>("[data-contributor-login]")].map(
+        (item) => item.dataset.contributorLogin ?? "",
+      );
+
+    const createItem = (contributor: Contributor, index: number, revealNow: boolean) => {
+      const item = document.createElement("li");
+      item.dataset.contributorLogin = contributor.login;
+      item.style.setProperty("--reveal-delay", `${index * 65}ms`);
+      if (revealNow) item.classList.add("is-in");
+      else item.setAttribute("data-reveal", "");
+
+      const link = document.createElement("a");
+      link.className = "contributor";
+      link.href = contributor.url;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.title = contributor.login;
+
+      const avatar = document.createElement("span");
+      avatar.className = "contributor-avatar";
+      const image = document.createElement("img");
+      image.src = contributor.avatar;
+      image.alt = `${contributor.login} avatar`;
+      image.width = 88;
+      image.height = 88;
+      image.loading = "lazy";
+      image.decoding = "async";
+      image.referrerPolicy = "no-referrer";
+      avatar.appendChild(image);
+
+      const login = document.createElement("span");
+      login.className = "contributor-login";
+      login.textContent = contributor.login;
+
+      link.append(avatar, login);
+      item.appendChild(link);
+      return item;
+    };
+
+    const render = (list: Contributor[]) => {
+      if (list.length === 0) return;
+      const logins = currentLogins();
+      if (
+        logins.length === list.length &&
+        list.every((contributor, index) => contributor.login === logins[index])
+      ) {
+        return;
+      }
+
+      const revealNow = !revealObserver || grid.getBoundingClientRect().top < window.innerHeight;
+      const items = list.map((contributor, index) => createItem(contributor, index, revealNow));
+
+      grid.querySelectorAll("[data-contributor-login]").forEach((item) => item.remove());
+
+      const fragment = document.createDocumentFragment();
+      for (const item of items) fragment.appendChild(item);
+      if (invite) grid.insertBefore(fragment, invite);
+      else grid.appendChild(fragment);
+
+      if (!revealNow && revealObserver) {
+        for (const item of items) revealObserver.observe(item);
+      }
+    };
+
+    const refresh = async () => {
+      const cached = readCache();
+      if (cached) render(cached);
+      const list = await fetchContributors();
+      if (list.length === 0) return;
+      render(list);
+      writeCache(list);
+    };
+
+    void refresh();
+  }
+</script>
 
 <style>
   .contributors {
