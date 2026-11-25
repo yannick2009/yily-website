@@ -12,9 +12,7 @@ const {
   description = "Stop scattering API keys and tokens across .env files, repos and chat. Yily is a lightweight, self-hosted secret manager: one Go binary, one SQLite file, AES-256-GCM at rest.",
 } = Astro.props;
 
-const canonicalURL = Astro.site
-  ? new URL(Astro.url.pathname, Astro.site)
-  : Astro.url;
+const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
 const ogImage = Astro.site ? new URL("/og.png", Astro.site).href : "/og.png";
 
 const jsonLd = {
@@ -92,17 +90,13 @@ const jsonLd = {
       document.documentElement.classList.add("js");
     </script>
 
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify(jsonLd)}
-    />
-
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <script
       is:inline
       defer
       src="https://umami-production-3e01.up.railway.app/script.js"
-      data-website-id="ea9c2460-67ad-42ae-8709-44b0c6ac235e"></script>
+      data-website-id="ea9c2460-67ad-42ae-8709-44b0c6ac235e"
+    ></script>
     <script
       is:inline
       defer
@@ -110,11 +104,88 @@ const jsonLd = {
       data-website-id="ea9c2460-67ad-42ae-8709-44b0c6ac235e"
       data-sample-rate="0.1"
       data-mask-level="moderate"
-      data-max-duration="300000"></script>
+      data-max-duration="300000"
+    ></script>
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
     <div class="site-noise" aria-hidden="true"></div>
     <slot />
+
+    <script>
+      // Keep the "Star on GitHub" star counts in sync with the repository.
+      const REPO = "yannick2009/yily";
+      const CACHE_KEY = "yily:github-stars";
+      const CACHE_TTL = 10 * 60 * 1000;
+
+      type CachedStars = { count: number; at: number };
+
+      const stars = document.querySelectorAll<HTMLElement>("[data-star-count]");
+
+      if (stars.length > 0) {
+        const compact = new Intl.NumberFormat("en", {
+          notation: "compact",
+          maximumFractionDigits: 1,
+        });
+
+        const formatCount = (count: number) =>
+          count < 1000 ? String(count) : compact.format(count).toLowerCase();
+
+        const paint = (count: number) => {
+          const label = formatCount(count);
+          stars.forEach((node) => {
+            const value = node.querySelector<HTMLElement>("[data-star-count-value]");
+            if (!value) return;
+            value.textContent = label;
+            node.classList.add("is-ready");
+          });
+        };
+
+        const readCache = (): CachedStars | null => {
+          try {
+            const raw = window.localStorage.getItem(CACHE_KEY);
+            if (!raw) return null;
+            const parsed: Partial<CachedStars> = JSON.parse(raw);
+            if (typeof parsed.count !== "number" || typeof parsed.at !== "number") {
+              return null;
+            }
+            return { count: parsed.count, at: parsed.at };
+          } catch {
+            return null;
+          }
+        };
+
+        const writeCache = (count: number) => {
+          try {
+            window.localStorage.setItem(CACHE_KEY, JSON.stringify({ count, at: Date.now() }));
+          } catch {
+            /* Storage unavailable: the count still renders for this visit. */
+          }
+        };
+
+        const refreshStars = async () => {
+          const cached = readCache();
+          if (cached) paint(cached.count);
+          if (cached && Date.now() - cached.at < CACHE_TTL) return;
+
+          try {
+            const response = await fetch(`https://api.github.com/repos/${REPO}`, {
+              headers: { Accept: "application/vnd.github+json" },
+            });
+            if (!response.ok) return;
+            const repo: { stargazers_count?: number } = await response.json();
+            if (typeof repo.stargazers_count !== "number") return;
+            paint(repo.stargazers_count);
+            writeCache(repo.stargazers_count);
+          } catch {
+            /* Offline or rate-limited: keep the cached value if we had one. */
+          }
+        };
+
+        void refreshStars();
+      }
+    </script>
   </body>
 </html>

@@ -20,33 +20,35 @@ const languages = [
     <div class="section-header" data-reveal>
       <span class="eyebrow">Why Yily</span>
       <h2 class="section-title">
-        Small by design.<br />
+        Small by design.
+        <br />
         <span class="serif gradient-text">Serious where it matters.</span>
       </h2>
       <p class="section-lede">
-        Yily started with a question: why does secret management need so much
-        machinery?
+        Yily started with a question: why does secret management need so much machinery?
       </p>
     </div>
 
     <div class="origin" data-reveal>
-      <div class="origin-label"><span class="origin-dot"></span>The origin</div>
+      <div class="origin-label">
+        <span class="origin-dot"></span>The origin
+      </div>
       <div class="origin-copy">
         <p>
-          Every project starts the same way. A key lands in a .env, gets pasted
-          into Slack, copied to a second machine, and eventually committed where
-          it should never be. Once a secret is out, it is out for good. You
-          cannot un-leak a key.
+          Every project starts the same way. A key lands in a .env, gets pasted into Slack, copied
+          to a second machine, and eventually committed where it should never be. Once a secret is
+          out, it is out for good. You cannot un-leak a key.
         </p>
         <p>
-          The big secret managers made this worse, not better. They were built
-          for large teams and came with clusters, agents, external databases,
-          and a bill that grows with every environment. I wanted the opposite:
-          one secure place for every key, a deploy that takes a minute, and
-          nothing left lying around.
+          The big secret managers made this worse, not better. They were built for large teams and
+          came with clusters, agents, external databases, and a bill that grows with every
+          environment. I wanted the opposite: one secure place for every key, a deploy that takes a
+          minute, and nothing left lying around.
         </p>
         <p>
-          That constraint shaped the architecture: <strong>one Go binary, one SQLite file, one master key.</strong> Everything else had to earn its place.
+          That constraint shaped the architecture:{" "}
+          <strong>one Go binary, one SQLite file, one master key.</strong> Everything else had to
+          earn its place.
         </p>
       </div>
     </div>
@@ -54,14 +56,15 @@ const languages = [
     <div class="bento" data-reveal-group>
       <article class="bento-card span-4" data-reveal data-spotlight>
         <div class="card-top">
-          <span class="card-icon"><Icon name="box" size={16} /></span>
+          <span class="card-icon">
+            <Icon name="box" size={16} />
+          </span>
           <span class="card-kicker">Deployment</span>
         </div>
         <h3>One binary. Zero orchestra.</h3>
         <p>
-          The API, web interface and CLI ship together, with state in a single
-          SQLite database. Deploy it next to your app. No external storage to
-          run.
+          The API, web interface and CLI ship together, with state in a single SQLite database.
+          Deploy it next to your app. No external storage to run.
         </p>
 
         <div class="visual dash-visual" aria-hidden="true">
@@ -73,22 +76,30 @@ const languages = [
           </div>
           <div class="dash-stats">
             <div class="dash-stat">
-              <span class="dash-stat-icon"><Icon name="folder" size={12} /></span>
+              <span class="dash-stat-icon">
+                <Icon name="folder" size={12} />
+              </span>
               <span class="dash-stat-value">3</span>
               <span class="dash-stat-label">Projects</span>
             </div>
             <div class="dash-stat">
-              <span class="dash-stat-icon"><Icon name="globe" size={12} /></span>
+              <span class="dash-stat-icon">
+                <Icon name="globe" size={12} />
+              </span>
               <span class="dash-stat-value">6</span>
               <span class="dash-stat-label">Environments</span>
             </div>
             <div class="dash-stat">
-              <span class="dash-stat-icon"><Icon name="lock" size={12} /></span>
+              <span class="dash-stat-icon">
+                <Icon name="lock" size={12} />
+              </span>
               <span class="dash-stat-value">24</span>
               <span class="dash-stat-label">Secrets</span>
             </div>
             <div class="dash-stat">
-              <span class="dash-stat-icon"><Icon name="key" size={12} /></span>
+              <span class="dash-stat-icon">
+                <Icon name="key" size={12} />
+              </span>
               <span class="dash-stat-value">2</span>
               <span class="dash-stat-label">Tokens</span>
             </div>
@@ -98,13 +109,15 @@ const languages = [
 
       <article class="bento-card span-2" data-reveal data-spotlight>
         <div class="card-top">
-          <span class="card-icon"><Icon name="lock" size={16} /></span>
+          <span class="card-icon">
+            <Icon name="lock" size={16} />
+          </span>
           <span class="card-kicker">At rest</span>
         </div>
         <h3>Encrypted, then stored.</h3>
         <p>
-          Every value is sealed with AES-256-GCM and a fresh nonce. The master key
-          never enters the database.
+          Every value is sealed with AES-256-GCM and a fresh nonce. The master key never enters the
+          database.
         </p>
 
         <div class="visual secret-visual" aria-hidden="true">
@@ -115,7 +128,9 @@ const languages = [
           </div>
           <div class="secret-meta">
             <span>Created Nov 9, 2026</span>
-            <span class="mini-primary"><Icon name="plus" size={9} /> New version</span>
+            <span class="mini-primary">
+              <Icon name="plus" size={9} /> New version
+            </span>
           </div>
           <div class="mini-card secret-current">
             <div class="secret-current-head">
@@ -124,7 +139,10 @@ const languages = [
             </div>
             <div class="secret-current-row">
               <code>••••••••••</code>
-              <span class="secret-actions"><Icon name="eye" size={11} /><Icon name="copy" size={11} /></span>
+              <span class="secret-actions">
+                <Icon name="eye" size={11} />
+                <Icon name="copy" size={11} />
+              </span>
             </div>
           </div>
         </div>
@@ -132,13 +150,15 @@ const languages = [
 
       <article class="bento-card span-2" data-reveal data-spotlight>
         <div class="card-top">
-          <span class="card-icon"><Icon name="layers" size={16} /></span>
+          <span class="card-icon">
+            <Icon name="layers" size={16} />
+          </span>
           <span class="card-kicker">Versioning</span>
         </div>
         <h3>History with an undo.</h3>
         <p>
-          Every value change becomes a version. Reactivate an older one the
-          moment a deploy goes sideways.
+          Every value change becomes a version. Reactivate an older one the moment a deploy goes
+          sideways.
         </p>
 
         <div class="visual versions-visual" aria-hidden="true">
@@ -177,23 +197,29 @@ const languages = [
 
       <article class="bento-card span-2" data-reveal data-spotlight>
         <div class="card-top">
-          <span class="card-icon"><Icon name="key" size={16} /></span>
+          <span class="card-icon">
+            <Icon name="key" size={16} />
+          </span>
           <span class="card-kicker">Access</span>
         </div>
         <h3>Tokens that know their place.</h3>
         <p>
-          Read- or write-scoped tokens, SHA-256 hashed before storage, revocable in
-          one click. The raw token is shown exactly once.
+          Read- or write-scoped tokens, SHA-256 hashed before storage, revocable in one click. The
+          raw token is shown exactly once.
         </p>
 
         <div class="visual tokens-visual" aria-hidden="true">
           <div class="mini-page-head">
             <span class="mini-page-title">Tokens</span>
-            <span class="mini-primary"><Icon name="plus" size={9} /> Create token</span>
+            <span class="mini-primary">
+              <Icon name="plus" size={9} /> Create token
+            </span>
           </div>
           <div class="mini-card token-card">
             <div class="token-row">
-              <span class="token-icon"><Icon name="key" size={11} /></span>
+              <span class="token-icon">
+                <Icon name="key" size={11} />
+              </span>
               <div class="token-main">
                 <div class="token-line">
                   <span class="token-name">deploy-bot</span>
@@ -202,10 +228,15 @@ const languages = [
                 <span class="token-meta">Never expires</span>
                 <span class="token-meta is-faint">Last used Nov 9, 2026</span>
               </div>
-              <span class="token-actions"><Icon name="rotate" size={11} /><Icon name="x-circle" size={11} /></span>
+              <span class="token-actions">
+                <Icon name="rotate" size={11} />
+                <Icon name="x-circle" size={11} />
+              </span>
             </div>
             <div class="token-row">
-              <span class="token-icon"><Icon name="key" size={11} /></span>
+              <span class="token-icon">
+                <Icon name="key" size={11} />
+              </span>
               <div class="token-main">
                 <div class="token-line">
                   <span class="token-name">ci-runner</span>
@@ -214,7 +245,10 @@ const languages = [
                 <span class="token-meta">Expires Dec 31, 2026</span>
                 <span class="token-meta is-faint">Last used Nov 10, 2026</span>
               </div>
-              <span class="token-actions"><Icon name="rotate" size={11} /><Icon name="x-circle" size={11} /></span>
+              <span class="token-actions">
+                <Icon name="rotate" size={11} />
+                <Icon name="x-circle" size={11} />
+              </span>
             </div>
           </div>
         </div>
@@ -222,38 +256,56 @@ const languages = [
 
       <article class="bento-card span-2" data-reveal data-spotlight>
         <div class="card-top">
-          <span class="card-icon"><Icon name="clock" size={16} /></span>
+          <span class="card-icon">
+            <Icon name="clock" size={16} />
+          </span>
           <span class="card-kicker">Audit</span>
         </div>
         <h3>Receipts, automatically.</h3>
         <p>
-          Sign-ins, rotations and revocations are recorded with the actor, target
-          and time. Export the trail when you need proof.
+          Sign-ins, rotations and revocations are recorded with the actor, target and time. Export
+          the trail when you need proof.
         </p>
 
         <div class="visual audit-visual" aria-hidden="true">
           <div class="mini-page-head">
             <span class="mini-page-title">Audit log</span>
-            <span class="mini-secondary"><Icon name="download" size={9} /> Export <span class="mini-csv">CSV</span></span>
+            <span class="mini-secondary">
+              <Icon name="download" size={9} /> Export <span class="mini-csv">CSV</span>
+            </span>
           </div>
           <div class="mini-card audit-card">
-            <div class="audit-table-head"><span>Actor</span><span>Action</span><span>Resource</span><span>Time</span></div>
+            <div class="audit-table-head">
+              <span>Actor</span>
+              <span>Action</span>
+              <span>Resource</span>
+              <span>Time</span>
+            </div>
             <div class="audit-row">
               <span class="audit-actor">Yannick</span>
               <span class="audit-action is-brand">Revealed</span>
-              <span class="audit-resource"><strong>JWT_SECRET</strong><em>Variable</em></span>
+              <span class="audit-resource">
+                <strong>JWT_SECRET</strong>
+                <em>Variable</em>
+              </span>
               <span class="audit-time">2m</span>
             </div>
             <div class="audit-row">
               <span class="audit-actor">Yannick</span>
               <span class="audit-action">Rotated</span>
-              <span class="audit-resource"><strong>deploy-bot</strong><em>Token</em></span>
+              <span class="audit-resource">
+                <strong>deploy-bot</strong>
+                <em>Token</em>
+              </span>
               <span class="audit-time">1h</span>
             </div>
             <div class="audit-row">
               <span class="audit-actor">Yannick</span>
               <span class="audit-action">Revoked</span>
-              <span class="audit-resource"><strong>legacy-token</strong><em>Token</em></span>
+              <span class="audit-resource">
+                <strong>legacy-token</strong>
+                <em>Token</em>
+              </span>
               <span class="audit-time">4h</span>
             </div>
           </div>
@@ -263,8 +315,12 @@ const languages = [
 
     <div class="langs" data-reveal>
       <div class="langs-head">
-        <span class="langs-icon"><Icon name="globe" size={15} /></span>
-        <span>Localized in <strong>10 languages</strong></span>
+        <span class="langs-icon">
+          <Icon name="globe" size={15} />
+        </span>
+        <span>
+          Localized in <strong>10 languages</strong>
+        </span>
       </div>
       <ul class="langs-list">
         {languages.map((lang) => (
@@ -277,8 +333,7 @@ const languages = [
 
 <style>
   .features {
-    background:
-      radial-gradient(900px 500px at 50% 0%, rgba(139, 92, 246, 0.055), transparent 70%);
+    background: radial-gradient(900px 500px at 50% 0%, rgba(139, 92, 246, 0.055), transparent 70%);
   }
 
   .features .section-header {
@@ -1028,6 +1083,5 @@ const languages = [
     .span-2 {
       grid-column: span 1;
     }
-
   }
 </style>

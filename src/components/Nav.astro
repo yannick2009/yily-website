@@ -1,6 +1,7 @@
 ---
 import Icon from "./Icon.astro";
 import GitHubIcon from "./GitHubIcon.astro";
+import StarCount from "./StarCount.astro";
 
 const repo = "https://github.com/yannick2009/yily";
 const links = [
@@ -17,24 +18,15 @@ const links = [
 <header class="site-nav" data-nav>
   <div class="container nav-inner">
     <a href="#top" class="brand" aria-label="Yily home">
-      <img
-        src="/logo.svg"
-        alt=""
-        width="180"
-        height="169"
-        class="brand-logo"
-        decoding="async"
-      />
+      <img src="/logo.svg" alt="" width="180" height="169" class="brand-logo" decoding="async" />
     </a>
 
     <nav class="nav-links" aria-label="Main">
-      {
-        links.map((link) => (
-          <a href={link.href} data-nav-link>
-            {link.label}
-          </a>
-        ))
-      }
+      {links.map((link) => (
+        <a href={link.href} data-nav-link>
+          {link.label}
+        </a>
+      ))}
     </nav>
 
     <div class="nav-actions">
@@ -47,6 +39,7 @@ const links = [
       >
         <GitHubIcon size={16} />
         <span>Star on GitHub</span>
+        <StarCount />
       </a>
       <button
         class="menu-btn"
@@ -56,8 +49,12 @@ const links = [
         aria-controls="mobile-menu"
         data-menu-btn
       >
-        <span class="menu-icon menu-open-icon"><Icon name="menu" size={18} /></span>
-        <span class="menu-icon menu-close-icon"><Icon name="x" size={18} /></span>
+        <span class="menu-icon menu-open-icon">
+          <Icon name="menu" size={18} />
+        </span>
+        <span class="menu-icon menu-close-icon">
+          <Icon name="x" size={18} />
+        </span>
       </button>
     </div>
   </div>
@@ -66,20 +63,21 @@ const links = [
 <div class="mobile-menu" id="mobile-menu" data-mobile-menu data-open="false" aria-hidden="true">
   <div class="mobile-menu-inner">
     <nav class="mobile-links" aria-label="Mobile navigation">
-      {
-        links.map((link, i) => (
-          <a href={link.href} style={`--delay:${i * 45 + 80}ms`}>
-            <span class="mobile-index">{String(i + 1).padStart(2, "0")}</span>
-            <span>{link.label}</span>
-            <span class="mobile-arrow"><Icon name="arrow-up-right" size={17} /></span>
-          </a>
-        ))
-      }
+      {links.map((link, i) => (
+        <a href={link.href} style={`--delay:${i * 45 + 80}ms`}>
+          <span class="mobile-index">{String(i + 1).padStart(2, "0")}</span>
+          <span>{link.label}</span>
+          <span class="mobile-arrow">
+            <Icon name="arrow-up-right" size={17} />
+          </span>
+        </a>
+      ))}
     </nav>
     <div class="mobile-foot">
       <a class="btn btn-primary" href={repo} target="_blank" rel="noreferrer">
         <GitHubIcon size={17} />
         Star on GitHub
+        <StarCount />
       </a>
       <p>One binary · zero plaintext · MIT</p>
     </div>

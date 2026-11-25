@@ -33,42 +33,45 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
       <div class="section-header left">
         <span class="eyebrow">The retrieval path</span>
         <h2 class="section-title">
-          A secret's journey,<br />
+          A secret's journey,
+          <br />
           <span class="serif gradient-text">end to end.</span>
         </h2>
         <p class="section-lede">
-          Yily was built around one job: getting a value from encrypted storage
-          into your process, with no copy left behind. Here is every hop.
+          Yily was built around one job: getting a value from encrypted storage into your process,
+          with no copy left behind. Here is every hop.
         </p>
       </div>
 
       <ol class="steps" aria-label="Secret retrieval steps">
-        {
-          steps.map((step, i) => (
-            <li class:list={["step", { "is-active": i === 0 }]} data-flow-step={i + 1}>
-              <button
-                type="button"
-                aria-controls="flow-diagram"
-                aria-current={i === 0 ? "step" : "false"}
-              >
-                <span class="step-num">{step.n}</span>
-                <span class="step-body">
-                  <span class="step-title">{step.title}</span>
-                  <span class="step-desc">{step.desc}</span>
-                  <code class="step-code">{step.code}</code>
-                  <span class="step-progress" aria-hidden="true"><i></i></span>
+        {steps.map((step, i) => (
+          <li class:list={["step", { "is-active": i === 0 }]} data-flow-step={i + 1}>
+            <button
+              type="button"
+              aria-controls="flow-diagram"
+              aria-current={i === 0 ? "step" : "false"}
+            >
+              <span class="step-num">{step.n}</span>
+              <span class="step-body">
+                <span class="step-title">{step.title}</span>
+                <span class="step-desc">{step.desc}</span>
+                <code class="step-code">{step.code}</code>
+                <span class="step-progress" aria-hidden="true">
+                  <i></i>
                 </span>
-              </button>
-            </li>
-          ))
-        }
+              </span>
+            </button>
+          </li>
+        ))}
       </ol>
 
       <div class="how-notes">
-        <span class="hint"><span class="hint-dot"></span><span data-flow-hint>Auto-advancing · click a step to pause</span></span>
+        <span class="hint">
+          <span class="hint-dot"></span>
+          <span data-flow-hint>Auto-advancing · click a step to pause</span>
+        </span>
         <span class="rest-note">
-          The bulk values endpoint is live today. SDK snippets on this page are
-          design previews.
+          The bulk values endpoint is live today. SDK snippets on this page are design previews.
         </span>
       </div>
     </div>
@@ -77,23 +80,31 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
       <div class="flow-card" id="flow-diagram" data-flow data-step="1">
         <div class="flow-head">
           <span class="flow-head-title">
-            <span class="flow-live-dot"></span>
-            A secret's journey
+            <span class="flow-live-dot"></span>A secret's journey
           </span>
-          <span class="flow-counter" data-flow-counter>01 / 03</span>
+          <span class="flow-counter" data-flow-counter>
+            01 / 03
+          </span>
         </div>
 
         <div class="flow-canvas">
           <div class="flow-app" aria-hidden="true">
             <div class="flow-node flow-client">
               <div class="flow-node-head">
-                <span class="flow-icon"><Icon name="terminal" size={13} /></span>
+                <span class="flow-icon">
+                  <Icon name="terminal" size={13} />
+                </span>
                 <span class="flow-node-title">Your app</span>
                 <span class="flow-node-tag">Go SDK</span>
               </div>
               <div class="flow-code">
                 <span class="flow-code-line">
-                  <span class="flow-code-dim">client</span><span class="flow-code-punct">.</span><span class="flow-code-fn">Load</span><span class="flow-code-punct">(</span><span class="flow-code-dim">&amp;cfg</span><span class="flow-code-punct">)</span>
+                  <span class="flow-code-dim">client</span>
+                  <span class="flow-code-punct">.</span>
+                  <span class="flow-code-fn">Load</span>
+                  <span class="flow-code-punct">(</span>
+                  <span class="flow-code-dim">&amp;cfg</span>
+                  <span class="flow-code-punct">)</span>
                 </span>
                 <span class="flow-code-sub">One batched request at boot</span>
               </div>
@@ -107,13 +118,19 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
 
             <div class="flow-node flow-server">
               <div class="flow-node-head flow-server-head">
-                <span class="flow-icon"><Icon name="server" size={13} /></span>
+                <span class="flow-icon">
+                  <Icon name="server" size={13} />
+                </span>
                 <span class="flow-node-title">Yily server</span>
-                <span class="flow-status"><span class="flow-status-dot"></span>online</span>
+                <span class="flow-status">
+                  <span class="flow-status-dot"></span>online
+                </span>
               </div>
               <div class="flow-server-rows">
                 <div class="flow-row flow-auth">
-                  <span class="flow-row-icon"><Icon name="shield" size={13} /></span>
+                  <span class="flow-row-icon">
+                    <Icon name="shield" size={13} />
+                  </span>
                   <span class="flow-row-copy">
                     <span class="flow-row-title">Authenticate</span>
                     <span class="flow-row-detail">SHA-256(PAT) · scope · expiry</span>
@@ -121,7 +138,9 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
                   <span class="flow-badge">read</span>
                 </div>
                 <div class="flow-row flow-resolve">
-                  <span class="flow-row-icon"><Icon name="database" size={13} /></span>
+                  <span class="flow-row-icon">
+                    <Icon name="database" size={13} />
+                  </span>
                   <span class="flow-row-copy">
                     <span class="flow-row-title">Resolve active version</span>
                     <span class="flow-row-detail">SQLite · ciphertext only</span>
@@ -130,8 +149,12 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
                 </div>
                 <div class="flow-row flow-decrypt">
                   <span class="flow-row-icon flow-lock">
-                    <span class="flow-lock-closed"><Icon name="lock" size={13} /></span>
-                    <span class="flow-lock-open"><Icon name="lock-open" size={13} /></span>
+                    <span class="flow-lock-closed">
+                      <Icon name="lock" size={13} />
+                    </span>
+                    <span class="flow-lock-open">
+                      <Icon name="lock-open" size={13} />
+                    </span>
                   </span>
                   <span class="flow-row-copy">
                     <span class="flow-row-title">Decrypt in memory</span>
@@ -150,11 +173,15 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
 
             <div class="flow-node flow-result">
               <div class="flow-node-head flow-result-head">
-                <span class="flow-icon flow-icon-key"><Icon name="key" size={13} /></span>
+                <span class="flow-icon flow-icon-key">
+                  <Icon name="key" size={13} />
+                </span>
                 <span class="flow-result-name">JWT_SECRET</span>
                 <span class="flow-node-tag">prod</span>
                 <span class="flow-node-tag">api</span>
-                <span class="flow-returned"><Icon name="check" size={9} /> returned</span>
+                <span class="flow-returned">
+                  <Icon name="check" size={9} /> returned
+                </span>
               </div>
 
               <div class="flow-current">
@@ -167,11 +194,17 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
                     <code class="flow-mask">••••••••••••</code>
                     <code class="flow-revealed">9f2b7c4e…a8d1</code>
                   </span>
-                  <span class="flow-countdown"><Icon name="clock" size={9} /> 20s</span>
+                  <span class="flow-countdown">
+                    <Icon name="clock" size={9} /> 20s
+                  </span>
                   <span class="flow-actions">
                     <span class="flow-eye">
-                      <span class="flow-eye-on"><Icon name="eye" size={12} /></span>
-                      <span class="flow-eye-off"><Icon name="eye-off" size={12} /></span>
+                      <span class="flow-eye-on">
+                        <Icon name="eye" size={12} />
+                      </span>
+                      <span class="flow-eye-off">
+                        <Icon name="eye-off" size={12} />
+                      </span>
                     </span>
                     <Icon name="copy" size={12} />
                   </span>
@@ -180,8 +213,12 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
 
               <div class="flow-result-foot">
                 <span class="flow-result-icon">
-                  <span class="flow-result-icon-idle"><Icon name="arrow-down" size={9} /></span>
-                  <span class="flow-result-icon-done"><Icon name="check" size={9} /></span>
+                  <span class="flow-result-icon-idle">
+                    <Icon name="arrow-down" size={9} />
+                  </span>
+                  <span class="flow-result-icon-done">
+                    <Icon name="check" size={9} />
+                  </span>
                 </span>
                 <span class="flow-result-copy">
                   <span class="flow-result-idle">Values return as typed config</span>
@@ -193,8 +230,12 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
         </div>
 
         <div class="flow-foot">
-          <span class="legend"><span class="legend-dot request"></span> request</span>
-          <span class="legend"><span class="legend-dot response"></span> response</span>
+          <span class="legend">
+            <span class="legend-dot request"></span> request
+          </span>
+          <span class="legend">
+            <span class="legend-dot response"></span> response
+          </span>
           <span class="flow-foot-note">plaintext never touches disk</span>
         </div>
       </div>
@@ -204,22 +245,29 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
   <div class="container try-now">
     <div class="try-card" data-reveal>
       <div class="try-copy">
-        <span class="try-eyebrow"><span class="try-live-dot"></span> Live today</span>
-        <h3 class="try-title">No SDK yet? <span class="serif gradient-text">Just curl it.</span></h3>
+        <span class="try-eyebrow">
+          <span class="try-live-dot"></span> Live today
+        </span>
+        <h3 class="try-title">
+          No SDK yet? <span class="serif gradient-text">Just curl it.</span>
+        </h3>
         <p class="try-desc">
-          The bulk values endpoint works right now. Point it at your own host
-          and read your variables with a Bearer token.
+          The bulk values endpoint works right now. Point it at your own host and read your
+          variables with a Bearer token.
         </p>
       </div>
       <div class="try-code">
         <div class="try-code-bar">
-          <span class="try-code-file"><Icon name="terminal" size={13} /> cURL</span>
+          <span class="try-code-file">
+            <Icon name="terminal" size={13} /> cURL
+          </span>
           <span class="try-code-lang">bash</span>
           <button
             class="copy-btn"
             type="button"
             data-copy-target="#try-curl"
-            aria-label="Copy the cURL command">
+            aria-label="Copy the cURL command"
+          >
             <Icon name="copy" size={12} class="icon-copy" />
             <Icon name="check" size={12} class="icon-check" />
             <span data-copy-label>Copy</span>
@@ -235,8 +283,7 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
 
 <style>
   .how {
-    background:
-      radial-gradient(1000px 600px at 85% 40%, rgba(131, 56, 236, 0.06), transparent 70%);
+    background: radial-gradient(1000px 600px at 85% 40%, rgba(131, 56, 236, 0.06), transparent 70%);
   }
 
   .how-grid {
@@ -397,7 +444,9 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
   }
 
   @keyframes step-progress {
-    to { transform: scaleX(1); }
+    to {
+      transform: scaleX(1);
+    }
   }
 
   .how-notes {
@@ -452,8 +501,7 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
     overflow: hidden;
     border: 1px solid var(--border-strong);
     border-radius: 22px;
-    background:
-      linear-gradient(180deg, rgba(18, 15, 25, 0.92), rgba(8, 7, 12, 0.97));
+    background: linear-gradient(180deg, rgba(18, 15, 25, 0.92), rgba(8, 7, 12, 0.97));
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.06) inset,
       0 40px 100px -30px rgba(0, 0, 0, 0.8),
@@ -499,8 +547,13 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
   }
 
   @keyframes flow-pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.45; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
   }
 
   .flow-counter {
@@ -514,8 +567,7 @@ const curlCommand = `curl -sS -H "Authorization: Bearer $YILY_TOKEN" \\
 
   .flow-canvas {
     padding: 1.15rem 1.1rem 1.25rem;
-    background:
-      radial-gradient(500px 380px at 50% 46%, rgba(139, 92, 246, 0.065), transparent 75%);
+    background: radial-gradient(500px 380px at 50% 46%, rgba(139, 92, 246, 0.065), transparent 75%);
   }
 
   .flow-app {

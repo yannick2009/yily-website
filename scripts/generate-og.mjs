@@ -35,7 +35,9 @@ const server = createServer(async (req, res) => {
       file = path.join(ROOT, "public", url.pathname.slice(1));
     }
     const data = await readFile(file);
-    res.writeHead(200, { "Content-Type": MIME[path.extname(file).toLowerCase()] || "application/octet-stream" });
+    res.writeHead(200, {
+      "Content-Type": MIME[path.extname(file).toLowerCase()] || "application/octet-stream",
+    });
     res.end(data);
   } catch {
     res.writeHead(404);
@@ -59,7 +61,7 @@ await page.evaluate(() => document.fonts.ready);
 await new Promise((r) => setTimeout(r, 300));
 
 const fonts = await page.evaluate(() => ({
-  inter: document.fonts.check('16px Inter'),
+  inter: document.fonts.check("16px Inter"),
   serif: document.fonts.check('italic 16px "Instrument Serif"'),
   mono: document.fonts.check('16px "IBM Plex Mono"'),
 }));

@@ -37,44 +37,53 @@ const contributors: Contributor[] = [
     <div class="section-header" data-reveal>
       <span class="eyebrow">Contributors</span>
       <h2 class="section-title">
-        We always need<br />
+        We always need
+        <br />
         <span class="serif gradient-text">more contributors.</span>
       </h2>
       <p class="section-lede">
-        A small group of people keeps Yily moving, and there is always room for
-        one more. Fix a bug, polish a screen, or just tell us what feels broken.
+        A small group of people keeps Yily moving, and there is always room for one more. Fix a bug,
+        polish a screen, or just tell us what feels broken.
       </p>
     </div>
 
     <ul class="contributors-grid" data-reveal-group>
-      {
-        contributors.map((c) => (
-          <li data-reveal>
-            <a class="contributor" href={c.url} target="_blank" rel="noreferrer" title={c.login}>
-              <span class="contributor-avatar">
-                <Image
-                  src={c.avatar}
-                  alt={`${c.login} avatar`}
-                  width={88}
-                  height={88}
-                  format="webp"
-                  loading="lazy"
-                  decoding="async"
-                  referrerpolicy="no-referrer"
-                />
-              </span>
-              <span class="contributor-login">{c.login}</span>
-            </a>
-          </li>
-        ))
-      }
+      {contributors.map((c) => (
+        <li data-reveal>
+          <a class="contributor" href={c.url} target="_blank" rel="noreferrer" title={c.login}>
+            <span class="contributor-avatar">
+              <Image
+                src={c.avatar}
+                alt={`${c.login} avatar`}
+                width={88}
+                height={88}
+                format="webp"
+                loading="lazy"
+                decoding="async"
+                referrerpolicy="no-referrer"
+              />
+            </span>
+            <span class="contributor-login">{c.login}</span>
+          </a>
+        </li>
+      ))}
 
       <li data-reveal>
-        <a class="contributor contributor-invite" href={contributing} target="_blank" rel="noreferrer" title="Become a contributor">
+        <a
+          class="contributor contributor-invite"
+          href={contributing}
+          target="_blank"
+          rel="noreferrer"
+          title="Become a contributor"
+        >
           <span class="contributor-avatar">
-            <span class="invite-plus" aria-hidden="true"><Icon name="plus" size={16} /></span>
+            <span class="invite-plus" aria-hidden="true">
+              <Icon name="plus" size={16} />
+            </span>
           </span>
-          <span class="contributor-login">You? <span class="sr-only">Become a contributor</span></span>
+          <span class="contributor-login">
+            You? <span class="sr-only">Become a contributor</span>
+          </span>
         </a>
       </li>
     </ul>
@@ -94,8 +103,7 @@ const contributors: Contributor[] = [
 
 <style>
   .contributors {
-    background:
-      radial-gradient(1000px 620px at 50% 40%, rgba(131, 56, 236, 0.06), transparent 72%);
+    background: radial-gradient(1000px 620px at 50% 40%, rgba(131, 56, 236, 0.06), transparent 72%);
   }
 
   .contributors-grid {
@@ -191,8 +199,7 @@ const contributors: Contributor[] = [
     border-style: dashed;
     border-color: rgba(167, 139, 250, 0.28);
     background:
-      linear-gradient(180deg, rgba(139, 92, 246, 0.05), rgba(139, 92, 246, 0.012)),
-      var(--bg-raised);
+      linear-gradient(180deg, rgba(139, 92, 246, 0.05), rgba(139, 92, 246, 0.012)), var(--bg-raised);
   }
 
   .contributor-invite:hover {

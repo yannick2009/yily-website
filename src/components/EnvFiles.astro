@@ -7,53 +7,87 @@ import Icon from "./Icon.astro";
     <div class="section-header" data-reveal>
       <span class="eyebrow">The .env problem</span>
       <h2 class="section-title">
-        Your keys are everywhere.<br />
+        Your keys are everywhere.
+        <br />
         <span class="serif gradient-text">Put them back in one place.</span>
       </h2>
       <p class="section-lede">
-        Most leaks are not hacks. They are a key pasted into the wrong channel,
-        or a .env that got committed by accident. Yily gives every secret one
-        home, so there is nothing left to scatter.
+        Most leaks are not hacks. They are a key pasted into the wrong channel, or a .env that got
+        committed by accident. Yily gives every secret one home, so there is nothing left to
+        scatter.
       </p>
     </div>
 
     <div class="split" data-reveal-group>
       <article class="split-card before" data-reveal>
         <div class="split-head">
-          <span class="split-icon is-before"><Icon name="x" size={15} /></span>
+          <span class="split-icon is-before">
+            <Icon name="x" size={15} />
+          </span>
           <span class="split-label">Without Yily</span>
         </div>
         <ul class="split-list">
-          <li><span class="li-ico is-before"><Icon name="x" size={10} /></span>A .env on every machine</li>
-          <li><span class="li-ico is-before"><Icon name="x" size={10} /></span>Keys pasted into Slack, tickets and CI logs</li>
-          <li><span class="li-ico is-before"><Icon name="x" size={10} /></span>One careless git push, and it is public forever</li>
+          <li>
+            <span class="li-ico is-before">
+              <Icon name="x" size={10} />
+            </span>
+            A .env on every machine
+          </li>
+          <li>
+            <span class="li-ico is-before">
+              <Icon name="x" size={10} />
+            </span>
+            Keys pasted into Slack, tickets and CI logs
+          </li>
+          <li>
+            <span class="li-ico is-before">
+              <Icon name="x" size={10} />
+            </span>
+            One careless git push, and it is public forever
+          </li>
         </ul>
       </article>
 
       <article class="split-card after" data-reveal>
         <div class="split-head">
-          <span class="split-icon is-after"><Icon name="check" size={15} /></span>
+          <span class="split-icon is-after">
+            <Icon name="check" size={15} />
+          </span>
           <span class="split-label">With Yily</span>
         </div>
         <ul class="split-list">
-          <li><span class="li-ico is-after"><Icon name="check" size={10} /></span>One self-hosted home for every key</li>
-          <li><span class="li-ico is-after"><Icon name="check" size={10} /></span>Values pulled at boot, never copied around</li>
-          <li><span class="li-ico is-after"><Icon name="check" size={10} /></span>Plaintext lives in memory only, never on disk</li>
+          <li>
+            <span class="li-ico is-after">
+              <Icon name="check" size={10} />
+            </span>
+            One self-hosted home for every key
+          </li>
+          <li>
+            <span class="li-ico is-after">
+              <Icon name="check" size={10} />
+            </span>
+            Values pulled at boot, never copied around
+          </li>
+          <li>
+            <span class="li-ico is-after">
+              <Icon name="check" size={10} />
+            </span>
+            Plaintext lives in memory only, never on disk
+          </li>
         </ul>
       </article>
     </div>
 
     <p class="env-closer" data-reveal>
-      A leaked key is gone forever. A revocable token is not. Yily makes sure
-      the only thing you ever share is a token.
+      A leaked key is gone forever. A revocable token is not. Yily makes sure the only thing you
+      ever share is a token.
     </p>
   </div>
 </section>
 
 <style>
   .env {
-    background:
-      radial-gradient(900px 500px at 50% 0%, rgba(131, 56, 236, 0.055), transparent 70%);
+    background: radial-gradient(900px 500px at 50% 0%, rgba(131, 56, 236, 0.055), transparent 70%);
   }
 
   .split {

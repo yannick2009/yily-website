@@ -1,6 +1,7 @@
 ---
 import Icon from "./Icon.astro";
 import GitHubIcon from "./GitHubIcon.astro";
+import StarCount from "./StarCount.astro";
 import { VERSION_TAG } from "../config";
 
 const repo = "https://github.com/yannick2009/yily";
@@ -14,22 +15,34 @@ const license = `${repo}/blob/main/LICENSE`;
   <div class="container">
     <div class="os-card" data-reveal data-spotlight>
       <div class="os-aura" aria-hidden="true"></div>
-      <img class="os-watermark" src="/logo.svg" alt="" width="180" height="169" aria-hidden="true" loading="lazy" decoding="async" fetchpriority="low" />
+      <img
+        class="os-watermark"
+        src="/logo.svg"
+        alt=""
+        width="180"
+        height="169"
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        fetchpriority="low"
+      />
 
       <div class="os-copy">
         <span class="eyebrow">Open source · MIT</span>
         <h2>
-          Built in the open.<br />
+          Built in the open.
+          <br />
           <span class="serif gradient-text">Yours to keep.</span>
         </h2>
         <p>
-          Audit every line, fork it if you disagree, and run it for as long as you
-          like. No seats, no license ceiling, and no vendor holding the keys.
+          Audit every line, fork it if you disagree, and run it for as long as you like. No seats,
+          no license ceiling, and no vendor holding the keys.
         </p>
         <div class="os-actions">
           <a class="btn btn-primary" href={repo} target="_blank" rel="noreferrer">
             <GitHubIcon size={18} />
             Star on GitHub
+            <StarCount />
           </a>
           <a class="btn btn-ghost" href={contributing} target="_blank" rel="noreferrer">
             Contributing guide
@@ -37,9 +50,16 @@ const license = `${repo}/blob/main/LICENSE`;
           </a>
         </div>
         <div class="os-meta">
-          <span class="pill"><span class="dot"></span>{VERSION_TAG}</span>
-          <span class="os-meta-item"><Icon name="shield" size={12} /> MIT licensed</span>
-          <span class="os-meta-item"><Icon name="branch" size={12} /> Built in public</span>
+          <span class="pill">
+            <span class="dot"></span>
+            {VERSION_TAG}
+          </span>
+          <span class="os-meta-item">
+            <Icon name="shield" size={12} /> MIT licensed
+          </span>
+          <span class="os-meta-item">
+            <Icon name="branch" size={12} /> Built in public
+          </span>
         </div>
       </div>
 
@@ -81,9 +101,15 @@ const license = `${repo}/blob/main/LICENSE`;
         </div>
 
         <div class="repo-links">
-          <a href={releases} target="_blank" rel="noreferrer">Releases <Icon name="arrow-up-right" size={12} /></a>
-          <a href={issues} target="_blank" rel="noreferrer">Issues <Icon name="arrow-up-right" size={12} /></a>
-          <a href={license} target="_blank" rel="noreferrer">License <Icon name="arrow-up-right" size={12} /></a>
+          <a href={releases} target="_blank" rel="noreferrer">
+            Releases <Icon name="arrow-up-right" size={12} />
+          </a>
+          <a href={issues} target="_blank" rel="noreferrer">
+            Issues <Icon name="arrow-up-right" size={12} />
+          </a>
+          <a href={license} target="_blank" rel="noreferrer">
+            License <Icon name="arrow-up-right" size={12} />
+          </a>
         </div>
       </div>
     </div>
@@ -106,8 +132,7 @@ const license = `${repo}/blob/main/LICENSE`;
     border: 1px solid rgba(167, 139, 250, 0.18);
     border-radius: 26px;
     background:
-      linear-gradient(120deg, rgba(32, 22, 48, 0.72), rgba(10, 8, 16, 0.86) 55%),
-      var(--bg-raised);
+      linear-gradient(120deg, rgba(32, 22, 48, 0.72), rgba(10, 8, 16, 0.86) 55%), var(--bg-raised);
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.07) inset,
       0 40px 120px -40px rgba(0, 0, 0, 0.9),

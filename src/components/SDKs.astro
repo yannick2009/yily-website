@@ -4,8 +4,7 @@ import Icon from "./Icon.astro";
 import LangIcon from "./LangIcon.astro";
 
 const repo = "https://github.com/yannick2009/yily";
-const sdkRepo = (lang: string) =>
-  `https://github.com/yannick2009/yily-sdk-${lang}`;
+const sdkRepo = (lang: string) => `https://github.com/yannick2009/yily-sdk-${lang}`;
 
 const goCode = `type AppConfig struct {
 	DBHost string \`yily:"DB_HOST"\`
@@ -81,8 +80,7 @@ const sdks = [
     shikiLang: "javascript",
     state: "API design preview",
     stateClass: "preview",
-    blurb:
-      "A typed loader for Node.js and modern runtimes. No build step required.",
+    blurb: "A typed loader for Node.js and modern runtimes. No build step required.",
     code: jsCode,
     link: sdkRepo("js"),
     linkLabel: "View the JavaScript SDK",
@@ -94,8 +92,7 @@ const sdks = [
     shikiLang: "typescript",
     state: "API design preview",
     stateClass: "preview",
-    blurb:
-      "The same client as JavaScript, with schema types inferred at compile time.",
+    blurb: "The same client as JavaScript, with schema types inferred at compile time.",
     code: tsCode,
     link: sdkRepo("js"),
     linkLabel: "View the TypeScript SDK",
@@ -120,8 +117,7 @@ const sdks = [
     shikiLang: "rust",
     state: "Coming soon",
     stateClass: "soon",
-    blurb:
-      "A derive-first API with async loading and explicit errors. No hidden runtime.",
+    blurb: "A derive-first API with async loading and explicit errors. No hidden runtime.",
     code: needContributor("Rust", "//"),
     link: sdkRepo("rust"),
     linkLabel: "Follow development",
@@ -133,8 +129,7 @@ const sdks = [
     shikiLang: "java",
     state: "Coming soon",
     stateClass: "soon",
-    blurb:
-      "A small builder and annotated records. Works with the JVM you already run.",
+    blurb: "A small builder and annotated records. Works with the JVM you already run.",
     code: needContributor("Java", "//"),
     link: sdkRepo("java"),
     linkLabel: "Follow development",
@@ -146,8 +141,7 @@ const sdks = [
     shikiLang: "python",
     state: "Coming soon",
     stateClass: "soon",
-    blurb:
-      "Explicit type mapping and a deliberately small surface area. Pythonic by default.",
+    blurb: "Explicit type mapping and a deliberately small surface area. Pythonic by default.",
     code: needContributor("Python", "#"),
     link: sdkRepo("py"),
     linkLabel: "Follow development",
@@ -159,8 +153,7 @@ const sdks = [
     shikiLang: "csharp",
     state: "Coming soon",
     stateClass: "soon",
-    blurb:
-      "A typed client for .NET with async loading and minimal ceremony. No hidden runtime.",
+    blurb: "A typed client for .NET with async loading and minimal ceremony. No hidden runtime.",
     code: needContributor("C#", "//"),
     link: sdkRepo("csharp"),
     linkLabel: "Follow development",
@@ -173,129 +166,129 @@ const sdks = [
     <div class="section-header" data-reveal>
       <span class="eyebrow">SDKs</span>
       <h2 class="section-title">
-        One API.<br />
+        One API.
+        <br />
         <span class="serif gradient-text">Every stack.</span>
       </h2>
       <p class="section-lede">
-        The REST API is live today. Thin, read-only SDKs are next: JavaScript
-        and TypeScript first, then Go, Rust, Java and Python. Same single
-        request, native types everywhere.
+        The REST API is live today. Thin, read-only SDKs are next: JavaScript and TypeScript first,
+        then Go, Rust, Java and Python. Same single request, native types everywhere.
       </p>
     </div>
 
     <div class="sdk-shell" data-reveal>
       <div class="sdk-tabs" role="tablist" aria-label="Choose an SDK language">
-        {
-          sdks.map((sdk, i) => (
-            <button
-              type="button"
-              role="tab"
-              id={`tab-${sdk.id}`}
-              aria-controls={`panel-${sdk.id}`}
-              aria-selected={i === 0 ? "true" : "false"}
-              tabindex={i === 0 ? 0 : -1}
-              class:list={["sdk-tab", { "is-active": i === 0 }]}
-              data-sdk-tab={sdk.id}>
-              <LangIcon
-                lang={sdk.id as "go" | "rust" | "java" | "javascript" | "typescript" | "python" | "csharp"}
-                size={16}
-              />
-              <span>{sdk.name}</span>
-              <span
-                class:list={["tab-dot", sdk.stateClass]}
-                aria-hidden="true"
-              />
-            </button>
-          ))
-        }
+        {sdks.map((sdk, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${sdk.id}`}
+            aria-controls={`panel-${sdk.id}`}
+            aria-selected={i === 0 ? "true" : "false"}
+            tabindex={i === 0 ? 0 : -1}
+            class:list={["sdk-tab", { "is-active": i === 0 }]}
+            data-sdk-tab={sdk.id}
+          >
+            <LangIcon
+              lang={
+                sdk.id as "go" | "rust" | "java" | "javascript" | "typescript" | "python" | "csharp"
+              }
+              size={16}
+            />
+            <span>{sdk.name}</span>
+            <span class:list={["tab-dot", sdk.stateClass]} aria-hidden="true" />
+          </button>
+        ))}
       </div>
 
       <div class="sdk-panels">
-        {
-          sdks.map((sdk, i) => (
-            <div
-              role="tabpanel"
-              id={`panel-${sdk.id}`}
-              aria-labelledby={`tab-${sdk.id}`}
-              class:list={["sdk-panel", { "is-active": i === 0 }]}
-              data-sdk-panel={sdk.id}
-              hidden={i !== 0}>
-              <div class="sdk-meta">
-                <span class:list={["sdk-state", sdk.stateClass]}>
-                  <Icon
-                    name={sdk.stateClass === "preview" ? "code" : "clock"}
-                    size={12}
-                  />
-                  {sdk.state}
-                </span>
-                <p>{sdk.blurb}</p>
-              </div>
+        {sdks.map((sdk, i) => (
+          <div
+            role="tabpanel"
+            id={`panel-${sdk.id}`}
+            aria-labelledby={`tab-${sdk.id}`}
+            class:list={["sdk-panel", { "is-active": i === 0 }]}
+            data-sdk-panel={sdk.id}
+            hidden={i !== 0}
+          >
+            <div class="sdk-meta">
+              <span class:list={["sdk-state", sdk.stateClass]}>
+                <Icon name={sdk.stateClass === "preview" ? "code" : "clock"} size={12} />
+                {sdk.state}
+              </span>
+              <p>{sdk.blurb}</p>
+            </div>
 
-              <div class="code-window">
-                <div class="code-bar">
-                  <span class="code-file">
-                    <LangIcon
-                      lang={sdk.id as "go" | "rust" | "java" | "javascript" | "typescript" | "python" | "csharp"}
-                      size={13}
-                    />
-                    {sdk.file}
-                  </span>
-                  <span class="code-lang">{sdk.name}</span>
-                  {sdk.stateClass === "preview" && (
-                    <button
-                      class="copy-btn"
-                      type="button"
-                      data-copy-target={`#code-${sdk.id}`}
-                      aria-label={`Copy the ${sdk.name} example`}>
-                      <Icon name="copy" size={12} class="icon-copy" />
-                      <Icon name="check" size={12} class="icon-check" />
-                      <span data-copy-label>Copy</span>
-                    </button>
-                  )}
-                </div>
-                <div class="code-body" id={`code-${sdk.id}`}>
-                  <Code
-                    code={sdk.code}
-                    lang={sdk.shikiLang as any}
-                    theme="github-dark-dimmed"
+            <div class="code-window">
+              <div class="code-bar">
+                <span class="code-file">
+                  <LangIcon
+                    lang={
+                      sdk.id as
+                        "go" | "rust" | "java" | "javascript" | "typescript" | "python" | "csharp"
+                    }
+                    size={13}
                   />
-                </div>
-              </div>
-
-              <div class="sdk-foot">
-                <span class="sdk-foot-note">
-                  {sdk.stateClass === "preview"
-                    ? "The API is taking shape in the open. Details may change before release."
-                    : "Not released yet. Watch the repo to catch the first cut."}
+                  {sdk.file}
                 </span>
-                <a href={sdk.link} target="_blank" rel="noreferrer">
-                  {sdk.linkLabel}
-                  <Icon name="arrow-up-right" size={13} />
-                </a>
+                <span class="code-lang">{sdk.name}</span>
+                {sdk.stateClass === "preview" && (
+                  <button
+                    class="copy-btn"
+                    type="button"
+                    data-copy-target={`#code-${sdk.id}`}
+                    aria-label={`Copy the ${sdk.name} example`}
+                  >
+                    <Icon name="copy" size={12} class="icon-copy" />
+                    <Icon name="check" size={12} class="icon-check" />
+                    <span data-copy-label>Copy</span>
+                  </button>
+                )}
+              </div>
+              <div class="code-body" id={`code-${sdk.id}`}>
+                <Code code={sdk.code} lang={sdk.shikiLang as any} theme="github-dark-dimmed" />
               </div>
             </div>
-          ))
-        }
+
+            <div class="sdk-foot">
+              <span class="sdk-foot-note">
+                {sdk.stateClass === "preview"
+                  ? "The API is taking shape in the open. Details may change before release."
+                  : "Not released yet. Watch the repo to catch the first cut."}
+              </span>
+              <a href={sdk.link} target="_blank" rel="noreferrer">
+                {sdk.linkLabel}
+                <Icon name="arrow-up-right" size={13} />
+              </a>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
 
     <div class="sdk-principles" data-reveal>
       <span class="principle">
-        <span class="principle-icon"><Icon name="shield" size={15} /></span>
+        <span class="principle-icon">
+          <Icon name="shield" size={15} />
+        </span>
         <span class="principle-copy">
           <strong>Read-only by design</strong>
           <em>SDKs retrieve. Nothing writes.</em>
         </span>
       </span>
       <span class="principle">
-        <span class="principle-icon"><Icon name="layers" size={15} /></span>
+        <span class="principle-icon">
+          <Icon name="layers" size={15} />
+        </span>
         <span class="principle-copy">
           <strong>One batched request</strong>
           <em>Every name, one round trip.</em>
         </span>
       </span>
       <span class="principle">
-        <span class="principle-icon"><Icon name="branch" size={15} /></span>
+        <span class="principle-icon">
+          <Icon name="branch" size={15} />
+        </span>
         <span class="principle-copy">
           <strong>Version pinning</strong>
           <em>Active by default. Pin when you need.</em>
@@ -304,10 +297,11 @@ const sdks = [
     </div>
 
     <p class="sdk-today" data-reveal>
-      Need it before the SDKs land? The batched read endpoint is available now,
-      so you can <a href={repo} target="_blank" rel="noreferrer"
-        >use the REST API today <Icon name="arrow-up-right" size={12} /></a
-      >.
+      Need it before the SDKs land? The batched read endpoint is available now, so you can{" "}
+      <a href={repo} target="_blank" rel="noreferrer">
+        use the REST API today <Icon name="arrow-up-right" size={12} />
+      </a>
+      .
     </p>
   </div>
 </section>
@@ -325,11 +319,7 @@ const sdks = [
     overflow: hidden;
     border: 1px solid var(--border-strong);
     border-radius: 22px;
-    background: linear-gradient(
-      180deg,
-      rgba(18, 15, 25, 0.85),
-      rgba(8, 7, 12, 0.95)
-    );
+    background: linear-gradient(180deg, rgba(18, 15, 25, 0.85), rgba(8, 7, 12, 0.95));
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.05) inset,
       0 40px 100px -40px rgba(0, 0, 0, 0.9);

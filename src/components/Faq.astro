@@ -58,8 +58,8 @@ const faqJsonLd = {
       <span class="eyebrow">FAQ</span>
       <h2 class="section-title">Fair questions.</h2>
       <p class="section-lede">
-        Still curious? The source is public, the specs are in the repo, and the
-        issue tracker is open.
+        Still curious? The source is public, the specs are in the repo, and the issue tracker is
+        open.
       </p>
       <div class="faq-actions">
         <a class="btn btn-ghost btn-sm" href={issues} target="_blank" rel="noreferrer">
@@ -74,31 +74,29 @@ const faqJsonLd = {
     </div>
 
     <div class="faq-list" data-reveal style="--reveal-delay: 80ms">
-      {
-        faqs.map((faq, i) => (
-          <details name="faq" open={i === 0}>
-            <summary>
-              <span class="faq-index">{String(i + 1).padStart(2, "0")}</span>
-              <span class="faq-question">{faq.q}</span>
-              <span class="faq-plus"><Icon name="plus" size={14} /></span>
-            </summary>
-            <div class="faq-answer">
-              <p>{faq.a}</p>
-            </div>
-          </details>
-        ))
-      }
+      {faqs.map((faq, i) => (
+        <details name="faq" open={i === 0}>
+          <summary>
+            <span class="faq-index">{String(i + 1).padStart(2, "0")}</span>
+            <span class="faq-question">{faq.q}</span>
+            <span class="faq-plus">
+              <Icon name="plus" size={14} />
+            </span>
+          </summary>
+          <div class="faq-answer">
+            <p>{faq.a}</p>
+          </div>
+        </details>
+      ))}
     </div>
   </div>
 </section>
 
 <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
-
 <style>
   .faq {
     border-top: 1px solid var(--border);
-    background:
-      radial-gradient(700px 400px at 10% 20%, rgba(131, 56, 236, 0.045), transparent 70%);
+    background: radial-gradient(700px 400px at 10% 20%, rgba(131, 56, 236, 0.045), transparent 70%);
   }
 
   .faq-grid {
@@ -235,8 +233,14 @@ const faqJsonLd = {
   }
 
   @keyframes faq-in {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @media (max-width: 960px) {

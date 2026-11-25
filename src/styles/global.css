@@ -406,6 +406,43 @@ pre {
   transform: translateY(2px);
 }
 
+/* GitHub star count inside "Star on GitHub" buttons */
+.star-count {
+  display: none;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: 0.05rem;
+  padding: 0.18rem 0.42rem;
+  border-radius: 999px;
+  background: rgba(10, 8, 16, 0.07);
+  color: inherit;
+  font-family: var(--font-code);
+  font-size: 0.68rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.star-count.is-ready {
+  display: inline-flex;
+}
+
+.star-count svg {
+  flex: none;
+  fill: currentColor;
+  stroke: none;
+  opacity: 0.72;
+}
+
+/* The nav CTA collapses to an icon-only button on small screens. */
+@media (max-width: 640px) {
+  .nav-cta .star-count.is-ready {
+    display: none;
+  }
+}
+
 /* ------------------------------------------------------------------
    Pills, cards, misc
 ------------------------------------------------------------------ */

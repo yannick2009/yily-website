@@ -11,19 +11,22 @@ const installCommand = `curl -fsSL ${installUrl} | bash -s -- --pre-release`;
     <div class="section-header" data-reveal>
       <span class="eyebrow">CLI</span>
       <h2 class="section-title">
-        Install the CLI.<br />
+        Install the CLI.
+        <br />
         <span class="serif gradient-text">Drive it from the shell.</span>
       </h2>
       <p class="section-lede">
-        Install <code class="inline-code">yily-cli</code> and manage environments
-        and variables from your terminal. One command, and it is in your
+        Install <code class="inline-code">yily-cli</code> and manage environments and variables from
+        your terminal. One command, and it is in your
         <code class="inline-code">~/.local/bin</code>.
       </p>
     </div>
 
     <div class="cli-card" data-reveal data-spotlight>
       <div class="cli-label">
-        <span class="cli-label-icon"><Icon name="terminal" size={14} /></span>
+        <span class="cli-label-icon">
+          <Icon name="terminal" size={14} />
+        </span>
         <span>Install the CLI</span>
         <span class="cli-flag">pre-release</span>
       </div>
@@ -43,14 +46,20 @@ const installCommand = `curl -fsSL ${installUrl} | bash -s -- --pre-release`;
       </div>
 
       <div class="cli-meta">
-        <span><Icon name="check" size={12} /> Linux &amp; macOS</span>
-        <span><Icon name="check" size={12} /> Checksum verified</span>
-        <span><Icon name="check" size={12} /> No sudo required</span>
+        <span>
+          <Icon name="check" size={12} /> Linux &amp; macOS
+        </span>
+        <span>
+          <Icon name="check" size={12} /> Checksum verified
+        </span>
+        <span>
+          <Icon name="check" size={12} /> No sudo required
+        </span>
       </div>
 
       <p class="cli-foot">
-        The <code class="inline-code">--pre-release</code> flag pulls the current
-        beta. Drop it once a stable release ships.
+        The <code class="inline-code">--pre-release</code> flag pulls the current beta. Drop it once
+        a stable release ships.
       </p>
     </div>
   </div>
@@ -58,8 +67,7 @@ const installCommand = `curl -fsSL ${installUrl} | bash -s -- --pre-release`;
 
 <style>
   .cli {
-    background:
-      radial-gradient(900px 520px at 50% 18%, rgba(131, 56, 236, 0.06), transparent 72%);
+    background: radial-gradient(900px 520px at 50% 18%, rgba(131, 56, 236, 0.06), transparent 72%);
   }
 
   .cli-card {
@@ -69,8 +77,7 @@ const installCommand = `curl -fsSL ${installUrl} | bash -s -- --pre-release`;
     margin: 0 auto;
     border: 1px solid var(--border-strong);
     border-radius: 16px;
-    background:
-      linear-gradient(180deg, rgba(18, 15, 25, 0.9), rgba(8, 7, 12, 0.96));
+    background: linear-gradient(180deg, rgba(18, 15, 25, 0.9), rgba(8, 7, 12, 0.96));
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.05) inset,
       0 30px 70px -30px rgba(0, 0, 0, 0.7);

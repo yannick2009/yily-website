@@ -55,30 +55,30 @@ const specs = [
     <div class="section-header" data-reveal>
       <span class="eyebrow">Security model</span>
       <h2 class="section-title">
-        Boring crypto.<br />
+        Boring crypto.
+        <br />
         <span class="serif gradient-text">Applied carefully.</span>
       </h2>
       <p class="section-lede">
-        Standard primitives, explicit context, zero cleverness. Secrets are
-        encrypted before they touch SQLite; tokens are hashed before they are
-        stored.
+        Standard primitives, explicit context, zero cleverness. Secrets are encrypted before they
+        touch SQLite; tokens are hashed before they are stored.
       </p>
     </div>
 
     <div class="specs" data-reveal-group>
-      {
-        specs.map((spec) => (
-          <article class="spec" data-reveal data-spotlight>
-            <div class="spec-top">
-              <span class="spec-icon"><Icon name={spec.icon} size={15} /></span>
-              <span class="spec-label">{spec.label}</span>
-            </div>
-            <h3>{spec.value}</h3>
-            <p>{spec.desc}</p>
-            <code class="spec-code">{spec.code}</code>
-          </article>
-        ))
-      }
+      {specs.map((spec) => (
+        <article class="spec" data-reveal data-spotlight>
+          <div class="spec-top">
+            <span class="spec-icon">
+              <Icon name={spec.icon} size={15} />
+            </span>
+            <span class="spec-label">{spec.label}</span>
+          </div>
+          <h3>{spec.value}</h3>
+          <p>{spec.desc}</p>
+          <code class="spec-code">{spec.code}</code>
+        </article>
+      ))}
     </div>
 
     <div class="envelope" data-reveal data-spotlight>
@@ -86,9 +86,8 @@ const specs = [
         <span class="eyebrow">Envelope anatomy</span>
         <h3>Every value carries its own proof.</h3>
         <p>
-          The stored format is versioned, self-describing and context-bound. It is
-          impossible to move a ciphertext to another variable or version without
-          authentication failing.
+          The stored format is versioned, self-describing and context-bound. It is impossible to
+          move a ciphertext to another variable or version without authentication failing.
         </p>
         <div class="envelope-links">
           <a href={encryptionDoc} target="_blank" rel="noreferrer">
@@ -120,24 +119,32 @@ const specs = [
         </div>
 
         <div class="env-foot">
-          <span><Icon name="rotate" size={11} /> versioned</span>
-          <span><Icon name="sparkle" size={11} /> random per write</span>
-          <span><Icon name="fingerprint" size={11} /> ID + version bound</span>
+          <span>
+            <Icon name="rotate" size={11} /> versioned
+          </span>
+          <span>
+            <Icon name="sparkle" size={11} /> random per write
+          </span>
+          <span>
+            <Icon name="fingerprint" size={11} /> ID + version bound
+          </span>
         </div>
       </div>
     </div>
 
     <p class="security-note" data-reveal>
-      Zero plaintext at rest. If the master key is lost, the ciphertext stays
-      closed. <a href={encryptionDoc} target="_blank" rel="noreferrer">Read the spec <Icon name="arrow-up-right" size={11} /></a>.
+      Zero plaintext at rest. If the master key is lost, the ciphertext stays closed.{" "}
+      <a href={encryptionDoc} target="_blank" rel="noreferrer">
+        Read the spec <Icon name="arrow-up-right" size={11} />
+      </a>
+      .
     </p>
   </div>
 </section>
 
 <style>
   .security {
-    background:
-      radial-gradient(1000px 600px at 50% 30%, rgba(131, 56, 236, 0.05), transparent 72%);
+    background: radial-gradient(1000px 600px at 50% 30%, rgba(131, 56, 236, 0.05), transparent 72%);
   }
 
   .specs {
@@ -312,14 +319,16 @@ const specs = [
   }
 
   @keyframes env-seg-focus {
-    0%, 13% {
+    0%,
+    13% {
       box-shadow:
         0 0 0 1px rgba(167, 139, 250, 0.3),
         0 8px 22px -8px rgba(139, 92, 246, 0.55);
       filter: brightness(1.3);
       transform: translateY(-1px);
     }
-    26%, 100% {
+    26%,
+    100% {
       box-shadow: none;
       filter: brightness(1);
       transform: none;
@@ -327,8 +336,14 @@ const specs = [
   }
 
   @keyframes env-label-focus {
-    0%, 13% { color: #c9b8fb; }
-    26%, 100% { color: #5a5468; }
+    0%,
+    13% {
+      color: #c9b8fb;
+    }
+    26%,
+    100% {
+      color: #5a5468;
+    }
   }
 
   .envelope-top {
@@ -409,9 +424,15 @@ const specs = [
     animation: env-label-focus 7.5s ease-in-out infinite;
   }
 
-  .env-labels span:nth-child(1) { animation-delay: 0s; }
-  .env-labels span:nth-child(2) { animation-delay: 2.5s; }
-  .env-labels span:nth-child(3) { animation-delay: 5s; }
+  .env-labels span:nth-child(1) {
+    animation-delay: 0s;
+  }
+  .env-labels span:nth-child(2) {
+    animation-delay: 2.5s;
+  }
+  .env-labels span:nth-child(3) {
+    animation-delay: 5s;
+  }
 
   .env-foot {
     display: flex;

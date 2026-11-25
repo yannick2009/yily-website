@@ -47,17 +47,34 @@ const columns: { title: string; links: FooterLink[] }[] = [
 ---
 
 <footer class="footer">
-  <img class="footer-watermark" src="/logo.svg" alt="" width="180" height="169" aria-hidden="true" loading="lazy" decoding="async" fetchpriority="low" />
+  <img
+    class="footer-watermark"
+    src="/logo.svg"
+    alt=""
+    width="180"
+    height="169"
+    aria-hidden="true"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+  />
 
   <div class="container">
     <div class="footer-top">
       <div class="footer-brand">
         <a href="#top" class="footer-logo" aria-label="Yily, back to top">
-          <img src="/logo.svg" alt="Yily" width="180" height="169" loading="lazy" decoding="async" />
+          <img
+            src="/logo.svg"
+            alt="Yily"
+            width="180"
+            height="169"
+            loading="lazy"
+            decoding="async"
+          />
         </a>
         <p>
-          A lightweight, self-hosted secret manager for people who would rather
-          keep their keys in one place than scattered across .env files.
+          A lightweight, self-hosted secret manager for people who would rather keep their keys in
+          one place than scattered across .env files.
         </p>
         <div class="footer-badges">
           <a
@@ -69,45 +86,49 @@ const columns: { title: string; links: FooterLink[] }[] = [
           >
             {version}
           </a>
-          <a class="footer-github" href={repo} target="_blank" rel="noreferrer" aria-label="Yily on GitHub">
+          <a
+            class="footer-github"
+            href={repo}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Yily on GitHub"
+          >
             <GitHubIcon size={15} />
           </a>
         </div>
       </div>
 
       <div class="footer-cols">
-        {
-          columns.map((column) => (
-            <nav class="footer-col" aria-label={column.title}>
-              <h3>{column.title}</h3>
-              <ul>
-                {column.links.map((link) => (
-                  <li>
-                    <a
-                      href={link.href}
-                      target={link.external ? "_blank" : undefined}
-                      rel={link.external ? "noreferrer" : undefined}
-                    >
-                      {link.label}
-                      {link.external && <Icon name="arrow-up-right" size={10} />}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))
-        }
+        {columns.map((column) => (
+          <nav class="footer-col" aria-label={column.title}>
+            <h3>{column.title}</h3>
+            <ul>
+              {column.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    target={link.external ? "_blank" : undefined}
+                    rel={link.external ? "noreferrer" : undefined}
+                  >
+                    {link.label}
+                    {link.external && <Icon name="arrow-up-right" size={10} />}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
       </div>
     </div>
 
     <div class="footer-bottom">
       <p>© {year} Yily. Released under the MIT License.</p>
-      <p class="footer-credit">
-        Built with Go, Astro &amp; a healthy distrust of plaintext.
-      </p>
+      <p class="footer-credit">Built with Go, Astro &amp; a healthy distrust of plaintext.</p>
       <a class="back-to-top" href="#top">
         Back to top
-        <span class="back-to-top-icon"><Icon name="arrow-up-right" size={12} /></span>
+        <span class="back-to-top-icon">
+          <Icon name="arrow-up-right" size={12} />
+        </span>
       </a>
     </div>
   </div>
@@ -119,8 +140,7 @@ const columns: { title: string; links: FooterLink[] }[] = [
     overflow: hidden;
     border-top: 1px solid var(--border);
     background:
-      radial-gradient(900px 400px at 50% 120%, rgba(131, 56, 236, 0.1), transparent 70%),
-      #08070c;
+      radial-gradient(900px 400px at 50% 120%, rgba(131, 56, 236, 0.1), transparent 70%), #08070c;
   }
 
   .footer-watermark {

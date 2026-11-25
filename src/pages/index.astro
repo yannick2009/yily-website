@@ -127,7 +127,7 @@ import Footer from "../components/Footer.astro";
             }
           }
         },
-        { threshold: 0.1, rootMargin: "0px 0px -7% 0px" }
+        { threshold: 0.1, rootMargin: "0px 0px -7% 0px" },
       );
       revealElements.forEach((el) => revealObserver.observe(el));
     }
@@ -157,40 +157,44 @@ import Footer from "../components/Footer.astro";
       if (!copied) throw new Error("copy failed");
     };
 
-    document.querySelectorAll<HTMLButtonElement>("[data-copy-target], [data-copy-block]").forEach((button) => {
-      button.addEventListener("click", async () => {
-        let text = "";
+    document
+      .querySelectorAll<HTMLButtonElement>("[data-copy-target], [data-copy-block]")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          let text = "";
 
-        if (button.hasAttribute("data-copy-block")) {
-          const pre = button.closest(".term-block")?.querySelector("pre");
-          text = pre?.textContent?.trim() ?? "";
-        } else {
-          const target = document.querySelector<HTMLElement>(button.getAttribute("data-copy-target") || "");
-          text = target?.querySelector("pre")?.textContent ?? target?.textContent ?? "";
-          text = text.trim();
-        }
-
-        if (!text) return;
-
-        try {
-          await writeClipboard(text);
-          button.classList.add("is-copied");
-          const label = button.querySelector<HTMLElement>("[data-copy-label]");
-          if (label) {
-            if (!label.dataset.original) label.dataset.original = label.textContent ?? "";
-            label.textContent = "Copied";
-            window.setTimeout(() => {
-              button.classList.remove("is-copied");
-              label.textContent = label.dataset.original ?? "Copy";
-            }, 1700);
+          if (button.hasAttribute("data-copy-block")) {
+            const pre = button.closest(".term-block")?.querySelector("pre");
+            text = pre?.textContent?.trim() ?? "";
           } else {
-            window.setTimeout(() => button.classList.remove("is-copied"), 1700);
+            const target = document.querySelector<HTMLElement>(
+              button.getAttribute("data-copy-target") || "",
+            );
+            text = target?.querySelector("pre")?.textContent ?? target?.textContent ?? "";
+            text = text.trim();
           }
-        } catch {
-          button.classList.remove("is-copied");
-        }
+
+          if (!text) return;
+
+          try {
+            await writeClipboard(text);
+            button.classList.add("is-copied");
+            const label = button.querySelector<HTMLElement>("[data-copy-label]");
+            if (label) {
+              if (!label.dataset.original) label.dataset.original = label.textContent ?? "";
+              label.textContent = "Copied";
+              window.setTimeout(() => {
+                button.classList.remove("is-copied");
+                label.textContent = label.dataset.original ?? "Copy";
+              }, 1700);
+            } else {
+              window.setTimeout(() => button.classList.remove("is-copied"), 1700);
+            }
+          } catch {
+            button.classList.remove("is-copied");
+          }
+        });
       });
-    });
 
     /* ---------------------------------------------------------------
        Cursor spotlight on cards
@@ -214,10 +218,7 @@ import Footer from "../components/Footer.astro";
 
     const secretRows = Array.from(document.querySelectorAll<HTMLElement>("[data-secret-row]"));
     const autoRow = document.querySelector<HTMLElement>("[data-auto-reveal]");
-    const controllers = new Map<
-      HTMLElement,
-      { reveal: () => void; hide: () => void }
-    >();
+    const controllers = new Map<HTMLElement, { reveal: () => void; hide: () => void }>();
     let heroInteracted = false;
 
     secretRows.forEach((row) => {
@@ -342,7 +343,9 @@ import Footer from "../components/Footer.astro";
     /* ---------------------------------------------------------------
        Deploy method tabs (self-hosting)
     --------------------------------------------------------------- */
-    const deployTabs = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-deploy-tab]"));
+    const deployTabs = Array.from(
+      document.querySelectorAll<HTMLButtonElement>("[data-deploy-tab]"),
+    );
     const deployPanels = Array.from(document.querySelectorAll<HTMLElement>("[data-deploy-panel]"));
 
     const activateDeploy = (id: string | undefined) => {
@@ -403,7 +406,9 @@ import Footer from "../components/Footer.astro";
         for (const step of flowSteps) {
           const active = Number(step.dataset.flowStep) === currentStep;
           step.classList.toggle("is-active", active);
-          step.querySelector<HTMLButtonElement>("button")?.setAttribute("aria-current", active ? "step" : "false");
+          step
+            .querySelector<HTMLButtonElement>("button")
+            ?.setAttribute("aria-current", active ? "step" : "false");
         }
       };
 
@@ -444,7 +449,7 @@ import Footer from "../components/Footer.astro";
               }
             }
           },
-          { threshold: 0.28 }
+          { threshold: 0.28 },
         );
         flowObserver.observe(flow);
       } else {

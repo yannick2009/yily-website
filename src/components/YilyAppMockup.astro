@@ -33,14 +33,21 @@ const rows = [
 
 <div class="app-frame">
   <div class="frame-bar">
-    <div class="win-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="win-dots" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
     <div class="frame-address">
       <Icon name="lock" size={10} />
       <span class="frame-host">yily.example.com</span>
       <span class="frame-sep">/</span>
       <span class="frame-path">projects / acme / production</span>
     </div>
-    <span class="frame-badge"><span class="frame-live-dot"></span><span>Encrypted at rest</span></span>
+    <span class="frame-badge">
+      <span class="frame-live-dot"></span>
+      <span>Encrypted at rest</span>
+    </span>
   </div>
 
   <div class="app">
@@ -51,15 +58,33 @@ const rows = [
 
       <nav class="app-nav">
         <span class="app-nav-label">Workspace</span>
-        <span class="app-nav-item"><Icon name="dashboard" size={14} />Dashboard</span>
-        <span class="app-nav-item is-active"><Icon name="folder" size={14} />Projects</span>
-        <span class="app-nav-item"><Icon name="key" size={14} />Tokens</span>
-        <span class="app-nav-item"><Icon name="clock" size={14} />Audit log</span>
+        <span class="app-nav-item">
+          <Icon name="dashboard" size={14} />
+          Dashboard
+        </span>
+        <span class="app-nav-item is-active">
+          <Icon name="folder" size={14} />
+          Projects
+        </span>
+        <span class="app-nav-item">
+          <Icon name="key" size={14} />
+          Tokens
+        </span>
+        <span class="app-nav-item">
+          <Icon name="clock" size={14} />
+          Audit log
+        </span>
       </nav>
 
       <div class="app-side-bottom">
-        <span class="app-nav-item"><Icon name="settings" size={14} />Settings</span>
-        <span class="app-nav-item"><Icon name="moon" size={14} />Theme<span class="app-theme-value">Dark</span></span>
+        <span class="app-nav-item">
+          <Icon name="settings" size={14} />
+          Settings
+        </span>
+        <span class="app-nav-item">
+          <Icon name="moon" size={14} />
+          Theme<span class="app-theme-value">Dark</span>
+        </span>
       </div>
 
       <div class="app-user">
@@ -68,28 +93,45 @@ const rows = [
           <strong>Yannick</strong>
           <span>admin@yily.local</span>
         </span>
-        <span class="app-logout"><Icon name="logout" size={13} /></span>
+        <span class="app-logout">
+          <Icon name="logout" size={13} />
+        </span>
       </div>
     </aside>
 
     <div class="app-content">
-      <span class="app-back"><Icon name="arrow-left" size={12} /> Acme</span>
+      <span class="app-back">
+        <Icon name="arrow-left" size={12} /> Acme
+      </span>
 
       <div class="app-page-head">
         <div class="app-page-title">
           <div class="app-title-row">
             <span class="app-title">Production</span>
-            <span class="app-edit"><Icon name="pencil" size={12} /></span>
+            <span class="app-edit">
+              <Icon name="pencil" size={12} />
+            </span>
           </div>
           <div class="app-desc">
             <span>Live API and infrastructure secrets.</span>
-            <span class="app-edit app-edit-small"><Icon name="pencil" size={10} /></span>
+            <span class="app-edit app-edit-small">
+              <Icon name="pencil" size={10} />
+            </span>
           </div>
         </div>
         <div class="app-head-actions">
-          <span class="app-button"><Icon name="upload" size={12} />Import</span>
-          <span class="app-button"><Icon name="download" size={12} />Export</span>
-          <span class="app-button primary"><Icon name="plus" size={12} />New variable</span>
+          <span class="app-button">
+            <Icon name="upload" size={12} />
+            Import
+          </span>
+          <span class="app-button">
+            <Icon name="download" size={12} />
+            Export
+          </span>
+          <span class="app-button primary">
+            <Icon name="plus" size={12} />
+            New variable
+          </span>
         </div>
       </div>
 
@@ -100,7 +142,9 @@ const rows = [
         </div>
         <div class="app-sort">
           <span class="app-tool-label">Sort</span>
-          <span class="app-sort-pill is-active">Name <span class="sort-arrow">↑</span></span>
+          <span class="app-sort-pill is-active">
+            Name <span class="sort-arrow">↑</span>
+          </span>
           <span class="app-sort-pill">Date</span>
         </div>
       </div>
@@ -122,58 +166,82 @@ const rows = [
           <span class="app-right">Actions</span>
         </div>
 
-        {
-          rows.map((row) => (
-            <div
-              class:list={["app-row", { "auto-reveal": row.auto }]}
-              data-secret-row
-              data-plain={row.value}
-              data-auto-reveal={row.auto ? "" : undefined}
-            >
-              <div class="app-name">
-                <span class="app-var-name" data-var-name>{row.name}</span>
-              </div>
-              <div class="app-status"><span class="app-status-dot"></span></div>
-              <div class="app-value">
-                <span class="value-text" data-value aria-hidden="true">••••••••••</span>
-                <span class="app-countdown" data-countdown hidden>
-                  <Icon name="clock" size={9} />
-                  <span data-countdown-seconds>20</span>s
-                </span>
-              </div>
-              <div class="app-tags">
-                {row.tags.map((tag) => <span class="app-tag">{tag}</span>)}
-              </div>
-              <div class="app-actions">
-                <button
-                  type="button"
-                  class="app-icon-btn"
-                  data-reveal-toggle
-                  aria-label={`Reveal ${row.name}`}
-                  aria-pressed="false"
-                >
-                  <span class="eye-show"><Icon name="eye" size={13} /></span>
-                  <span class="eye-hide"><Icon name="eye-off" size={13} /></span>
-                </button>
-                <span class="app-icon-btn is-ghost"><Icon name="copy" size={13} /></span>
-                <span class="app-icon-btn is-ghost is-danger"><Icon name="trash" size={13} /></span>
-              </div>
+        {rows.map((row) => (
+          <div
+            class:list={["app-row", { "auto-reveal": row.auto }]}
+            data-secret-row
+            data-plain={row.value}
+            data-auto-reveal={row.auto ? "" : undefined}
+          >
+            <div class="app-name">
+              <span class="app-var-name" data-var-name>
+                {row.name}
+              </span>
             </div>
-          ))
-        }
+            <div class="app-status">
+              <span class="app-status-dot"></span>
+            </div>
+            <div class="app-value">
+              <span class="value-text" data-value aria-hidden="true">
+                ••••••••••
+              </span>
+              <span class="app-countdown" data-countdown hidden>
+                <Icon name="clock" size={9} />
+                <span data-countdown-seconds>20</span>s
+              </span>
+            </div>
+            <div class="app-tags">
+              {row.tags.map((tag) => (
+                <span class="app-tag">{tag}</span>
+              ))}
+            </div>
+            <div class="app-actions">
+              <button
+                type="button"
+                class="app-icon-btn"
+                data-reveal-toggle
+                aria-label={`Reveal ${row.name}`}
+                aria-pressed="false"
+              >
+                <span class="eye-show">
+                  <Icon name="eye" size={13} />
+                </span>
+                <span class="eye-hide">
+                  <Icon name="eye-off" size={13} />
+                </span>
+              </button>
+              <span class="app-icon-btn is-ghost">
+                <Icon name="copy" size={13} />
+              </span>
+              <span class="app-icon-btn is-ghost is-danger">
+                <Icon name="trash" size={13} />
+              </span>
+            </div>
+          </div>
+        ))}
 
         <div class="app-row app-row-inactive">
           <div class="app-name">
             <span class="app-var-name">LEGACY_API_KEY</span>
             <span class="app-needs">Needs value</span>
           </div>
-          <div class="app-status"><span class="app-status-dot is-inactive"></span></div>
-          <div class="app-value"><span class="value-text is-empty">– – – – –</span></div>
+          <div class="app-status">
+            <span class="app-status-dot is-inactive"></span>
+          </div>
+          <div class="app-value">
+            <span class="value-text is-empty">– – – – –</span>
+          </div>
           <div class="app-tags"></div>
           <div class="app-actions">
-            <span class="app-icon-btn is-disabled"><Icon name="eye" size={13} /></span>
-            <span class="app-icon-btn is-ghost is-disabled"><Icon name="copy" size={13} /></span>
-            <span class="app-icon-btn is-ghost is-disabled"><Icon name="trash" size={13} /></span>
+            <span class="app-icon-btn is-disabled">
+              <Icon name="eye" size={13} />
+            </span>
+            <span class="app-icon-btn is-ghost is-disabled">
+              <Icon name="copy" size={13} />
+            </span>
+            <span class="app-icon-btn is-ghost is-disabled">
+              <Icon name="trash" size={13} />
+            </span>
           </div>
         </div>
       </div>
