@@ -35,12 +35,21 @@ npm run build        # static output in dist/
 npm run preview
 ```
 
-Set `SITE_URL` at build time so canonical URLs and the Open Graph image resolve
-to absolute addresses:
+The canonical URL is defined by `site` in [`astro.config.mjs`](astro.config.mjs).
+Canonical links, Open Graph URLs and the sitemap are derived from it.
 
-```bash
-SITE_URL=https://yily.example.com npm run build
-```
+## Deployment
+
+The production site is served by Railway (Railpack static serving). Two root files
+control how the `dist/` output is served:
+
+- `Staticfile` keeps SPA-style index fallback off, so unknown paths return a real
+  404 instead of the homepage with a 200 status.
+- `Caddyfile` adds long-lived caching for content-hashed assets, revalidation for
+  HTML, and serves `dist/404.html` with a 404 status.
+
+Keep both files when deploying. Removing them restores Railway's default SPA
+fallback (every unknown path returns the homepage with a 200 status).
 
 ## Structure
 

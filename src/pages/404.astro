@@ -1,0 +1,112 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import GitHubIcon from "../components/GitHubIcon.astro";
+
+const repo = "https://github.com/yannick2009/yily";
+---
+
+<BaseLayout
+  title="404 — Page not found | Yily"
+  description="This page does not exist. Head back to yily.dev to learn about Yily, the self-hosted secret manager for API keys and .env files."
+  noindex
+>
+  <main class="not-found" id="main">
+    <div class="container not-found-inner">
+      <a class="not-found-brand" href="/" aria-label="Yily home">
+        <img src="/logo.svg" alt="" width="180" height="169" decoding="async" />
+      </a>
+
+      <span class="eyebrow">Error 404</span>
+      <h1 class="not-found-title">
+        This page
+        <span class="serif gradient-text">slipped away.</span>
+      </h1>
+      <p class="not-found-lede">
+        The link is broken or the page moved. Your secrets, for the record, are still right where
+        you left them.
+      </p>
+
+      <div class="not-found-actions">
+        <a class="btn btn-primary" href="/">
+          <Icon name="arrow-left" size={16} />
+          Back to home
+        </a>
+        <a class="btn btn-ghost" href={repo} target="_blank" rel="noreferrer">
+          <GitHubIcon size={17} />
+          Star on GitHub
+        </a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    place-items: center;
+    min-height: 100svh;
+    padding: 3rem 0;
+    text-align: center;
+  }
+
+  .not-found-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 620px;
+  }
+
+  .not-found-brand {
+    display: inline-block;
+    margin-bottom: 2.25rem;
+  }
+
+  .not-found-brand img {
+    width: auto;
+    height: 40px;
+    filter: drop-shadow(0 0 22px rgba(131, 56, 236, 0.28));
+  }
+
+  .not-found-title {
+    margin-top: 1rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: -0.05em;
+    text-wrap: balance;
+  }
+
+  .not-found-title .serif {
+    display: block;
+  }
+
+  .not-found-lede {
+    max-width: 46ch;
+    margin-top: 1.25rem;
+    color: var(--muted);
+    font-size: clamp(0.98rem, 1.2vw, 1.06rem);
+    line-height: 1.75;
+    text-wrap: pretty;
+  }
+
+  .not-found-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    .not-found-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .not-found-actions .btn {
+      width: 100%;
+    }
+  }
+</style>

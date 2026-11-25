@@ -1,0 +1,5 @@
+# Railway / Railpack serves this Astro build with Caddy.
+# Keep SPA-style fallback off so unknown routes return a real 404 (404.html)
+# instead of the homepage with a 200 status.
+root: dist
+index_fallback: false

@@ -5,15 +5,19 @@ import { VERSION } from "../config";
 interface Props {
   title?: string;
   description?: string;
+  noindex?: boolean;
 }
 
 const {
-  title = "Yily: One home for your secrets, none scattered around.",
-  description = "Stop scattering API keys and tokens across .env files, repos and chat. Yily is a lightweight, self-hosted secret manager: one Go binary, one SQLite file, AES-256-GCM at rest.",
+  title = "Yily: Self-hosted secret manager for API keys and .env",
+  description = "Stop scattering API keys and tokens across .env files. Yily is a self-hosted secret manager: one Go binary, one SQLite file, AES-256-GCM at rest.",
+  noindex = false,
 } = Astro.props;
 
 const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
+const siteUrl = Astro.site ? new URL("/", Astro.site).href : "https://yily.dev/";
 const ogImage = Astro.site ? new URL("/og.png", Astro.site).href : "/og.png";
+const logoUrl = Astro.site ? new URL("/logo.svg", Astro.site).href : "/logo.svg";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -22,7 +26,9 @@ const jsonLd = {
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Linux, macOS",
   description,
-  url: "https://github.com/yannick2009/yily",
+  url: siteUrl,
+  image: ogImage,
+  screenshot: ogImage,
   license: "https://opensource.org/licenses/MIT",
   offers: {
     "@type": "Offer",
@@ -30,6 +36,15 @@ const jsonLd = {
     priceCurrency: "USD",
   },
   softwareVersion: VERSION,
+  sameAs: ["https://github.com/yannick2009/yily"],
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Yily",
+  url: siteUrl,
+  logo: logoUrl,
   sameAs: ["https://github.com/yannick2009/yily"],
 };
 ---
@@ -43,7 +58,8 @@ const jsonLd = {
 
     <title>{title}</title>
     <meta name="description" content={description} />
-    {Astro.site && <link rel="canonical" href={canonicalURL} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    {Astro.site && !noindex && <link rel="canonical" href={canonicalURL} />}
 
     <meta name="theme-color" content="#07060a" />
     <meta name="color-scheme" content="dark" />
@@ -64,7 +80,7 @@ const jsonLd = {
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="Yily: One home for your secrets, none scattered around."
+      content="Yily: One home for your secrets, not scattered across .env files."
     />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
@@ -90,7 +106,10 @@ const jsonLd = {
       document.documentElement.classList.add("js");
     </script>
 
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {!noindex && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    {!noindex && (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+    )}
     <script
       is:inline
       defer

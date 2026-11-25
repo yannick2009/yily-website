@@ -101,7 +101,7 @@ const columns: { title: string; links: FooterLink[] }[] = [
       <div class="footer-cols">
         {columns.map((column) => (
           <nav class="footer-col" aria-label={column.title}>
-            <h3>{column.title}</h3>
+            <h2>{column.title}</h2>
             <ul>
               {column.links.map((link) => (
                 <li>
@@ -239,7 +239,7 @@ const columns: { title: string; links: FooterLink[] }[] = [
     gap: 2rem;
   }
 
-  .footer-col h3 {
+  .footer-col h2 {
     color: var(--text-soft);
     font-family: var(--font-body);
     font-size: 0.62rem;
