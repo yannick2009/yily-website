@@ -1,23 +1,30 @@
 {
   "name": "client",
-  "type": "module",
   "version": "0.0.1",
-  "engines": {
-    "node": ">=22.23.4"
-  },
+  "type": "module",
   "scripts": {
     "dev": "astro dev --host",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "og": "node scripts/generate-og.mjs"
+    "og": "node scripts/generate-og.mjs",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^7.4.8"
   },
   "devDependencies": {
+    "@astrojs/compiler-rs": "^0.5.3",
+    "oxfmt": "^0.80.0",
+    "oxlint": "^1.95.0",
     "pngjs": "^7.0.0",
     "puppeteer-core": "^25.17.0"
+  },
+  "engines": {
+    "node": ">=22.23.4"
   }
 }
